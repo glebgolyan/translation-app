@@ -4,7 +4,7 @@ import {
   Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent,
   DrawerCloseButton, Divider, Badge, SimpleGrid, Image, Modal,
   ModalOverlay, ModalContent, ModalCloseButton, ModalBody,
-  IconButton, Tooltip, useToast, Select,
+  IconButton, Tooltip, useToast, Select, useColorModeValue,
 } from '@chakra-ui/react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useRef, useCallback } from 'react';
@@ -290,6 +290,9 @@ export default function AssignmentsPage() {
 
   const orders = data?.data || [];
 
+  const bg = useColorModeValue('white', '#1a1a1a');
+  const borderColor = useColorModeValue('gray.100', '#2e2e2e');
+
   return (
       <Box p={8}>
         <Box mb={6}>
@@ -307,10 +310,10 @@ export default function AssignmentsPage() {
               orders.map(order => (
                   <Box
                       key={order.id}
-                      bg="white"
+                      bg={bg}
                       borderRadius="8px"
                       border="1px solid"
-                      borderColor="gray.100"
+                      borderColor={borderColor}
                       p={5}
                       cursor="pointer"
                       onClick={() => handleOpen(order)}
@@ -360,7 +363,7 @@ export default function AssignmentsPage() {
                   <VStack spacing={6} align="stretch">
 
                     {/* Info */}
-                    <Box bg="gray.50" borderRadius="8px" p={4}>
+                    <Box bg={bg} borderColor={borderColor} borderRadius="8px" p={4}>
                       <Text fontSize="12px" color="gray.400" fontFamily="Syne" fontWeight="600" letterSpacing="0.06em" textTransform="uppercase" mb={1}>
                         Languages
                       </Text>

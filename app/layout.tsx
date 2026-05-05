@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { AppChakraProvider } from '@/shared/providers/ChakraProvider';
 import { QueryProvider } from '@/shared/providers/QueryProvider';
+import { ColorModeScript } from '@chakra-ui/react';
 
 export const metadata: Metadata = {
     title: 'TranslateOS — Document Translation Management',
@@ -19,10 +20,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             />
         </head>
         <body>
+        <ColorModeScript initialColorMode="light" />
         <QueryProvider>
-            <AppChakraProvider>
-                {children}
-            </AppChakraProvider>
+            <AppChakraProvider>{children}</AppChakraProvider>
         </QueryProvider>
         </body>
         </html>

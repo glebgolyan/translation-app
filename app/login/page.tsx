@@ -3,7 +3,7 @@
 import {
   Box, VStack, Text, FormControl, FormLabel, FormErrorMessage,
   Input, Button, Link, Flex, Icon, useToast, InputGroup,
-  InputRightElement, IconButton,
+  InputRightElement, IconButton, useColorModeValue,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,6 +28,9 @@ export default function LoginPage() {
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const bg = useColorModeValue('white', '#1a1a1a');
+  const labelColor = useColorModeValue('gray.400', '#666666');
+
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
@@ -45,7 +48,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Box minH="100vh" display="flex" bg="#fafafa">
+    <Box minH="100vh" display="flex" bg={bg}>
       {/* Left decorative panel */}
       <Box
         display={{ base: 'none', lg: 'flex' }}
@@ -93,7 +96,7 @@ export default function LoginPage() {
             <Text fontFamily="Syne" fontWeight="800" fontSize="28px" letterSpacing="-0.02em" mb={2}>
               Welcome back
             </Text>
-            <Text color="gray.400" fontSize="14px">Sign in to your account to continue</Text>
+            <Text color={labelColor} fontSize="14px">Sign in to your account to continue</Text>
           </Box>
 
           <Box as="form" onSubmit={handleSubmit(onSubmit)}>
@@ -105,7 +108,7 @@ export default function LoginPage() {
                   type="email"
                   placeholder="you@company.com"
                   size="md"
-                  bg="white"
+                  bg={bg}
                 />
                 <FormErrorMessage fontSize="12px">{errors.email?.message}</FormErrorMessage>
               </FormControl>
@@ -118,7 +121,7 @@ export default function LoginPage() {
                     type={showPw ? 'text' : 'password'}
                     placeholder="••••••••"
                     size="md"
-                    bg="white"
+                    bg={bg}
                   />
                   <InputRightElement>
                     <IconButton

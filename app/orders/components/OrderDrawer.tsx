@@ -1,0 +1,49 @@
+'use client';
+import {
+    Drawer, DrawerBody, DrawerHeader, DrawerOverlay,
+    DrawerContent, DrawerCloseButton,
+} from '@chakra-ui/react';
+import { OrderForm } from '@/widgets/order-form/OrderForm';
+import { Order, UpdateOrderDto } from '@/entities/order/model/types';
+import { User } from '@/entities/user/model/types';
+import { useT } from '@/shared/hooks/useT';
+
+interface OrderDrawerProps {
+    isOpen: boolean;
+    onClose: () => void;
+    order?: Order | null;
+    translators: User[];
+    mode: 'create' | 'edit';
+    isLoading: boolean;
+    onSubmit: (data: UpdateOrderDto, originalFiles: File[], translatedFiles: File[]) => Promise<void>;
+    userRole: string;
+}
+
+export function OrderDrawer({
+                                isOpen, onClose, order, translators, mode, isLoading, onSubmit, userRole,
+                            }: OrderDrawerProps) {
+    const { t } = useT();
+
+    return (
+        <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="xl">
+            <DrawerOverlay />
+            <DrawerContent>
+                <DrawerCloseButton />
+                <DrawerHeader fontFamily="Syne" fontWeight="700" borderBottom="1px solid" borderColor="gray.100" pb={4}>
+                    {mode === 'create' ? t('orders.newOrder') : t('orders.editOrder')}
+                </DrawerHeader>
+                <DrawerBody py={6} overflowY="auto">
+                    <OrderForm
+                        order={order || undefined}
+                        translators={translators}
+                        onSubmit={onSubmit}
+                        onCancel={onClose}
+                        isLoading={isLoading}
+                        mode={mode}
+                        userRole={userRole}
+                    />
+                </DrawerBody>
+            </DrawerContent>
+        </Drawer>
+    );
+}

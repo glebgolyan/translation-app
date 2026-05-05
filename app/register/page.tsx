@@ -2,7 +2,7 @@
 // app/register/page.tsx
 import {
   Box, VStack, Text, FormControl, FormLabel, FormErrorMessage,
-  Input, Button, useToast, Select,
+  Input, Button, useToast, Select, useColorModeValue,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,6 +28,10 @@ export default function RegisterPage() {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
+  const bg = useColorModeValue('white', '#1a1a1a');
+  const borderColor = useColorModeValue('gray.100', '#2e2e2e');
+  const labelColor = useColorModeValue('gray.400', '#666666');
+
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
@@ -45,7 +49,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <Box minH="100vh" display="flex" alignItems="center" justifyContent="center" bg="#fafafa" p={8}>
+    <Box minH="100vh" display="flex" alignItems="center" justifyContent="center" bg={bg} p={8}>
       <Box w="100%" maxW="420px">
         <Box mb={8} textAlign="center">
           <Box
@@ -58,10 +62,10 @@ export default function RegisterPage() {
           <Text fontFamily="Syne" fontWeight="800" fontSize="26px" letterSpacing="-0.02em" mb={2}>
             Create account
           </Text>
-          <Text color="gray.400" fontSize="14px">Join TranslateOS as a client</Text>
+          {/*<Text color="gray.400" fontSize="14px">Join TranslateOS as a client</Text>*/}
         </Box>
 
-        <Box bg="white" borderRadius="12px" border="1px solid" borderColor="gray.100" p={8}>
+        <Box bg={bg} borderRadius="12px" border="1px solid" borderColor={borderColor} p={8}>
           <Box as="form" onSubmit={handleSubmit(onSubmit)}>
             <VStack spacing={4}>
               <FormControl isInvalid={!!errors.name}>
@@ -100,7 +104,7 @@ export default function RegisterPage() {
           </Box>
         </Box>
 
-        <Text textAlign="center" fontSize="13px" color="gray.400" mt={4}>
+        <Text textAlign="center" fontSize="13px" color={labelColor} mt={4}>
           Already have an account?{' '}
           <NextLink href="/login" style={{ textDecoration: 'none' }}>
             <Text as="span" color="brand.600" fontWeight="500">Sign in</Text>

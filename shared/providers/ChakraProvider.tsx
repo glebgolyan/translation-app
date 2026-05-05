@@ -1,8 +1,11 @@
 'use client';
-// shared/providers/ChakraProvider.tsx
-import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme, ColorModeScript } from '@chakra-ui/react';
 
 const theme = extendTheme({
+  config: {
+    initialColorMode: 'light',
+    useSystemColorMode: false,
+  },
   fonts: {
     heading: `'Syne', sans-serif`,
     body: `'DM Sans', sans-serif`,
@@ -26,6 +29,28 @@ const theme = extendTheme({
       600: '#00b894',
     },
   },
+  semanticTokens: {
+    colors: {
+      // backgrounds
+      'bg.app': { default: '#fafafa', _dark: '#0f0f0f' },
+      'bg.surface': { default: 'white', _dark: '#1a1a1a' },
+      'bg.subtle': { default: 'gray.50', _dark: '#222222' },
+      'bg.hover': { default: 'gray.50', _dark: '#2a2a2a' },
+      // borders
+      'border.default': { default: 'gray.100', _dark: '#2e2e2e' },
+      'border.subtle': { default: 'gray.50', _dark: '#252525' },
+      // text
+      'text.primary': { default: 'gray.900', _dark: '#f0f0f0' },
+      'text.secondary': { default: 'gray.500', _dark: '#888888' },
+      'text.muted': { default: 'gray.400', _dark: '#666666' },
+      // sidebar
+      'sidebar.bg': { default: 'white', _dark: '#141414' },
+      'sidebar.border': { default: 'gray.100', _dark: '#2a2a2a' },
+      'sidebar.active.bg': { default: 'brand.50', _dark: '#1a2540' },
+      'sidebar.active.color': { default: 'brand.600', _dark: 'brand.300' },
+      'sidebar.hover.bg': { default: 'gray.50', _dark: '#222222' },
+    },
+  },
   components: {
     Button: {
       defaultProps: { colorScheme: 'brand' },
@@ -36,9 +61,7 @@ const theme = extendTheme({
           fontWeight: '600',
           letterSpacing: '0.02em',
         },
-        ghost: {
-          borderRadius: '4px',
-        },
+        ghost: { borderRadius: '4px' },
       },
     },
     Input: {
@@ -46,12 +69,27 @@ const theme = extendTheme({
         outline: {
           field: {
             borderRadius: '4px',
-            borderColor: 'gray.200',
-            _focus: { borderColor: 'brand.500', boxShadow: '0 0 0 1px var(--chakra-colors-brand-500)' },
+            borderColor: 'border.default',
+            bg: 'bg.surface',
+            _focus: {
+              borderColor: 'brand.500',
+              boxShadow: '0 0 0 1px var(--chakra-colors-brand-500)',
+            },
           },
         },
       },
       defaultProps: { variant: 'outline' },
+    },
+    Select: {
+      variants: {
+        outline: {
+          field: {
+            borderRadius: '4px',
+            borderColor: 'border.default',
+            bg: 'bg.surface',
+          },
+        },
+      },
     },
     Table: {
       variants: {
@@ -61,12 +99,12 @@ const theme = extendTheme({
             fontSize: '11px',
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: 'gray.500',
-            borderColor: 'gray.100',
+            color: 'text.muted',
+            borderColor: 'border.default',
             py: 3,
           },
           td: {
-            borderColor: 'gray.50',
+            borderColor: 'border.subtle',
             fontSize: '14px',
             py: 3,
           },
@@ -74,17 +112,58 @@ const theme = extendTheme({
       },
     },
     Badge: {
-      baseStyle: { borderRadius: '3px', fontSize: '11px', fontFamily: 'Syne', fontWeight: '700', letterSpacing: '0.06em' },
+      baseStyle: {
+        borderRadius: '3px',
+        fontSize: '11px',
+        fontFamily: 'Syne',
+        fontWeight: '700',
+        letterSpacing: '0.06em',
+      },
+    },
+    Menu: {
+      baseStyle: {
+        list: {
+          bg: 'bg.surface',
+          borderColor: 'border.default',
+          shadow: 'lg',
+        },
+        item: {
+          bg: 'bg.surface',
+          _hover: { bg: 'bg.hover' },
+        },
+      },
+    },
+    Modal: {
+      baseStyle: {
+        dialog: { bg: 'bg.surface' },
+      },
+    },
+    Drawer: {
+      baseStyle: {
+        dialog: { bg: 'bg.surface' },
+      },
+    },
+    Divider: {
+      baseStyle: {
+        borderColor: 'border.default',
+      },
     },
   },
   styles: {
-    global: {
-      body: { bg: '#fafafa', color: '#111' },
-      '@import': "url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap')",
-    },
+    global: (props: any) => ({
+      body: {
+        bg: 'bg.app',
+        color: 'text.primary',
+      },
+    }),
   },
 });
 
 export function AppChakraProvider({ children }: { children: React.ReactNode }) {
-  return <ChakraProvider theme={theme}>{children}</ChakraProvider>;
+  return (
+      <>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+        <ChakraProvider theme={theme}>{children}</ChakraProvider>
+      </>
+  );
 }
