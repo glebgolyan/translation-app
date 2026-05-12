@@ -63,6 +63,8 @@
     "assignmentStatus": "Assignment & Status",
     "assignTranslator": "Assign Translator",
     "unassigned": "Unassigned",
+    "comment": "Comment",
+    "commentPlaceholder": "Add a note about this order…",
     "status": "Status",
     "files": "Files",
     "originalDocs": "Original Documents",

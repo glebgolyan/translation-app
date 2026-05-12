@@ -1,6 +1,9 @@
 'use client';
-import {Flex, InputGroup, InputLeftElement, Input, Select, Icon, Text, useColorModeValue} from '@chakra-ui/react';
-import { RiSearchLine } from 'react-icons/ri';
+import {
+    Flex, InputGroup, InputLeftElement, Input, Select,
+    Icon, Text, Button, HStack, useColorModeValue,
+} from '@chakra-ui/react';
+import { RiSearchLine, RiCalendarLine } from 'react-icons/ri';
 import { OrderFilters, OrderStatus } from '@/entities/order/model/types';
 import { useT } from '@/shared/hooks/useT';
 
@@ -10,30 +13,79 @@ interface TableFiltersProps {
     onChange: (filters: OrderFilters) => void;
 }
 
+type DateRange = 'all' | 'week' | 'month' | 'year';
+
+const DATE_RANGES: { value: DateRange; label: string }[] = [
+    { value: 'all', label: 'All time' },
+    { value: 'week', label: 'Last week' },
+    { value: 'month', label: 'Last month' },
+    { value: 'year', label: 'Last year' },
+];
+
+function getDateRange(range: DateRange): { dateFrom?: string; dateTo?: string } {
+    if (range === 'all') return {};
+    const now = new Date();
+    const to = now.toISOString();
+    let from: Date;
+
+    if (range === 'week') {
+        from = new Date();
+        from.setDate(now.getDate() - 7);
+    } else if (range === 'month') {
+        from = new Date();
+        from.setMonth(now.getMonth() - 1);
+    } else {
+        from = new Date();
+        from.setFullYear(now.getFullYear() - 1);
+    }
+
+    return { dateFrom: from.toISOString(), dateTo: to };
+}
+
 export function TableFilters({ filters, total, onChange }: TableFiltersProps) {
     const { t } = useT();
 
-    const bg = useColorModeValue('white', '#1a1a1a');
-    const borderColor = useColorModeValue('gray.100', '#2e2e2e');
-    const labelColor = useColorModeValue('gray.400', '#666666');
-    const valueColor = useColorModeValue('gray.900', '#f0f0f0');
+    const activeBg = useColorModeValue('brand.500', 'brand.500');
+    const inactiveBg = useColorModeValue('white', '#1a1a1a');
+    const inactiveBorder = useColorModeValue('gray.200', '#2e2e2e');
+    const inactiveColor = useColorModeValue('gray.600', '#888888');
+    const totalColor = useColorModeValue('gray.400', '#666666');
+
+    const activeRange: DateRange = (() => {
+        if (!filters.dateFrom) return 'all';
+        const diff = Date.now() - new Date(filters.dateFrom).getTime();
+        const days = diff / (1000 * 60 * 60 * 24);
+        if (days <= 8) return 'week';
+        if (days <= 32) return 'month';
+        return 'year';
+    })();
+
+    const handleRangeChange = (range: DateRange) => {
+        const { dateFrom, dateTo } = getDateRange(range);
+        onChange({ ...filters, dateFrom, dateTo, page: 1 });
+    };
 
     return (
         <Flex gap={3} mb={4} align="center" flexWrap="wrap">
-            <InputGroup maxW="280px" size="sm">
+            {/* Search */}
+            <InputGroup maxW="240px" size="sm">
                 <InputLeftElement pointerEvents="none">
-                    <Icon as={RiSearchLine} color={valueColor} />
+                    <Icon as={RiSearchLine} color="gray.400" />
                 </InputLeftElement>
                 <Input
                     placeholder={t('orders.searchPlaceholder')}
                     value={filters.search || ''}
                     onChange={e => onChange({ ...filters, search: e.target.value, page: 1 })}
-                    bg={bg} borderColor={borderColor}
+                    bg={inactiveBg}
+                    borderColor={inactiveBorder}
                 />
             </InputGroup>
 
+            {/* Status filter */}
             <Select
-                size="sm" maxW="160px" bg={bg} borderColor={borderColor}
+                size="sm" maxW="150px"
+                bg={inactiveBg}
+                borderColor={inactiveBorder}
                 value={filters.status || ''}
                 onChange={e => onChange({ ...filters, status: (e.target.value as OrderStatus) || undefined, page: 1 })}
             >
@@ -44,7 +96,38 @@ export function TableFilters({ filters, total, onChange }: TableFiltersProps) {
                 <option value="PAID">{t('status.PAID')}</option>
             </Select>
 
-            <Text fontSize="13px" color={labelColor} ml="auto">{total} orders</Text>
+            {/* Date range pills */}
+            <HStack spacing={1}>
+                <Icon as={RiCalendarLine} color={totalColor} boxSize={4} />
+                {DATE_RANGES.map(range => {
+                    const isActive = activeRange === range.value;
+                    return (
+                        <Button
+                            key={range.value}
+                            size="xs"
+                            fontFamily="Syne"
+                            fontWeight="600"
+                            fontSize="11px"
+                            px={3}
+                            borderRadius="20px"
+                            bg={isActive ? activeBg : inactiveBg}
+                            color={isActive ? 'white' : inactiveColor}
+                            border="1px solid"
+                            borderColor={isActive ? 'brand.500' : inactiveBorder}
+                            _hover={{
+                                bg: isActive ? 'brand.600' : inactiveBorder,
+                            }}
+                            onClick={() => handleRangeChange(range.value)}
+                        >
+                            {range.label}
+                        </Button>
+                    );
+                })}
+            </HStack>
+
+            <Text fontSize="13px" color={totalColor} ml="auto">
+                {total} orders
+            </Text>
         </Flex>
     );
 }

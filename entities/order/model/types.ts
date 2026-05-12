@@ -20,6 +20,7 @@ export interface Order {
   paymentType: PaymentType;
   cardAmount?: number;
   translatorId?: string;
+  comment?: string;
   translator?: {
     id: string;
     name: string;
@@ -58,6 +59,7 @@ export interface UpdateOrderDto {
   remainingAmount?: number;
   paymentType?: PaymentType;
   cardAmount?: number;
+  comment?: string;
   translatorId?: string;
   status?: OrderStatus;
   originalFiles?: string[];
@@ -74,6 +76,8 @@ export interface OrderFilters {
   limit?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
+  dateFrom?: string;
+  dateTo?: string;
 }
 
 export interface PaginatedOrders {

@@ -22,19 +22,17 @@ interface Column {
 }
 
 const COLUMNS: Column[] = [
-  { key: 'createdAt', labelKey: 'orders.received', sortable: true },
-  { key: 'dueDate', labelKey: 'orders.deadline', sortable: true },
-  { key: 'languages', labelKey: 'orders.languages' },
-  { key: 'clientName', labelKey: 'orders.clientName', sortable: true, roles: ['MANAGER', 'ADMIN'] },
-  { key: 'documentType', labelKey: 'orders.documentType', roles: ['MANAGER', 'ADMIN'] },
-  { key: 'documentCount', labelKey: 'orders.documentCount', roles: ['MANAGER', 'ADMIN'] },
-  { key: 'totalPrice', labelKey: 'orders.totalPrice', sortable: true, roles: ['MANAGER', 'ADMIN'] },
-  { key: 'deposit', labelKey: 'orders.deposit', roles: ['MANAGER', 'ADMIN'] },
-  { key: 'remainingAmount', labelKey: 'orders.remaining', roles: ['MANAGER', 'ADMIN'] },
-  { key: 'paymentType', labelKey: 'orders.paymentType', roles: ['MANAGER', 'ADMIN'] },
-  { key: 'translator', labelKey: 'orders.translator', roles: ['MANAGER', 'ADMIN'] },
-  { key: 'originalFiles', labelKey: 'orders.files' },
-  { key: 'status', labelKey: 'orders.status', sortable: true },
+  { key: 'createdAt', labelKey: 'orders.received', sortable: true, width: '90px' },
+  { key: 'dueDate', labelKey: 'orders.deadline', sortable: true, width: '90px' },
+  { key: 'languages', labelKey: 'orders.languages', width: '160px' },
+  { key: 'clientName', labelKey: 'orders.clientName', sortable: true, roles: ['MANAGER', 'ADMIN'], width: '140px' },
+  { key: 'documentType', labelKey: 'orders.documentType', roles: ['MANAGER', 'ADMIN'], width: '110px' },
+  { key: 'totalPrice', labelKey: 'orders.totalPrice', sortable: true, roles: ['MANAGER', 'ADMIN'], width: '110px' },
+  // { key: 'paymentType', labelKey: 'orders.paymentType', roles: ['MANAGER', 'ADMIN'], width: '110px' },
+  { key: 'translator', labelKey: 'orders.translator', roles: ['MANAGER', 'ADMIN'], width: '120px' },
+  { key: 'comment', labelKey: 'orders.comment', roles: ['MANAGER', 'ADMIN'], width: '140px' },
+  { key: 'originalFiles', labelKey: 'orders.files', width: '130px' },
+  { key: 'status', labelKey: 'orders.status', sortable: true, width: '100px' },
 ];
 
 interface OrderTableProps {
@@ -91,7 +89,6 @@ export function OrderTable({ userRole, onEdit, onView, onDelete }: OrderTablePro
                           onClick={() => col.sortable && handleSort(col.key)}
                           cursor={col.sortable ? 'pointer' : 'default'}
                           userSelect="none"
-                          // t
                           _hover={col.sortable ? { color: 'brand.600' } : {}}
                       >
                         <Flex align="center" gap={1}>

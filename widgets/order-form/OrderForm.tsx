@@ -16,6 +16,7 @@ import { TranslationDetailsSection } from './components/TranslationDetailsSectio
 import { PaymentSection } from './components/PaymentSection';
 import { AssignmentSection } from './components/AssignmentSection';
 import { FileSection } from './components/FileSection';
+import {CommentSection} from "@/widgets/order-form/components/CommentSection";
 
 const ACCEPTED_TYPES = [
   'application/pdf',
@@ -36,6 +37,7 @@ const orderSchema = z.object({
   deposit: z.number().min(0),
   remainingAmount: z.number().min(0),
   paymentType: z.enum(['cash', 'card', 'mixed']),
+  comment: z.string().optional(),
   cardAmount: z.number().optional(),
   translatorId: z.string().optional(),
   status: z.enum(['NEW', 'IN_PROGRESS', 'DONE', 'PAID']),
@@ -64,7 +66,7 @@ export function OrderForm({
   const [existingOriginal, setExistingOriginal] = useState<string[]>(order?.originalFiles || []);
   const [existingTranslated, setExistingTranslated] = useState<string[]>(order?.translatedFiles || []);
 
-  const { register, handleSubmit, control, watch, formState: { errors } } = useForm<OrderFormValues>({
+  const { register, handleSubmit, control, watch, setValue, formState: { errors } } = useForm<OrderFormValues>({
     resolver: zodResolver(orderSchema) as any,
     defaultValues: {
       sourceLanguage: order?.sourceLanguage || '',
@@ -80,6 +82,7 @@ export function OrderForm({
       paymentType: order?.paymentType || 'cash',
       cardAmount: order?.cardAmount || 0,
       translatorId: order?.translatorId || '',
+      comment: order?.comment || '',
       status: order?.status || 'NEW',
       dueDate: order?.dueDate ? new Date(order.dueDate).toISOString().split('T')[0] : '',
     },
@@ -123,12 +126,16 @@ export function OrderForm({
           <TranslationDetailsSection register={register} errors={errors} control={control} />
 
           {isManagerOrAdmin && (
-              <PaymentSection register={register} control={control} paymentType={paymentType} />
+              <PaymentSection register={register} control={control} paymentType={paymentType} setValue={setValue} />
           )}
 
           {isManagerOrAdmin && (
               <AssignmentSection register={register} translators={translators} />
           )}
+
+          {
+              isManagerOrAdmin && <CommentSection register={register} />
+          }
 
           <Box>
             <Text fontFamily="Syne" fontWeight="700" fontSize="13px" letterSpacing="0.06em"

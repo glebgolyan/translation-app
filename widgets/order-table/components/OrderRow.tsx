@@ -1,5 +1,5 @@
 'use client';
-import {Tr, Td, HStack, IconButton, Icon, Text, Flex, Box, useColorModeValue} from '@chakra-ui/react';
+import {Tr, Td, HStack, IconButton, Icon, Text, Flex, Box, useColorModeValue, Tooltip} from '@chakra-ui/react';
 import { RiEyeLine, RiEditLine, RiDeleteBinLine } from 'react-icons/ri';
 import { Order } from '@/entities/order/model/types';
 import { UserRole } from '@/entities/user/model/types';
@@ -40,7 +40,39 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
             case 'documentCount':
                 return <Text fontSize="13px" textAlign="center">{order.documentCount}</Text>;
             case 'totalPrice':
-                return <Text fontSize="13px" fontFamily="mono" fontWeight="600">₴{order.totalPrice.toLocaleString()}</Text>;
+                return (
+                    <Tooltip
+                        label={
+                            <Box fontSize="12px" p={1} >
+                                <Text>💰 {t('orders.totalPrice')}: ₴{order.totalPrice.toLocaleString()}</Text>
+                                <Text>⬇️ {t('orders.deposit')}: ₴{order.deposit.toLocaleString()}</Text>
+                                <Text color={order.remainingAmount > 0 ? 'orange.300' : 'green.300'}>
+                                    🔄 {t('orders.remaining')}: ₴{order.remainingAmount.toLocaleString()}
+                                </Text>
+                                <Text fontSize="11px" color="gray.400" mt={1} textTransform="capitalize">
+                                    {order.paymentType}{order.cardAmount ? ` · ₴${order.cardAmount} card` : ''}
+                                </Text>
+                            </Box>
+                        }
+                        placement="top"
+                        hasArrow
+                        bg={useColorModeValue('gray.800', '#2a2a2a')}
+                        color="white"
+                        borderRadius="6px"
+                        p={2}
+                    >
+                        <Box cursor="default" >
+                            <Text fontSize="12px" fontFamily="mono" fontWeight="600">
+                                ₴{order.totalPrice.toLocaleString()}
+                            </Text>
+                            {order.remainingAmount > 0 && (
+                                <Text fontSize="10px"  fontFamily="mono">
+                                    -{order.remainingAmount.toLocaleString()} {t('orders.remaining').toLowerCase()}
+                                </Text>
+                            )}
+                        </Box>
+                    </Tooltip>
+                );
             case 'deposit':
                 return <Text fontSize="13px" fontFamily="mono" color="green.600">₴{order.deposit.toLocaleString()}</Text>;
             case 'remainingAmount':
@@ -55,6 +87,34 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
                 return <Text fontSize="13px" color={order.translator ? 'gray.700' : 'gray.300'}>
                     {order.translator?.name || t('orders.unassigned')}
                 </Text>;
+            case 'comment':
+                return order.comment ? (
+                    <Tooltip
+                        label={order.comment}
+                        placement="top"
+                        hasArrow
+                        maxW="280px"
+                        bg={useColorModeValue('gray.800', '#2a2a2a')}
+                        color="white"
+                        borderRadius="6px"
+                        p={3}
+                        fontSize="12px"
+                        whiteSpace="pre-wrap"
+                    >
+                        <Text
+                            fontSize="12px"
+                            noOfLines={2}
+                            cursor="default"
+                            maxW="140px"
+                            overflow="hidden"
+                            textOverflow="ellipsis"
+                        >
+                            {order.comment}
+                        </Text>
+                    </Tooltip>
+                ) : (
+                    <Text fontSize="12px">—</Text>
+                );
             case 'originalFiles':
                 return <Text fontSize="12px" color="gray.400">
                     {order.originalFiles.length} {t('common.original')} · {order.translatedFiles.length} {t('common.translated')}

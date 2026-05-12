@@ -63,6 +63,8 @@
     "assignmentStatus": "Призначення та статус",
     "assignTranslator": "Призначити перекладача",
     "unassigned": "Не призначено",
+    "comment": "Коментар",
+    "commentPlaceholder": "Додайте нотатку до цього замовлення…",
     "status": "Статус",
     "files": "Файли",
     "originalDocs": "Оригінальні документи",
