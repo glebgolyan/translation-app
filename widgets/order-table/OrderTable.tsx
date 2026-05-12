@@ -19,6 +19,7 @@ interface Column {
   labelKey: string;
   sortable?: boolean;
   roles?: UserRole[];
+  width: string;
 }
 
 const COLUMNS: Column[] = [

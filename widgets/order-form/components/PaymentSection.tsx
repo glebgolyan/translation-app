@@ -3,13 +3,13 @@ import {
     Box, Grid, FormControl, FormLabel, Select,
     NumberInput, NumberInputField, Text,
 } from '@chakra-ui/react';
-import { UseFormRegister, Control, Controller, UseFormSetValue, useWatch } from 'react-hook-form';
+import { UseFormRegister, Controller, UseFormSetValue, useWatch } from 'react-hook-form';
 import { useT } from '@/shared/hooks/useT';
 import { useEffect } from 'react';
 
 interface PaymentSectionProps {
     register: UseFormRegister<any>;
-    control: Control<any>;
+    control: any;
     paymentType: string;
     setValue: UseFormSetValue<any>;
 }
