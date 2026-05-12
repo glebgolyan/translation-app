@@ -15,7 +15,7 @@ const LANGUAGES = [
 interface TranslationDetailsSectionProps {
     register: UseFormRegister<any>;
     errors: FieldErrors<any>;
-    control: Control<any>;
+    control: any;
 }
 
 export function TranslationDetailsSection({ register, errors, control }: TranslationDetailsSectionProps) {
