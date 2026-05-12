@@ -63,6 +63,8 @@
     "assignmentStatus": "Назначение и статус",
     "assignTranslator": "Назначить переводчика",
     "unassigned": "Не назначен",
+    "comment": "Комментарий",
+    "commentPlaceholder": "Добавьте заметку к этому заказу…",
     "status": "Статус",
     "files": "Файлы",
     "originalDocs": "Оригинальные документы",

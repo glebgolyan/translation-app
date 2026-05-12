@@ -32,11 +32,13 @@ export default function DashboardPage() {
                 <Text color="gray.500" fontSize="14px">{t('dashboard.subtitle')}</Text>
             </Box>
 
-            <Grid templateColumns="repeat(4, 1fr)" gap={4} mb={8}>
+            <Grid templateColumns={`repeat(${user?.role === 'ADMIN' ? 4 : 3}, 1fr)`} gap={4} mb={8}>
                 <StatCard label={t('dashboard.totalOrders')} value={total} icon={RiFileList3Line} color="#4d76ff" change={12} />
                 <StatCard label={t('dashboard.inProgress')} value={inProgress} icon={RiTimeLine} color="#fdcb6e" />
                 <StatCard label={t('dashboard.completed')} value={done} icon={RiCheckboxCircleLine} color="#00b894" change={8} />
-                <StatCard label={t('dashboard.revenue')} value={`₴${revenue.toLocaleString()}`} icon={RiMoneyDollarCircleLine} color="#a29bfe" change={5} />
+                {user?.role === 'ADMIN' && (
+                    <StatCard label={t('dashboard.revenue')} value={`₴${revenue.toLocaleString()}`} icon={RiMoneyDollarCircleLine} color="#a29bfe" change={5} />
+                )}
             </Grid>
 
             <RecentOrders orders={orders} />

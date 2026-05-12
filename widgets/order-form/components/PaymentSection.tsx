@@ -3,21 +3,34 @@ import {
     Box, Grid, FormControl, FormLabel, Select,
     NumberInput, NumberInputField, Text,
 } from '@chakra-ui/react';
-import { UseFormRegister, Control, Controller } from 'react-hook-form';
+import { UseFormRegister, Control, Controller, UseFormSetValue, useWatch } from 'react-hook-form';
 import { useT } from '@/shared/hooks/useT';
+import { useEffect } from 'react';
 
 interface PaymentSectionProps {
     register: UseFormRegister<any>;
     control: Control<any>;
     paymentType: string;
+    setValue: UseFormSetValue<any>;
 }
 
-export function PaymentSection({ register, control, paymentType }: PaymentSectionProps) {
+export function PaymentSection({ register, control, paymentType, setValue }: PaymentSectionProps) {
     const { t } = useT();
+
+    const totalPrice = useWatch({ control, name: 'totalPrice' });
+    const deposit = useWatch({ control, name: 'deposit' });
+
+    useEffect(() => {
+        const total = Number(totalPrice) || 0;
+        const dep = Number(deposit) || 0;
+        const remaining = Math.max(0, total - dep);
+        setValue('remainingAmount', remaining, { shouldValidate: false });
+    }, [totalPrice, deposit, setValue]);
 
     return (
         <Box>
-            <Text fontFamily="Syne" fontWeight="700" fontSize="13px" letterSpacing="0.06em" textTransform="uppercase" color="gray.400" mb={4}>
+            <Text fontFamily="Syne" fontWeight="700" fontSize="13px" letterSpacing="0.06em"
+                  textTransform="uppercase" color="gray.400" mb={4}>
                 {t('orders.payment')}
             </Text>
             <Grid templateColumns="repeat(3, 1fr)" gap={4}>
@@ -27,7 +40,8 @@ export function PaymentSection({ register, control, paymentType }: PaymentSectio
                         name="totalPrice"
                         control={control}
                         render={({ field }) => (
-                            <NumberInput size="sm" min={0} value={field.value} onChange={(_, v) => field.onChange(v)}>
+                            <NumberInput size="sm" min={0} value={field.value}
+                                         onChange={(_, v) => field.onChange(isNaN(v) ? 0 : v)}>
                                 <NumberInputField />
                             </NumberInput>
                         )}
@@ -40,7 +54,8 @@ export function PaymentSection({ register, control, paymentType }: PaymentSectio
                         name="deposit"
                         control={control}
                         render={({ field }) => (
-                            <NumberInput size="sm" min={0} value={field.value} onChange={(_, v) => field.onChange(v)}>
+                            <NumberInput size="sm" min={0} value={field.value}
+                                         onChange={(_, v) => field.onChange(isNaN(v) ? 0 : v)}>
                                 <NumberInputField />
                             </NumberInput>
                         )}
@@ -53,8 +68,14 @@ export function PaymentSection({ register, control, paymentType }: PaymentSectio
                         name="remainingAmount"
                         control={control}
                         render={({ field }) => (
-                            <NumberInput size="sm" min={0} value={field.value} onChange={(_, v) => field.onChange(v)}>
-                                <NumberInputField />
+                            <NumberInput size="sm" min={0} value={field.value} isReadOnly>
+                                <NumberInputField
+                                    bg="gray.50"
+                                    _dark={{ bg: '#222222' }}
+                                    cursor="default"
+                                    fontWeight="600"
+                                    color={Number(field.value) > 0 ? 'orange.500' : 'green.500'}
+                                />
                             </NumberInput>
                         )}
                     />
@@ -76,7 +97,8 @@ export function PaymentSection({ register, control, paymentType }: PaymentSectio
                             name="cardAmount"
                             control={control}
                             render={({ field }) => (
-                                <NumberInput size="sm" min={0} value={field.value || 0} onChange={(_, v) => field.onChange(v)}>
+                                <NumberInput size="sm" min={0} value={field.value || 0}
+                                             onChange={(_, v) => field.onChange(isNaN(v) ? 0 : v)}>
                                     <NumberInputField />
                                 </NumberInput>
                             )}
