@@ -5,7 +5,8 @@
     "myOrders": "Мої замовлення",
     "assignments": "Завдання",
     "users": "Користувачі",
-    "settings": "Налаштування"
+    "settings": "Налаштування",
+    "translatorStats": "Статистика перекладачів"
   },
   "auth": {
     "login": "Увійти",

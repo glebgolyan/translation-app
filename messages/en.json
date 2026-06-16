@@ -5,7 +5,8 @@
     "myOrders": "My Orders",
     "assignments": "Assignments",
     "users": "Users",
-    "settings": "Settings"
+    "settings": "Settings",
+    "translatorStats": "Translator Stats"
   },
   "auth": {
     "login": "Sign In",

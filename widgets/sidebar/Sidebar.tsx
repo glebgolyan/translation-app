@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 import {
   RiDashboardLine, RiFileList3Line, RiUserLine,
   RiTranslate2, RiSettings3Line, RiLogoutBoxLine,
-  RiArrowDownSLine, RiMenuFoldLine, RiMenuUnfoldLine,
+  RiArrowDownSLine, RiMenuFoldLine, RiMenuUnfoldLine, RiBarChart2Line,
 } from 'react-icons/ri';
 import { User, UserRole } from '@/entities/user/model/types';
 import { LanguageSwitcher } from '@/shared/ui/LanguageSwitcher';
@@ -48,6 +48,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { labelKey: 'nav.dashboard', href: '/dashboard', icon: RiDashboardLine, roles: ['CLIENT', 'MANAGER', 'TRANSLATOR', 'ADMIN'] },
   { labelKey: 'nav.orders', href: '/orders', icon: RiFileList3Line, roles: ['MANAGER', 'ADMIN'] },
+  { labelKey: 'nav.translatorStats', href: '/translations', icon: RiBarChart2Line, roles: ['MANAGER', 'ADMIN'] },
   { labelKey: 'nav.myOrders', href: '/my-orders', icon: RiFileList3Line, roles: ['CLIENT'] },
   { labelKey: 'nav.assignments', href: '/assignments', icon: RiTranslate2, roles: ['TRANSLATOR'] },
   { labelKey: 'nav.users', href: '/admin/users', icon: RiUserLine, roles: ['ADMIN'] },

@@ -5,7 +5,8 @@
     "myOrders": "Мои заказы",
     "assignments": "Задания",
     "users": "Пользователи",
-    "settings": "Настройки"
+    "settings": "Настройки",
+    "translatorStats": "Статистика переводчиков"
   },
   "auth": {
     "login": "Войти",
