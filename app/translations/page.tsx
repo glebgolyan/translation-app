@@ -2,14 +2,13 @@
 import { Box, Text, useColorModeValue } from '@chakra-ui/react';
 import { useAuth } from '@/features/auth/model/useAuth';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { TranslatorStatsTable } from './components/TranslatorStatsTable';
-import { useT } from '@/shared/hooks/useT';
 
 export default function TranslationsPage() {
     const { user } = useAuth();
     const router = useRouter();
-    const { t } = useT();
+
 
     const textColor = useColorModeValue('gray.900', '#f0f0f0');
     const subtitleColor = useColorModeValue('gray.400', '#666666');

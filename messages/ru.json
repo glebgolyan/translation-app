@@ -6,7 +6,37 @@
     "assignments": "Задания",
     "users": "Пользователи",
     "settings": "Настройки",
-    "translatorStats": "Статистика переводчиков"
+    "translatorStats": "Статистика переводчиков",
+    "apostilization": "Апостиль"
+
+  },
+  "apostilization": {
+    "title": "Апостиль",
+    "subtitle": "Управление документами апостиля",
+    "createNew": "Создать новый",
+    "edit": "Редактировать апостиль",
+    "dateOfTaking": "Дата получения",
+    "clientName": "Имя клиента",
+    "documentType": "Тип документа",
+    "contact": "Контакт (Тел/Email)",
+    "whatToDo": "Что делать",
+    "payment": "Оплата",
+    "sum": "Сумма",
+    "deposit": "Авансовый платеж",
+    "remaining": "Остаток",
+    "costPrice": "Стоимость",
+    "paymentType": "Тип оплаты",
+    "cash": "Наличные",
+    "card": "Карта",
+    "notes": "Примечания",
+    "status": "Статус",
+    "inWork": "В работе",
+    "done": "Готово",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "actions": "Действия",
+    "searchPlaceholder": "Поиск имени клиента или телефона...",
+    "noResults": "Результатов не найдено"
   },
   "auth": {
     "login": "Войти",

@@ -49,6 +49,7 @@ const NAV_ITEMS: NavItem[] = [
   { labelKey: 'nav.dashboard', href: '/dashboard', icon: RiDashboardLine, roles: ['CLIENT', 'MANAGER', 'TRANSLATOR', 'ADMIN'] },
   { labelKey: 'nav.orders', href: '/orders', icon: RiFileList3Line, roles: ['MANAGER', 'ADMIN'] },
   { labelKey: 'nav.translatorStats', href: '/translations', icon: RiBarChart2Line, roles: ['MANAGER', 'ADMIN'] },
+  { labelKey: 'nav.apostilization', href: '/apostilization', icon: RiFileList3Line, roles: ['MANAGER', 'ADMIN'] },
   { labelKey: 'nav.myOrders', href: '/my-orders', icon: RiFileList3Line, roles: ['CLIENT'] },
   { labelKey: 'nav.assignments', href: '/assignments', icon: RiTranslate2, roles: ['TRANSLATOR'] },
   { labelKey: 'nav.users', href: '/admin/users', icon: RiUserLine, roles: ['ADMIN'] },

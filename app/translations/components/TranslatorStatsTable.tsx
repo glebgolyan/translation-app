@@ -35,7 +35,6 @@ export function TranslatorStatsTable() {
     });
 
     const stats = data?.data || [];
-    const daysInMonth = data?.daysInMonth || 31;
 
     // Get actual days in month
     const [year, monthNum] = month.split('-');
