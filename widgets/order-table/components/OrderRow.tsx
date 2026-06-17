@@ -1,5 +1,5 @@
 'use client';
-import {Tr, Td, HStack, IconButton, Icon, Text, Flex, Box, useColorModeValue, Tooltip} from '@chakra-ui/react';
+import {Tr, Td, HStack, IconButton, Icon, Text, Box, useColorModeValue, Tooltip} from '@chakra-ui/react';
 import { RiEyeLine, RiEditLine, RiDeleteBinLine } from 'react-icons/ri';
 import { Order } from '@/entities/order/model/types';
 import { UserRole } from '@/entities/user/model/types';
@@ -20,6 +20,12 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
 
     const renderCell = (colKey: string) => {
         switch (colKey) {
+            case 'orderNumber':
+                return (
+                    <Text fontSize="12px" fontFamily="mono" fontWeight="600" color='gray.600'>
+                        #{order.orderNumber}
+                    </Text>
+                );
             case 'createdAt':
                 return <Text fontSize="13px" fontFamily="mono" color="gray.600">{new Date(order.createdAt).toLocaleDateString('uk-UA')}</Text>;
             case 'dueDate': {

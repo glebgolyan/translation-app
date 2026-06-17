@@ -111,7 +111,14 @@
     "languages": "Languages",
     "translator": "Translator",
     "allStatuses": "All statuses",
-    "searchPlaceholder": "Search client, language…"
+    "searchPlaceholder": "Search client, language…",
+    "downloadFiles": "Download Files",
+    "deleteFiles": "Delete Files",
+    "downloadFilesByDate": "Download Files by Date Range",
+    "deleteFilesByDate": "Delete Files by Date Range",
+    "selectDateRangeDownload": "Select a date range to download all files from orders",
+    "selectDateRangeDelete": "Select a date range to delete all files from orders",
+    "deleteWarning": "⚠️ This action cannot be undone. All files in this date range will be permanently deleted."
   },
   "status": {
     "NEW": "NEW",

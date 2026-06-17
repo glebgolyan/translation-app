@@ -7,6 +7,7 @@ export interface Order {
   id: string;
   createdAt: string;
   dueDate: string;
+  orderNumber: number;
   sourceLanguage: string;
   targetLanguage: string;
   clientName: string;

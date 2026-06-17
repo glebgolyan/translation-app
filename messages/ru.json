@@ -112,7 +112,14 @@
     "languages": "Языки",
     "translator": "Переводчик",
     "allStatuses": "Все статусы",
-    "searchPlaceholder": "Поиск клиента, языка…"
+    "searchPlaceholder": "Поиск клиента, языка…",
+    "downloadFiles": "Скачать файлы",
+    "deleteFiles": "Удалить файлы",
+    "downloadFilesByDate": "Скачать файлы по диапазону дат",
+    "deleteFilesByDate": "Удалить файлы по диапазону дат",
+    "selectDateRangeDownload": "Выберите период для скачивания всех файлов заказов",
+    "selectDateRangeDelete": "Выберите период для удаления всех файлов заказов",
+    "deleteWarning": "⚠️ Это действие невозможно отменить. Все файлы в этом диапазоне дат будут безвозвратно удалены."
   },
   "status": {
     "NEW": "НОВЫЙ",

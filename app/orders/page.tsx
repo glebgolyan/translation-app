@@ -2,7 +2,7 @@
 import { Box, Flex, Text, Button, Icon, useToast } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { RiAddLine } from 'react-icons/ri';
+import {RiAddLine, RiDeleteBinLine, RiDownloadCloud2Line} from 'react-icons/ri';
 import { useDisclosure } from '@chakra-ui/react';
 import { OrderTable } from '@/widgets/order-table/OrderTable';
 import { OrderDrawer } from './components/OrderDrawer';
@@ -11,6 +11,7 @@ import { usersApi } from '@/features/admin/api/usersApi';
 import { useAuth } from '@/features/auth/model/useAuth';
 import { Order, UpdateOrderDto } from '@/entities/order/model/types';
 import { useT } from '@/shared/hooks/useT';
+import { FileManagementDialog } from "@/app/orders/components/FileManagementDialog";
 
 export default function OrdersPage() {
   const { user } = useAuth();
@@ -18,9 +19,11 @@ export default function OrdersPage() {
   const toast = useToast();
   const queryClient = useQueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isFileDialogOpen, onOpen: onFileDialogOpen, onClose: onFileDialogClose } = useDisclosure();
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [formMode, setFormMode] = useState<'create' | 'edit'>('create');
   const [formLoading, setFormLoading] = useState(false);
+  const [fileMode, setFileMode] = useState<'download' | 'delete'>('download');
 
   const { data: translators = [] } = useQuery({
     queryKey: ['translators'],
@@ -78,11 +81,35 @@ export default function OrdersPage() {
             </Text>
             <Text color="gray.400" fontSize="14px" mt={0.5}>{t('orders.subtitle')}</Text>
           </Box>
-          {(user.role === 'MANAGER' || user.role === 'ADMIN') && (
-              <Button leftIcon={<Icon as={RiAddLine} />} size="sm" onClick={handleCreate}>
-                {t('orders.newOrder')}
-              </Button>
-          )}
+          <Flex gap={2}>
+            {user.role === 'ADMIN' && (
+                <>
+                  <Button
+                      leftIcon={<Icon as={RiDownloadCloud2Line} />}
+                      size="sm"
+                      variant="outline"
+                      onClick={() => { setFileMode('download'); onFileDialogOpen(); }}
+                  >
+                    {t('orders.downloadFiles') || 'Download Files'}
+                  </Button>
+                  <Button
+                      leftIcon={<Icon as={RiDeleteBinLine} />}
+                      size="sm"
+                      colorScheme="red"
+                      variant="outline"
+                      onClick={() => { setFileMode('delete'); onFileDialogOpen(); }}
+                  >
+                    {t('orders.deleteFiles') || 'Delete Files'}
+                  </Button>
+                </>
+            )}
+            {(user.role === 'MANAGER' || user.role === 'ADMIN') && (
+                <Button leftIcon={<Icon as={RiAddLine} />} size="sm" onClick={handleCreate}>
+                  {t('orders.newOrder')}
+                </Button>
+            )}
+          </Flex>
+
         </Flex>
 
         <OrderTable userRole={user.role} onEdit={handleEdit} onView={handleEdit} />
@@ -96,6 +123,12 @@ export default function OrdersPage() {
             isLoading={formLoading}
             onSubmit={handleFormSubmit}
             userRole={user.role}
+        />
+
+        <FileManagementDialog
+            isOpen={isFileDialogOpen}
+            onClose={onFileDialogClose}
+            mode={fileMode}
         />
       </Box>
   );
