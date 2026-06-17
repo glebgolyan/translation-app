@@ -7,8 +7,8 @@ import {
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import {useEffect, useState} from 'react';
+import {useRouter, useSearchParams} from 'next/navigation';
 import NextLink from 'next/link';
 import { useAuth } from '@/features/auth/model/useAuth';
 
@@ -28,9 +28,21 @@ export default function RegisterPage() {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
+  const searchParams = useSearchParams();
+  const hasAccess = searchParams.get('login') === 'true';
+
   const bg = useColorModeValue('white', '#1a1a1a');
   const borderColor = useColorModeValue('gray.100', '#2e2e2e');
   const labelColor = useColorModeValue('gray.400', '#666666');
+
+  // Redirect if no login=true query param
+  useEffect(() => {
+    if (!hasAccess && !loading) {
+      router.push('/login');
+    }
+  }, [hasAccess, loading, router]);
+
+  if (loading || !hasAccess) return null;
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),

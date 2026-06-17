@@ -26,6 +26,7 @@ const COLUMNS: Column[] = [
   { key: 'createdAt', labelKey: 'orders.received', sortable: true, width: '90px' },
   { key: 'dueDate', labelKey: 'orders.deadline', sortable: true, width: '90px' },
   { key: 'languages', labelKey: 'orders.languages', width: '160px' },
+  { key: 'fileStatus', labelKey: 'orders.fileStatus', roles: ['MANAGER', 'ADMIN'], width: '120px' },
   { key: 'clientName', labelKey: 'orders.clientName', sortable: true, roles: ['MANAGER', 'ADMIN'], width: '140px' },
   { key: 'documentType', labelKey: 'orders.documentType', roles: ['MANAGER', 'ADMIN'], width: '110px' },
   { key: 'totalPrice', labelKey: 'orders.totalPrice', sortable: true, roles: ['MANAGER', 'ADMIN'], width: '110px' },

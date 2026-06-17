@@ -30,6 +30,7 @@ export interface Order {
   status: OrderStatus;
   originalFiles: string[];
   translatedFiles: string[];
+  filesDeletedAt?: Date | null;
   clientId: string;
   client?: {
     id: string;

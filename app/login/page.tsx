@@ -4,14 +4,14 @@ import {
   Box, VStack, Text, FormControl, FormLabel, FormErrorMessage,
   Input, Button, Link, Flex, Icon, useToast, InputGroup,
   InputRightElement, IconButton, useColorModeValue,
+  Link as ChakraLink
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import NextLink from 'next/link';
-import { RiTranslate2, RiEyeLine, RiEyeOffLine } from 'react-icons/ri';
+import {useRouter, useSearchParams} from 'next/navigation';
+import { RiEyeLine, RiEyeOffLine } from 'react-icons/ri';
 import { useAuth } from '@/features/auth/model/useAuth';
 
 const schema = z.object({
@@ -28,8 +28,13 @@ export default function LoginPage() {
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const searchParams = useSearchParams();
+  const showRegister = searchParams.get('register') === 'true';
+
   const bg = useColorModeValue('white', '#1a1a1a');
   const labelColor = useColorModeValue('gray.400', '#666666');
+  const subtextColor = useColorModeValue('gray.500', '#888888');
+  const linkColor = useColorModeValue('brand.500', 'brand.300');
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -149,15 +154,24 @@ export default function LoginPage() {
               </Button>
             </VStack>
           </Box>
-
-          <Text textAlign="center" fontSize="13px" color="gray.400" mt={6}>
-            Don't have an account?{' '}
-            <NextLink href="/register" style={{ textDecoration: 'none' }}>
-              <Text as="span" color="brand.600" fontWeight="500" _hover={{ textDecoration: 'underline' }}>
-                Register
-              </Text>
-            </NextLink>
-          </Text>
+          {showRegister && (
+              <Box mt={6} textAlign="center">
+                <Text fontSize="14px" color={subtextColor}>
+                  Don't have an account?{' '}
+                  <ChakraLink href="/register?login=true" color={linkColor} fontWeight="600" _hover={{ textDecoration: 'underline' }}>
+                    Register
+                  </ChakraLink>
+                </Text>
+              </Box>
+          )}
+          {/*<Text textAlign="center" fontSize="13px" color="gray.400" mt={6}>*/}
+          {/*  Don't have an account?{' '}*/}
+          {/*  <NextLink href="/register" style={{ textDecoration: 'none' }}>*/}
+          {/*    <Text as="span" color="brand.600" fontWeight="500" _hover={{ textDecoration: 'underline' }}>*/}
+          {/*      Register*/}
+          {/*    </Text>*/}
+          {/*  </NextLink>*/}
+          {/*</Text>*/}
         </Box>
       </Box>
     </Box>

@@ -5,6 +5,7 @@ import { Order } from '@/entities/order/model/types';
 import { UserRole } from '@/entities/user/model/types';
 import { StatusBadge } from '@/shared/ui/StatusBadge';
 import { useT } from '@/shared/hooks/useT';
+import {FileStatusBadge} from "@/widgets/order-table/components/FileStatusBadge";
 
 interface OrderRowProps {
     order: Order;
@@ -25,6 +26,14 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
                     <Text fontSize="12px" fontFamily="mono" fontWeight="600" color='gray.600'>
                         #{order.orderNumber}
                     </Text>
+                );
+            case 'fileStatus':
+                return (
+                    <FileStatusBadge
+                        originalFiles={order.originalFiles}
+                        translatedFiles={order.translatedFiles}
+                        filesDeletedAt={order.filesDeletedAt}
+                    />
                 );
             case 'createdAt':
                 return <Text fontSize="13px" fontFamily="mono" color="gray.600">{new Date(order.createdAt).toLocaleDateString('uk-UA')}</Text>;

@@ -118,7 +118,11 @@
     "deleteFilesByDate": "Delete Files by Date Range",
     "selectDateRangeDownload": "Select a date range to download all files from orders",
     "selectDateRangeDelete": "Select a date range to delete all files from orders",
-    "deleteWarning": "⚠️ This action cannot be undone. All files in this date range will be permanently deleted."
+    "deleteWarning": "⚠️ This action cannot be undone. All files in this date range will be permanently deleted.",
+    "fileStatus": "File Status",
+    "filesDeleted": "Files deleted",
+    "deletedByAdmin": "Deleted by Admin",
+    "file": "file"
   },
   "status": {
     "NEW": "NEW",
