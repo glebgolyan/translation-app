@@ -2,7 +2,7 @@
 // app/login/page.tsx
 import {
   Box, VStack, Text, FormControl, FormLabel, FormErrorMessage,
-  Input, Button, Link, Flex, Icon, useToast, InputGroup,
+  Input, Button, Flex, Icon, useToast, InputGroup,
   InputRightElement, IconButton, useColorModeValue,
   Link as ChakraLink
 } from '@chakra-ui/react';
@@ -43,7 +43,7 @@ export default function LoginPage() {
   const onSubmit = async (values: FormValues) => {
     setLoading(true);
     try {
-      const user = await login(values.email, values.password);
+      await login(values.email, values.password);
       router.push('/dashboard');
     } catch {
       toast({ title: 'Invalid credentials', status: 'error', duration: 3000, isClosable: true });

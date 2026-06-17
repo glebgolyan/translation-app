@@ -50,7 +50,6 @@ export function OrderTable({ userRole, onEdit, onView, onDelete }: OrderTablePro
   const bg = useColorModeValue('white', '#1a1a1a');
   const borderColor = useColorModeValue('gray.100', '#2e2e2e');
   const labelColor = useColorModeValue('gray.400', '#666666');
-  const valueColor = useColorModeValue('gray.900', '#f0f0f0');
   const helpColor = useColorModeValue('gray.500', '#888888');
 
   const [filters, setFilters] = useState<OrderFilters>({

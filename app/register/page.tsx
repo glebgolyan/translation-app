@@ -2,7 +2,7 @@
 // app/register/page.tsx
 import {
   Box, VStack, Text, FormControl, FormLabel, FormErrorMessage,
-  Input, Button, useToast, Select, useColorModeValue,
+  Input, Button, useToast, useColorModeValue,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
