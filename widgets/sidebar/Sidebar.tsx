@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 import {
   RiDashboardLine, RiFileList3Line, RiUserLine,
   RiTranslate2, RiSettings3Line, RiLogoutBoxLine,
-  RiArrowDownSLine, RiMenuFoldLine, RiMenuUnfoldLine, RiBarChart2Line,
+  RiArrowDownSLine, RiMenuFoldLine, RiMenuUnfoldLine, RiBarChart2Line, RiChat3Line,
 } from 'react-icons/ri';
 import { User, UserRole } from '@/entities/user/model/types';
 import { LanguageSwitcher } from '@/shared/ui/LanguageSwitcher';
@@ -18,6 +18,7 @@ import { useT } from '@/shared/hooks/useT';
 import { useColorModeValue } from '@chakra-ui/react';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { UnreadBadge } from "@/widgets/order-table/components/UnreadBadge";
 
 // ─── Sidebar collapse store ───────────────────────────────────────────────────
 
@@ -42,10 +43,18 @@ interface NavItem {
   labelKey: string;
   href: string;
   icon: React.ElementType;
+  component?: React.ElementType;
   roles: UserRole[];
 }
 
 const NAV_ITEMS: NavItem[] = [
+  {
+    labelKey: 'nav.messages',
+    href: '/messages',
+    icon: RiChat3Line,
+    component: () => <><UnreadBadge/></>,
+    roles: ['ADMIN', 'MANAGER', 'TRANSLATOR']
+  },
   { labelKey: 'nav.dashboard', href: '/dashboard', icon: RiDashboardLine, roles: ['CLIENT', 'MANAGER', 'TRANSLATOR', 'ADMIN'] },
   { labelKey: 'nav.orders', href: '/orders', icon: RiFileList3Line, roles: ['MANAGER', 'ADMIN'] },
   { labelKey: 'nav.translatorStats', href: '/translations', icon: RiBarChart2Line, roles: ['MANAGER', 'ADMIN'] },
@@ -173,6 +182,7 @@ export function Sidebar({ user, onLogout }: SidebarProps) {
                             {t(item.labelKey)}
                           </Text>
                       )}
+                      {item.component && <item.component />}
                     </Flex>
                   </Link>
                 </Tooltip>
@@ -193,6 +203,7 @@ export function Sidebar({ user, onLogout }: SidebarProps) {
               </HStack>
             </Box>
         )}
+
 
         {collapsed && (
             <Box py={3} display="flex" justifyContent="center" borderTop="1px solid" borderColor={borderColor}>

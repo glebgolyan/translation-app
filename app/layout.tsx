@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { AppChakraProvider } from '@/shared/providers/ChakraProvider';
 import { QueryProvider } from '@/shared/providers/QueryProvider';
 import { ColorModeScript } from '@chakra-ui/react';
+import { MessagesProvider } from "@/shared/providers/MessagesProvider";
 
 export const metadata: Metadata = {
     title: 'TranslateOS — Document Translation Management',
@@ -12,6 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
         <head>
+            <title>Translation app</title>
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
             <link
@@ -22,7 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <body>
         <ColorModeScript initialColorMode="light" />
         <QueryProvider>
-            <AppChakraProvider>{children}</AppChakraProvider>
+            <AppChakraProvider>
+                <MessagesProvider>
+                    {children}
+                </MessagesProvider>
+            </AppChakraProvider>
         </QueryProvider>
         </body>
         </html>

@@ -4,7 +4,7 @@ import {
   Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent,
   DrawerCloseButton, Divider, Badge, SimpleGrid, Image, Modal,
   ModalOverlay, ModalContent, ModalCloseButton, ModalBody,
-  IconButton, Tooltip, useToast, Select, useColorModeValue,
+  IconButton, useToast, useColorModeValue,
 } from '@chakra-ui/react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useRef, useCallback } from 'react';
@@ -17,6 +17,9 @@ import {
 import { ordersApi } from '@/features/orders/api/ordersApi';
 import { StatusBadge } from '@/shared/ui/StatusBadge';
 import { Order, OrderStatus } from '@/entities/order/model/types';
+import {UnreadBadge} from "@/widgets/order-table/components/UnreadBadge";
+import {Messenger} from "@/widgets/order-table/components/Messenger";
+import {useAuth} from "@/features/auth/model/useAuth";
 
 // ─── File helpers ─────────────────────────────────────────────────────────────
 
@@ -212,6 +215,7 @@ const TRANSLATOR_STATUSES: { value: OrderStatus; label: string }[] = [
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function AssignmentsPage() {
+  const { user } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [previewUrl, setPreviewUrl] = useState('');
@@ -515,6 +519,30 @@ export default function AssignmentsPage() {
                       )}
                     </Box>
 
+
+                    {selectedOrder && (
+                        <Box mt={6} borderTop="1px solid" borderColor='gray.100' pt={6}>
+                          <HStack mb={4}>
+                            <Text fontFamily="Syne" fontWeight="700" fontSize="13px">
+                              Live Chat
+                            </Text>
+                            <UnreadBadge orderId={selectedOrder.id} />
+                          </HStack>
+                          <Messenger
+                              orderId={selectedOrder.id}
+                              onNewMessage={(msg) => {
+                                if (msg.senderId !== user?.id) {
+                                  toast({
+                                    title: 'New message',
+                                    description: msg.text || 'Sent a reaction',
+                                    status: 'info',
+                                    duration: 3000,
+                                  });
+                                }
+                              }}
+                          />
+                        </Box>
+                    )}
                   </VStack>
               )}
             </DrawerBody>
