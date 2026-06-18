@@ -1,128 +1,29 @@
-'use client';
-// app/register/page.tsx
-import {
-  Box, VStack, Text, FormControl, FormLabel, FormErrorMessage,
-  Input, Button, useToast, useColorModeValue,
-} from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import {useEffect, useState} from 'react';
-import {useRouter, useSearchParams} from 'next/navigation';
-import NextLink from 'next/link';
-import { useAuth } from '@/features/auth/model/useAuth';
-
-const schema = z.object({
-  name: z.string().min(2, 'Min 2 characters'),
-  email: z.string().email('Invalid email'),
-  phone: z.string().optional(),
-  password: z.string().min(6, 'Min 6 characters'),
-  confirm: z.string(),
-}).refine(d => d.password === d.confirm, { message: "Passwords don't match", path: ['confirm'] });
-
-type FormValues = z.infer<typeof schema>;
+import { Box, Text } from '@chakra-ui/react';
+import { Suspense } from 'react';
+import { RegisterPageContent } from './components/RegisterPageContent';
 
 export default function RegisterPage() {
-  const { register: authRegister } = useAuth();
-  const router = useRouter();
-  const toast = useToast();
-  const [loading, setLoading] = useState(false);
-
-  const searchParams = useSearchParams();
-  const hasAccess = searchParams.get('login') === 'true';
-
-  const bg = useColorModeValue('white', '#1a1a1a');
-  const borderColor = useColorModeValue('gray.100', '#2e2e2e');
-  const labelColor = useColorModeValue('gray.400', '#666666');
-
-  // Redirect if no login=true query param
-  useEffect(() => {
-    if (!hasAccess && !loading) {
-      router.push('/login');
-    }
-  }, [hasAccess, loading, router]);
-
-  if (loading || !hasAccess) return null;
-
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
-    resolver: zodResolver(schema),
-  });
-
-  const onSubmit = async (values: FormValues) => {
-    setLoading(true);
-    try {
-      await authRegister({ email: values.email, password: values.password, name: values.name, phone: values.phone });
-      router.push('/dashboard');
-    } catch {
-      toast({ title: 'Registration failed', status: 'error', duration: 3000 });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <Box minH="100vh" display="flex" alignItems="center" justifyContent="center" bg={bg} p={8}>
-      <Box w="100%" maxW="420px">
-        <Box mb={8} textAlign="center">
-          <Box
-            w="40px" h="40px" bg="brand.600" borderRadius="10px"
-            display="flex" alignItems="center" justifyContent="center"
-            mx="auto" mb={4}
-          >
-            <Text color="white" fontFamily="Syne" fontWeight="800" fontSize="20px">T</Text>
-          </Box>
-          <Text fontFamily="Syne" fontWeight="800" fontSize="26px" letterSpacing="-0.02em" mb={2}>
-            Create account
-          </Text>
-          {/*<Text color="gray.400" fontSize="14px">Join TranslateOS as a client</Text>*/}
-        </Box>
-
-        <Box bg={bg} borderRadius="12px" border="1px solid" borderColor={borderColor} p={8}>
-          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-            <VStack spacing={4}>
-              <FormControl isInvalid={!!errors.name}>
-                <FormLabel fontSize="13px">Full Name</FormLabel>
-                <Input {...register('name')} placeholder="John Doe" />
-                <FormErrorMessage fontSize="12px">{errors.name?.message}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl isInvalid={!!errors.email}>
-                <FormLabel fontSize="13px">Email</FormLabel>
-                <Input {...register('email')} type="email" placeholder="you@example.com" />
-                <FormErrorMessage fontSize="12px">{errors.email?.message}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl>
-                <FormLabel fontSize="13px">Phone (optional)</FormLabel>
-                <Input {...register('phone')} placeholder="+380 XX XXX XXXX" />
-              </FormControl>
-
-              <FormControl isInvalid={!!errors.password}>
-                <FormLabel fontSize="13px">Password</FormLabel>
-                <Input {...register('password')} type="password" placeholder="••••••••" />
-                <FormErrorMessage fontSize="12px">{errors.password?.message}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl isInvalid={!!errors.confirm}>
-                <FormLabel fontSize="13px">Confirm Password</FormLabel>
-                <Input {...register('confirm')} type="password" placeholder="••••••••" />
-                <FormErrorMessage fontSize="12px">{errors.confirm?.message}</FormErrorMessage>
-              </FormControl>
-
-              <Button type="submit" w="full" isLoading={loading} loadingText="Creating…" mt={2}>
-                Create Account
-              </Button>
-            </VStack>
+      <Box minH="100vh" display="flex">
+        {/* Left side - Brand */}
+        <Box flex={1} bg="brand.600" display={{ base: 'none', lg: 'flex' }} flexDirection="column" justifyContent="center" p={8}>
+          <Box mb={8}>
+            <Box w="48px" h="48px" bg="white" borderRadius="12px" display="flex" alignItems="center" justifyContent="center" mb={6}>
+              <Text color="brand.600" fontSize="24px" fontFamily="Syne" fontWeight="800">T</Text>
+            </Box>
+            <Text fontFamily="Syne" fontSize="32px" fontWeight="800" color="white" letterSpacing="-0.02em" mb={2}>
+              TranslateOS
+            </Text>
+            <Text color="rgba(255,255,255,0.7)" fontSize="16px" fontFamily="DM Sans">
+              Professional Document Translation Management
+            </Text>
           </Box>
         </Box>
 
-        <Text textAlign="center" fontSize="13px" color={labelColor} mt={4}>
-          Already have an account?{' '}
-          <NextLink href="/login" style={{ textDecoration: 'none' }}>
-            <Text as="span" color="brand.600" fontWeight="500">Sign in</Text>
-          </NextLink>
-        </Text>
+        {/* Right side - Form */}
+        <Suspense fallback={<Box flex={1} />}>
+          <RegisterPageContent />
+        </Suspense>
       </Box>
-    </Box>
   );
 }
