@@ -55,7 +55,7 @@ const NAV_ITEMS: NavItem[] = [
     component: () => <><UnreadBadge/></>,
     roles: ['ADMIN', 'MANAGER', 'TRANSLATOR']
   },
-  { labelKey: 'nav.dashboard', href: '/dashboard', icon: RiDashboardLine, roles: ['CLIENT', 'MANAGER', 'TRANSLATOR', 'ADMIN'] },
+  { labelKey: 'nav.dashboard', href: '/dashboard', icon: RiDashboardLine, roles: ['MANAGER', 'ADMIN'] },
   { labelKey: 'nav.orders', href: '/orders', icon: RiFileList3Line, roles: ['MANAGER', 'ADMIN'] },
   { labelKey: 'nav.translatorStats', href: '/translations', icon: RiBarChart2Line, roles: ['MANAGER', 'ADMIN'] },
   { labelKey: 'nav.apostilization', href: '/apostilization', icon: RiFileList3Line, roles: ['MANAGER', 'ADMIN'] },
