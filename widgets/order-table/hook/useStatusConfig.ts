@@ -36,7 +36,7 @@ export function useStatusConfig() {
             colorScheme: 'red',
         },
         CERTIFIED: {
-            label: t('orders.certified') || 'CERTIFIED',
+            label: t('status.CERTIFIED') || 'CERTIFIED',
             colorScheme: 'orange',
         },
     };
