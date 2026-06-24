@@ -129,7 +129,10 @@
     "NEW": "НОВЕ",
     "IN_PROGRESS": "В РОБОТІ",
     "DONE": "ГОТОВО",
-    "PAID": "ОПЛАЧЕНО"
+    "TAKEN": "Забрали",
+    "PAID": "ОПЛАЧЕНО",
+    "CANCELLED": "Відміна",
+    "CERTIFIED": "Завірено"
   },
   "assignments": {
     "title": "Мої завдання",

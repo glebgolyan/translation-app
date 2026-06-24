@@ -129,7 +129,10 @@
     "NEW": "NEW",
     "IN_PROGRESS": "IN PROGRESS",
     "DONE": "DONE",
-    "PAID": "PAID"
+    "TAKEN": "TAKEN",
+    "PAID": "PAID",
+    "CANCELLED": "CANCELLED",
+    "CERTIFIED": "CERTIFIED"
   },
   "assignments": {
     "title": "My Assignments",

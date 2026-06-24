@@ -130,7 +130,10 @@
     "NEW": "НОВЫЙ",
     "IN_PROGRESS": "В РАБОТЕ",
     "DONE": "ГОТОВО",
-    "PAID": "ОПЛАЧЕНО"
+    "TAKEN": "ЗАБРАЛИ",
+    "PAID": "ОПЛАЧЕНО",
+    "CANCELLED": "Отменён",
+    "CERTIFIED": "Заверено"
   },
   "assignments": {
     "title": "Мои задания",

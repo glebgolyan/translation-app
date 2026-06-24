@@ -1,7 +1,7 @@
 'use client';
 import {
     Box, Table, Thead, Tbody, Tr, Th, Td, HStack, Icon,
-    IconButton, Badge, useColorModeValue, Center, Spinner,
+    IconButton, useColorModeValue, Center, Spinner,
     useToast, Select,
 } from '@chakra-ui/react';
 import { RiEditLine, RiDeleteBinLine } from 'react-icons/ri';
@@ -96,6 +96,7 @@ export function ApostilizationTable({ month, search, onEdit }: ApostilizationTab
                                     >
                                         <option value="IN_PROGRESS">{t('apostilization.inWork')}</option>
                                         <option value="DONE">{t('apostilization.done')}</option>
+                                        <option value="TAKEN">{t('apostilization.TAKEN')}</option>
                                     </Select>
                                 </Td>
                                 <Td px={4} py={3}>

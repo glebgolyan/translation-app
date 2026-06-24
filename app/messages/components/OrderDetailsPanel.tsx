@@ -40,7 +40,9 @@ export function OrderDetailsPanel({ conversation }: OrderDetailsPanelProps) {
             PENDING: 'yellow',
             IN_PROGRESS: 'blue',
             COMPLETED: 'green',
+            TAKEN: 'green',
             CANCELLED: 'red',
+            CERTIFIED : 'orange',
         };
         return colors[status] || 'gray';
     };

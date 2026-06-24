@@ -92,7 +92,10 @@ export function TableFilters({ filters, total, onChange }: TableFiltersProps) {
                 <option value="">{t('orders.allStatuses')}</option>
                 <option value="NEW">{t('status.NEW')}</option>
                 <option value="IN_PROGRESS">{t('status.IN_PROGRESS')}</option>
+                <option value="CANCELLED">{t('status.CANCELLED')}</option>
+                <option value="CERTIFIED">{t('status.CERTIFIED')}</option>
                 <option value="DONE">{t('status.DONE')}</option>
+                <option value="TAKEN">{t('status.TAKEN')}</option>
                 <option value="PAID">{t('status.PAID')}</option>
             </Select>
 
