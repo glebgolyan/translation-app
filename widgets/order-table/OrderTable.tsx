@@ -47,6 +47,7 @@ interface OrderTableProps {
 export function OrderTable({ userRole, onEdit, onView, onDelete }: OrderTableProps) {
   const { t } = useT();
 
+  const headerBg = '#00ffff';
   const bg = useColorModeValue('white', '#1a1a1a');
   const borderColor = useColorModeValue('gray.100', '#2e2e2e');
   const labelColor = useColorModeValue('gray.400', '#666666');
@@ -82,7 +83,7 @@ export function OrderTable({ userRole, onEdit, onView, onDelete }: OrderTablePro
         <Box bg={bg} borderRadius="8px" border="1px solid" borderColor={borderColor} overflow="hidden">
           <Box overflowX="auto">
             <Table variant="simple" size="sm">
-              <Thead bg={bg}>
+              <Thead bg={headerBg}>
                 <Tr>
                   {visibleColumns.map(col => (
                       <Th

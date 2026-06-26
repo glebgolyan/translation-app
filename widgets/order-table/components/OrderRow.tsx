@@ -6,6 +6,7 @@ import { UserRole } from '@/entities/user/model/types';
 import { StatusBadge } from '@/shared/ui/StatusBadge';
 import { useT } from '@/shared/hooks/useT';
 import {FileStatusBadge} from "@/widgets/order-table/components/FileStatusBadge";
+import {useLanguageConfig} from "@/shared/hooks/useLanguageConfig";
 
 interface OrderRowProps {
     order: Order;
@@ -18,6 +19,8 @@ interface OrderRowProps {
 
 export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDelete }: OrderRowProps) {
     const { t } = useT();
+
+    const { getLanguageName } = useLanguageConfig();
 
     const renderCell = (colKey: string) => {
         switch (colKey) {
@@ -44,7 +47,7 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
                 </Text>;
             }
             case 'languages':
-                return <Text fontSize="13px" fontFamily="mono">{order.sourceLanguage} → {order.targetLanguage}</Text>;
+                return <Text fontSize="13px" fontFamily="mono">{getLanguageName(order.sourceLanguage)} → {getLanguageName(order.targetLanguage)}</Text>;
             case 'clientName':
                 return <Box>
                     <Text fontSize="13px" fontWeight="500">{order.clientName}</Text>

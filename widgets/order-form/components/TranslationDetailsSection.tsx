@@ -5,12 +5,7 @@ import {
 } from '@chakra-ui/react';
 import { UseFormRegister, FieldErrors, Control, Controller } from 'react-hook-form';
 import { useT } from '@/shared/hooks/useT';
-
-const LANGUAGES = [
-    'Ukrainian', 'English', 'German', 'French', 'Polish',
-    'Spanish', 'Italian', 'Romanian', 'Hungarian', 'Czech',
-    'Slovak', 'Russian', 'Arabic', 'Chinese', 'Japanese',
-];
+import {useLanguageConfig} from "@/shared/hooks/useLanguageConfig";
 
 interface TranslationDetailsSectionProps {
     register: UseFormRegister<any>;
@@ -20,7 +15,9 @@ interface TranslationDetailsSectionProps {
 
 export function TranslationDetailsSection({ register, errors, control }: TranslationDetailsSectionProps) {
     const { t } = useT();
+    const { getLanguageList } = useLanguageConfig();
 
+    const languages = getLanguageList();
     return (
         <Box>
             <Text fontFamily="Syne" fontWeight="700" fontSize="13px" letterSpacing="0.06em" textTransform="uppercase" color="gray.400" mb={4}>
@@ -31,17 +28,19 @@ export function TranslationDetailsSection({ register, errors, control }: Transla
                     <FormLabel fontSize="13px">{t('orders.sourceLanguage')}</FormLabel>
                     <Select {...register('sourceLanguage')} size="sm">
                         <option value="">Select language</option>
-                        {LANGUAGES.map(l => <option key={l} value={l}>{l}</option>)}
+                        {languages.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
                     </Select>
                     <FormErrorMessage>{errors.sourceLanguage?.message as string}</FormErrorMessage>
                 </FormControl>
 
                 <FormControl isInvalid={!!errors.targetLanguage}>
                     <FormLabel fontSize="13px">{t('orders.targetLanguage')}</FormLabel>
+
                     <Select {...register('targetLanguage')} size="sm">
                         <option value="">Select language</option>
-                        {LANGUAGES.map(l => <option key={l} value={l}>{l}</option>)}
+                        {languages.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
                     </Select>
+
                     <FormErrorMessage>{errors.targetLanguage?.message as string}</FormErrorMessage>
                 </FormControl>
 

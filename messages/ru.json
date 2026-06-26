@@ -175,5 +175,28 @@
     "due": "До",
     "original": "оригинал",
     "translated": "перевод"
+  },
+  "languages": {
+    "english": "Английский",
+    "ukrainian": "Украинский",
+    "russian": "Русский",
+    "polish": "Польский",
+    "german": "Немецкий",
+    "french": "Французский",
+    "spanish": "Испанский",
+    "italian": "Итальянский",
+    "portuguese": "Португальский",
+    "dutch": "Голландский",
+    "czech": "Чешский",
+    "hungarian": "Венгерский",
+    "romanian": "Румынский",
+    "bulgarian": "Болгарский",
+    "greek": "Греческий",
+    "turkish": "Турецкий",
+    "japanese": "Японский",
+    "chinese": "Китайский",
+    "korean": "Корейский",
+    "arabic": "Арабский",
+    "hebrew": "Иврит"
   }
 }

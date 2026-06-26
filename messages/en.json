@@ -174,5 +174,28 @@
     "due": "Due",
     "original": "original",
     "translated": "translated"
+  },
+  "languages": {
+    "english": "English",
+    "ukrainian": "Ukrainian",
+    "russian": "Russian",
+    "polish": "Polish",
+    "german": "German",
+    "french": "French",
+    "spanish": "Spanish",
+    "italian": "Italian",
+    "portuguese": "Portuguese",
+    "dutch": "Dutch",
+    "czech": "Czech",
+    "hungarian": "Hungarian",
+    "romanian": "Romanian",
+    "bulgarian": "Bulgarian",
+    "greek": "Greek",
+    "turkish": "Turkish",
+    "japanese": "Japanese",
+    "chinese": "Chinese",
+    "korean": "Korean",
+    "arabic": "Arabic",
+    "hebrew": "Hebrew"
   }
 }
