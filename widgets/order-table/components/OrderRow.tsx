@@ -1,5 +1,5 @@
 'use client';
-import {Tr, Td, HStack, IconButton, Icon, Text, Box, useColorModeValue, Tooltip} from '@chakra-ui/react';
+import {Tr, Td, HStack, IconButton, Icon, Text, Box, useColorModeValue, Tooltip, useToast} from '@chakra-ui/react';
 import { RiEyeLine, RiEditLine, RiDeleteBinLine } from 'react-icons/ri';
 import { Order } from '@/entities/order/model/types';
 import { UserRole } from '@/entities/user/model/types';
@@ -17,17 +17,44 @@ interface OrderRowProps {
     onDelete?: (order: Order) => void;
 }
 
+
+
 export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDelete }: OrderRowProps) {
     const { t } = useT();
+
+    const toast = useToast();
+
+    const handleCopyId = (fullId: string) => {
+        navigator.clipboard.writeText(fullId);
+        toast({
+            title: 'Copied!',
+            description: fullId,
+            status: 'success',
+            duration: 2000,
+            isClosable: true,
+        });
+    };
 
     const { getLanguageName } = useLanguageConfig();
 
     const renderCell = (colKey: string) => {
         switch (colKey) {
-            case 'orderNumber':
+            case 'id':
                 return (
-                    <Text fontSize="12px" fontFamily="mono" fontWeight="600" color='gray.600'>
-                        #{order.orderNumber}
+                    <Text
+                        fontSize="12px"
+                        fontFamily="mono"
+                        fontWeight="600"
+                        color={useColorModeValue('gray.700', 'gray.300')}
+                        cursor="pointer"
+                        onClick={() => handleCopyId(order.id)}
+                        _hover={{
+                            textDecoration: 'underline',
+                            opacity: 0.7,
+                        }}
+                        title={`Click to copy full ID: ${order.id}`}
+                    >
+                        #{order.id.substring(0, 7)}...
                     </Text>
                 );
             case 'fileStatus':

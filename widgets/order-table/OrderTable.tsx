@@ -23,6 +23,7 @@ interface Column {
 }
 
 const COLUMNS: Column[] = [
+  { key: 'id', labelKey: '#', sortable: false, width: '20px' },
   { key: 'createdAt', labelKey: 'orders.received', sortable: true, width: '90px' },
   { key: 'dueDate', labelKey: 'orders.deadline', sortable: true, width: '90px' },
   { key: 'languages', labelKey: 'orders.languages', width: '160px' },
@@ -30,7 +31,6 @@ const COLUMNS: Column[] = [
   { key: 'clientName', labelKey: 'orders.clientName', sortable: true, roles: ['MANAGER', 'ADMIN'], width: '140px' },
   { key: 'documentType', labelKey: 'orders.documentType', roles: ['MANAGER', 'ADMIN'], width: '110px' },
   { key: 'totalPrice', labelKey: 'orders.totalPrice', sortable: true, roles: ['MANAGER', 'ADMIN'], width: '110px' },
-  // { key: 'paymentType', labelKey: 'orders.paymentType', roles: ['MANAGER', 'ADMIN'], width: '110px' },
   { key: 'translator', labelKey: 'orders.translator', roles: ['MANAGER', 'ADMIN'], width: '120px' },
   { key: 'comment', labelKey: 'orders.comment', roles: ['MANAGER', 'ADMIN'], width: '140px' },
   { key: 'originalFiles', labelKey: 'orders.files', width: '130px' },
