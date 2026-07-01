@@ -14,13 +14,13 @@ export default function DashboardPage() {
 
     const { data: ordersData } = useQuery({
         queryKey: ['orders', 'dashboard'],
-        queryFn: () => ordersApi.getAll({ limit: 5 }),
+        queryFn: () => ordersApi.getAll({ limit: 50 }),
     });
 
     const orders = ordersData?.data || [];
     const total = ordersData?.total || 0;
-    const inProgress = orders.filter(o => o.status === 'IN_PROGRESS').length;
-    const done = orders.filter(o => o.status === 'DONE').length;
+    const inProgress = orders.filter(o => o.status === 'IN_PROGRESS' || o.status === 'DONE' || o.status === 'NEW').length;
+    const done = orders.filter(o =>  o.status === 'CERTIFIED' || o.status === 'TAKEN').length;
     const revenue = orders.reduce((sum, o) => sum + o.totalPrice, 0);
 
     return (

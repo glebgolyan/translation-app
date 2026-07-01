@@ -47,11 +47,14 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
                 </Text>;
             }
             case 'languages':
-                return <Text fontSize="13px" fontFamily="mono">{getLanguageName(order.sourceLanguage)} → {getLanguageName(order.targetLanguage)}</Text>;
+                return <Text fontSize="13px" fontFamily="mono">
+                    {getLanguageName(order.sourceLanguage)}
+                    →
+                    {getLanguageName(order.targetLanguage)}</Text>;
             case 'clientName':
                 return <Box>
                     <Text fontSize="13px" fontWeight="500">{order.clientName}</Text>
-                    <Text fontSize="11px" color="gray.400">{order.phone}</Text>
+                    <Text fontSize="13px" color="gray.400">{order.phone}</Text>
                 </Box>;
             case 'documentType':
                 return <Text fontSize="13px">{order.documentType || '—'}</Text>;
@@ -102,7 +105,7 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
                     {order.paymentType}{order.cardAmount ? ` / ₴${order.cardAmount}` : ''}
                 </Text>;
             case 'translator':
-                return <Text fontSize="13px" color={order.translator ? 'gray.700' : 'gray.300'}>
+                return <Text fontSize="13px" color={useColorModeValue('gray.700', 'gray.300')}>
                     {order.translator?.name || t('orders.unassigned')}
                 </Text>;
             case 'comment':
