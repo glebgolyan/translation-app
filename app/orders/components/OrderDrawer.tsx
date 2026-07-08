@@ -7,9 +7,6 @@ import { OrderForm } from '@/widgets/order-form/OrderForm';
 import { Order, UpdateOrderDto } from '@/entities/order/model/types';
 import { User } from '@/entities/user/model/types';
 import { useT } from '@/shared/hooks/useT';
-import {UnreadBadge} from "@/widgets/order-table/components/UnreadBadge";
-import {Messenger} from "@/widgets/order-table/components/Messenger";
-import {useAuth} from "@/features/auth/model/useAuth";
 
 interface OrderDrawerProps {
     isOpen: boolean;
