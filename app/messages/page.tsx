@@ -65,7 +65,7 @@ export default function MessagesPage() {
                             <HStack w="100%" pb={3} borderBottom="1px solid" borderColor={dividerColor} align="flex-start">
                                 <VStack align="start" spacing={0} flex={1}>
                                     <Text fontFamily="Syne" fontWeight="700" fontSize="14px" color={textColor}>
-                                        Order #{selectedConversation.orderNumber}
+                                        Order #{selectedConversation.id}
                                     </Text>
                                     <Text fontSize="12px" color={subtitleColor}>
                                         {selectedConversation.clientName}

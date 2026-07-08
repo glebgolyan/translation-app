@@ -1,9 +1,11 @@
 'use client';
-import { Badge, Icon, Tooltip } from '@chakra-ui/react';
+import {Badge, Icon, Tooltip, useToast} from '@chakra-ui/react';
 import { RiChat3Line } from 'react-icons/ri';
 import { useQuery } from '@tanstack/react-query';
 import { messagesApi } from '@/features/messages/api/messagesApi';
 import { useAuth } from '@/features/auth/model/useAuth';
+import {useEffect} from "react";
+import {useMessageSound} from "@/shared/hooks/useMessageSound";
 
 interface UnreadBadgeProps {
     orderId?: string;
@@ -12,12 +14,29 @@ interface UnreadBadgeProps {
 export function UnreadBadge({ orderId }: UnreadBadgeProps) {
     const { user } = useAuth();
 
+    const toast = useToast();
+
+    const playMessageSound = useMessageSound();
+
     const { data: unreadCount = 0 } = useQuery({
         queryKey: ['unread_messages'],
         queryFn: () => messagesApi.getUnreadCount(user?.id!, orderId),
         enabled: !!user?.id,
         refetchInterval: 3000,
     });
+
+    useEffect(() => {
+        playMessageSound();
+
+        toast({
+            title: '📨 New Message',
+            description: ``,
+            status: 'info',
+            duration: 4000,
+            isClosable: true,
+            position: 'top-right',
+        });
+    }, [unreadCount]);
 
     // if (unreadCount === 0) return null;
 

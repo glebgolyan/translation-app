@@ -72,7 +72,7 @@ export function ConversationList({ onSelectConversation, selectedId }: Conversat
                         <VStackVertical spacing={0} flex={1}>
                             <HStack spacing={2} justify="space-between" w="100%">
                                 <Text fontWeight="700" fontSize="13px" color={textColor}>
-                                    Order #{conv.orderNumber}
+                                    Order #{conv.id}
                                 </Text>
                                 {conv.unreadCount > 0 && (
                                     <Badge colorScheme="red" fontSize="10px">

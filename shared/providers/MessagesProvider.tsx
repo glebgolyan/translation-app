@@ -9,7 +9,7 @@ interface MessagesContextType {
     socket: Socket | null;
 }
 
-const MessagesContext = createContext<MessagesContextType>({
+export const MessagesContext = createContext<MessagesContextType>({
     unreadCount: 0,
     socket: null,
 });
@@ -29,6 +29,9 @@ export function MessagesProvider({ children }: { children: React.ReactNode }) {
         const baseUrl = new URL(apiUrl).origin || 'http://localhost:3001';
 
         const socket = io(`${baseUrl}/messages`, {
+            auth: {
+                userId: user.id,
+            },
             query: { userId: user.id },
             reconnection: true,
             reconnectionDelay: 1000,
@@ -39,6 +42,8 @@ export function MessagesProvider({ children }: { children: React.ReactNode }) {
         socket.on('connect', () => {
             console.log('✅ Messages socket connected');
             console.log('--socket--', socket)
+
+            socket.emit(`user:${user.id}`);
         });
 
         socket.on('new_message', (message: any) => {
