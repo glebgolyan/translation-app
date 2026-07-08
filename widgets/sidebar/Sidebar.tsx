@@ -19,6 +19,8 @@ import { useColorModeValue } from '@chakra-ui/react';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { UnreadBadge } from "@/widgets/order-table/components/UnreadBadge";
+import {useContext} from "react";
+import {MessagesContext} from "@/shared/providers/MessagesProvider";
 
 // ─── Sidebar collapse store ───────────────────────────────────────────────────
 
