@@ -1,7 +1,7 @@
 'use client';
 import {
     Drawer, DrawerBody, DrawerHeader, DrawerOverlay,
-    DrawerContent, DrawerCloseButton, Box, HStack, Text, useToast
+    DrawerContent, DrawerCloseButton
 } from '@chakra-ui/react';
 import { OrderForm } from '@/widgets/order-form/OrderForm';
 import { Order, UpdateOrderDto } from '@/entities/order/model/types';
