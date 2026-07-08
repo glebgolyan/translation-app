@@ -23,8 +23,10 @@ export function MessagesProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         if (!user?.id) return;
 
-        // Get base URL
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:3001';
+        // Get base URL by removing /api from NEXT_PUBLIC_API_URL
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
+
+        const baseUrl = new URL(apiUrl).origin || 'http://localhost:3001';
 
         const socket = io(`${baseUrl}/messages`, {
             query: { userId: user.id },

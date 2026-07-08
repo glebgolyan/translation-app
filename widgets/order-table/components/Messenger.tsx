@@ -57,7 +57,9 @@ export function Messenger({ orderId, translatorId, onNewMessage }: MessengerProp
         if (!user?.id) return;
 
         // Get base URL by removing /api from NEXT_PUBLIC_API_URL
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:3001';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
+
+        const baseUrl = new URL(apiUrl).origin || 'http://localhost:3001';
 
         console.log('Connecting to socket.io at:', baseUrl, 'namespace: /messages');
 
