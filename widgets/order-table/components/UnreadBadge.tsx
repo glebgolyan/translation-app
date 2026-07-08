@@ -26,16 +26,18 @@ export function UnreadBadge({ orderId }: UnreadBadgeProps) {
     });
 
     useEffect(() => {
-        playMessageSound();
+        if(unreadCount){
+            playMessageSound();
 
-        toast({
-            title: '📨 New Message',
-            description: ``,
-            status: 'info',
-            duration: 4000,
-            isClosable: true,
-            position: 'top-right',
-        });
+            toast({
+                title: '📨 New Message',
+                description: ``,
+                status: 'info',
+                duration: 4000,
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
     }, [unreadCount]);
 
     // if (unreadCount === 0) return null;
