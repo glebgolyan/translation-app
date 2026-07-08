@@ -25,11 +25,7 @@ interface OrderDrawerProps {
 export function OrderDrawer({
                                 isOpen, onClose, order, translators, mode, isLoading, onSubmit, userRole,
                             }: OrderDrawerProps) {
-    const { user } = useAuth();
-
     const { t } = useT();
-
-    const toast = useToast();
 
     return (
         <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="xl">
@@ -50,29 +46,7 @@ export function OrderDrawer({
                         userRole={userRole}
                     />
 
-                    {order && (
-                        <Box mt={6} borderTop="1px solid" borderColor='gray.100' pt={6}>
-                            <HStack mb={4}>
-                                <Text fontFamily="Syne" fontWeight="700" fontSize="13px">
-                                    Live Chat
-                                </Text>
-                                <UnreadBadge orderId={order.id} />
-                            </HStack>
-                            <Messenger
-                                orderId={order.id}
-                                onNewMessage={(msg) => {
-                                    if (msg.senderId !== user?.id) {
-                                        toast({
-                                            title: 'New message',
-                                            description: msg.text || 'Sent a reaction',
-                                            status: 'info',
-                                            duration: 3000,
-                                        });
-                                    }
-                                }}
-                            />
-                        </Box>
-                    )}
+
                 </DrawerBody>
             </DrawerContent>
         </Drawer>

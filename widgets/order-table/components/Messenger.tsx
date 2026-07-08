@@ -198,7 +198,7 @@ export function Messenger({ orderId, translatorId, onNewMessage }: MessengerProp
     }, [messages, user?.id]);
 
     return (
-        <VStack spacing={3} w="100%" minH="400px" maxH='600px' bg={bg} border="1px solid" borderColor={borderColor} borderRadius="8px" p={3}>
+        <VStack spacing={3} w="100%" minH="260px" maxH='600px' bg={bg} border="1px solid" borderColor={borderColor} borderRadius="8px" p={3}>
             {/* Messages area */}
             <Box
                 ref={scrollRef}

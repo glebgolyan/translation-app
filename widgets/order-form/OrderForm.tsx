@@ -1,6 +1,6 @@
 'use client';
 import {
-  Box, VStack, HStack, Button, Text, Divider, Icon,
+  Box, VStack, HStack, Button, Text, Divider, Icon, Flex,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,6 +17,9 @@ import { PaymentSection } from './components/PaymentSection';
 import { AssignmentSection } from './components/AssignmentSection';
 import { FileSection } from './components/FileSection';
 import {CommentSection} from "@/widgets/order-form/components/CommentSection";
+import {UnreadBadge} from "@/widgets/order-table/components/UnreadBadge";
+import {Messenger} from "@/widgets/order-table/components/Messenger";
+import {useAuth} from "@/features/auth/model/useAuth";
 
 const ACCEPTED_TYPES = [
   'application/pdf',
@@ -60,7 +63,11 @@ export function OrderForm({
                             order, translators = [], onSubmit, onCancel, isLoading, mode = 'edit', userRole,
                           }: OrderFormProps) {
   const { t } = useT();
+
   const toast = useToast();
+
+  const { user } = useAuth();
+
   const [originalLocal, setOriginalLocal] = useState<File[]>([]);
   const [translatedLocal, setTranslatedLocal] = useState<File[]>([]);
   const [existingOriginal, setExistingOriginal] = useState<string[]>(order?.originalFiles || []);
@@ -118,56 +125,83 @@ export function OrderForm({
   return (
       <Box as="form" onSubmit={handleSubmit(handleFormSubmit)}>
         <VStack spacing={6} align="stretch">
-
-          {isManagerOrAdmin && (
-              <ClientInfoSection register={register} errors={errors} />
-          )}
-
-          <TranslationDetailsSection register={register} errors={errors} control={control} />
-
-          {isManagerOrAdmin && (
-              <PaymentSection register={register} control={control} paymentType={paymentType} setValue={setValue} />
-          )}
-
-          {isManagerOrAdmin && (
-              <AssignmentSection register={register} translators={translators} />
-          )}
-
-          {
-              isManagerOrAdmin && <CommentSection register={register} />
-          }
-
-          <Box>
-            <Text fontFamily="Syne" fontWeight="700" fontSize="13px" letterSpacing="0.06em"
-                  textTransform="uppercase" color="gray.400" mb={4}>
-              {t('orders.files')}
-            </Text>
-            <VStack spacing={5} align="stretch">
-              <FileSection
-                  label={t('orders.originalDocs')}
-                  existingFiles={existingOriginal}
-                  localFiles={originalLocal}
-                  onAddFiles={addOriginalFiles}
-                  onRemoveLocal={i => setOriginalLocal(prev => prev.filter((_, idx) => idx !== i))}
-                  onRemoveExisting={isManagerOrAdmin ? i => setExistingOriginal(prev => prev.filter((_, idx) => idx !== i)) : undefined}
-                  canUpload={userRole !== 'TRANSLATOR'}
-              />
-              {(isManagerOrAdmin || userRole === 'TRANSLATOR') && (
-                  <>
-                    <Divider />
-                    <FileSection
-                        label={t('orders.translatedDocs')}
-                        existingFiles={existingTranslated}
-                        localFiles={translatedLocal}
-                        onAddFiles={addTranslatedFiles}
-                        onRemoveLocal={i => setTranslatedLocal(prev => prev.filter((_, idx) => idx !== i))}
-                        onRemoveExisting={isManagerOrAdmin ? i => setExistingTranslated(prev => prev.filter((_, idx) => idx !== i)) : undefined}
-                        canUpload={true}
-                    />
-                  </>
+          <Flex flexDir="row" gap={2}>
+            <Flex flexDir='column'>
+              {isManagerOrAdmin && (
+                  <ClientInfoSection register={register} errors={errors} />
               )}
-            </VStack>
-          </Box>
+
+              <TranslationDetailsSection register={register} errors={errors} control={control} />
+
+              {isManagerOrAdmin && (
+                  <PaymentSection register={register} control={control} paymentType={paymentType} setValue={setValue} />
+              )}
+
+              {isManagerOrAdmin && (
+                  <AssignmentSection register={register} translators={translators} />
+              )}
+
+              {
+                  isManagerOrAdmin && <CommentSection register={register} />
+              }
+            </Flex>
+
+            <Flex flexDir='column'>
+              <Text fontFamily="Syne" fontWeight="700" fontSize="13px" letterSpacing="0.06em"
+                    textTransform="uppercase" color="gray.400" mb={4}>
+                {t('orders.files')}
+              </Text>
+              <VStack spacing={5} align="stretch">
+                <FileSection
+                    label={t('orders.originalDocs')}
+                    existingFiles={existingOriginal}
+                    localFiles={originalLocal}
+                    onAddFiles={addOriginalFiles}
+                    onRemoveLocal={i => setOriginalLocal(prev => prev.filter((_, idx) => idx !== i))}
+                    onRemoveExisting={isManagerOrAdmin ? i => setExistingOriginal(prev => prev.filter((_, idx) => idx !== i)) : undefined}
+                    canUpload={userRole !== 'TRANSLATOR'}
+                />
+                {(isManagerOrAdmin || userRole === 'TRANSLATOR') && (
+                    <>
+                      <Divider />
+                      <FileSection
+                          label={t('orders.translatedDocs')}
+                          existingFiles={existingTranslated}
+                          localFiles={translatedLocal}
+                          onAddFiles={addTranslatedFiles}
+                          onRemoveLocal={i => setTranslatedLocal(prev => prev.filter((_, idx) => idx !== i))}
+                          onRemoveExisting={isManagerOrAdmin ? i => setExistingTranslated(prev => prev.filter((_, idx) => idx !== i)) : undefined}
+                          canUpload={true}
+                      />
+                    </>
+                )}
+              </VStack>
+
+              {order && (
+                  <Box mt={6} borderTop="1px solid" borderColor='gray.100' pt={6}>
+                    <HStack mb={4}>
+                      <Text fontFamily="Syne" fontWeight="700" fontSize="13px">
+                        Live Chat
+                      </Text>
+                      <UnreadBadge orderId={order.id} />
+                    </HStack>
+                    <Messenger
+                        orderId={order.id}
+                        onNewMessage={(msg) => {
+                          if (msg.senderId !== user?.id) {
+                            toast({
+                              title: 'New message',
+                              description: msg.text || 'Sent a reaction',
+                              status: 'info',
+                              duration: 3000,
+                            });
+                          }
+                        }}
+                    />
+                  </Box>
+              )}
+            </Flex>
+          </Flex>
 
           <HStack justify="flex-end" pt={2}>
             <Button variant="ghost" size="sm" onClick={onCancel} colorScheme="gray">
