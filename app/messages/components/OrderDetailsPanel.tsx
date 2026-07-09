@@ -146,25 +146,25 @@ export function OrderDetailsPanel({ conversation }: OrderDetailsPanelProps) {
             <Divider />
 
             {/* Payment Information */}
-            <Box>
-                <Text fontFamily="Syne" fontWeight="700" fontSize="13px" mb={3} color={textColor}>
-                    Payment Details
-                </Text>
-                <Grid templateColumns="1fr 1fr" gap={3} fontSize="13px">
-                    <VStack spacing={1} align="start" bg={bgSubtle} p={2} borderRadius="6px">
-                        <Text color={mutedColor} fontSize="11px">Total</Text>
-                        <Text fontWeight="700" color={textColor} fontSize="14px" fontFamily="mono">
-                            ₴{conversation.totalPrice?.toLocaleString()}
-                        </Text>
-                    </VStack>
-                    <VStack spacing={1} align="start" bg={bgSubtle} p={2} borderRadius="6px">
-                        <Text color={mutedColor} fontSize="11px">Deposit</Text>
-                        <Text fontWeight="700" color={textColor} fontSize="14px" fontFamily="mono">
-                            ₴{conversation.deposit?.toLocaleString()}
-                        </Text>
-                    </VStack>
-                </Grid>
-            </Box>
+            {/*<Box>*/}
+            {/*    <Text fontFamily="Syne" fontWeight="700" fontSize="13px" mb={3} color={textColor}>*/}
+            {/*        Payment Details*/}
+            {/*    </Text>*/}
+            {/*    <Grid templateColumns="1fr 1fr" gap={3} fontSize="13px">*/}
+            {/*        <VStack spacing={1} align="start" bg={bgSubtle} p={2} borderRadius="6px">*/}
+            {/*            <Text color={mutedColor} fontSize="11px">Total</Text>*/}
+            {/*            <Text fontWeight="700" color={textColor} fontSize="14px" fontFamily="mono">*/}
+            {/*                ₴{conversation.totalPrice?.toLocaleString()}*/}
+            {/*            </Text>*/}
+            {/*        </VStack>*/}
+            {/*        <VStack spacing={1} align="start" bg={bgSubtle} p={2} borderRadius="6px">*/}
+            {/*            <Text color={mutedColor} fontSize="11px">Deposit</Text>*/}
+            {/*            <Text fontWeight="700" color={textColor} fontSize="14px" fontFamily="mono">*/}
+            {/*                ₴{conversation.deposit?.toLocaleString()}*/}
+            {/*            </Text>*/}
+            {/*        </VStack>*/}
+            {/*    </Grid>*/}
+            {/*</Box>*/}
 
             {/* Edit Drawer */}
             {order && (
