@@ -55,7 +55,7 @@ export function ApostilizationForm({
             deposit: initialData?.deposit || 0,
             costPrice: initialData?.costPrice || 0,
             paymentType: initialData?.paymentType || 'cash',
-            status: initialData?.status || 'IN_WORK',
+            status: initialData?.status || 'IN_PROGRESS',
             notes: initialData?.notes || '',
         },
     });
@@ -175,7 +175,7 @@ export function ApostilizationForm({
                     <FormControl isInvalid={!!errors.status}>
                         <FormLabel fontSize="13px" color={labelColor}>{t('apostilization.status')}</FormLabel>
                         <Select {...register('status')} size="sm">
-                            <option value="IN_WORK">{t('apostilization.inWork')}</option>
+                            <option value="IN_PROGRESS">{t('apostilization.inWork')}</option>
                             <option value="DONE">{t('apostilization.done')}</option>
                         </Select>
                     </FormControl>

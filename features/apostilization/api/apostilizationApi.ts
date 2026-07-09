@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/api/client';
+import { Apostilization } from "@/entities/apostilization/model/types";
 
 export const apostilizationApi = {
     create: async (dto: any) => {
@@ -6,7 +7,7 @@ export const apostilizationApi = {
         return data;
     },
 
-    getAll: async (filters?: { month?: string; search?: string }) => {
+    getAll: async (filters?: { month?: string; search?: string }):Promise<Apostilization[]> => {
         const params = new URLSearchParams();
         if (filters?.month) params.append('month', filters.month);
         if (filters?.search) params.append('search', filters.search);

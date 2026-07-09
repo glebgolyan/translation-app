@@ -7,21 +7,39 @@ import { useAuth } from '@/features/auth/model/useAuth';
 import { useT } from '@/shared/hooks/useT';
 import { StatCard } from './components/StatCard';
 import { RecentOrders } from './components/RecentOrders';
+import {apostilizationApi} from "@/features/apostilization/api/apostilizationApi";
+import {useState} from "react";
 
 export default function DashboardPage() {
     const { user } = useAuth();
     const { t } = useT();
+
+    const [month] = useState(() => {
+        const now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    });
 
     const { data: ordersData } = useQuery({
         queryKey: ['orders', 'dashboard'],
         queryFn: () => ordersApi.getAll({ limit: 50 }),
     });
 
+
+    const { data: apostilization = [] } = useQuery({
+        queryKey: ['apostilization'],
+        queryFn: () => apostilizationApi.getAll({month}),
+    });
+
     const orders = ordersData?.data || [];
     const total = ordersData?.total || 0;
     const inProgress = orders.filter(o => o.status === 'IN_PROGRESS' || o.status === 'DONE' || o.status === 'NEW').length;
     const done = orders.filter(o =>  o.status === 'CERTIFIED' || o.status === 'TAKEN').length;
-    const revenue = orders.reduce((sum, o) => sum + o.totalPrice, 0);
+
+    const totalApostilization = apostilization.reduce((sum, a) => sum + a.costPrice, 0);
+
+    const totalOrders = orders.reduce((sum, o) => sum + o.totalPrice, 0);
+
+    const revenue = totalOrders + totalApostilization
 
     return (
         <Box p={8}>
