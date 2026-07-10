@@ -1,6 +1,6 @@
 'use client';
 import {
-  Box, VStack, HStack, Button, Text, Divider, Icon, Flex,
+  Box, VStack, HStack, Button, Text, Divider, Icon, Flex, Grid,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -125,8 +125,8 @@ export function OrderForm({
   return (
       <Box as="form" onSubmit={handleSubmit(handleFormSubmit)}>
         <VStack spacing={6} align="stretch">
-          <Flex flexDir="row" gap={2}>
-            <Flex flexDir='column'>
+          <Grid gridTemplateColumns='1.2fr 1fr' gap={4}>
+            <Flex flexDir='column' minW='250px'>
               {isManagerOrAdmin && (
                   <ClientInfoSection register={register} errors={errors} />
               )}
@@ -201,7 +201,7 @@ export function OrderForm({
                   </Box>
               )}
             </Flex>
-          </Flex>
+          </Grid>
 
           <HStack justify="flex-end" pt={2}>
             <Button variant="ghost" size="sm" onClick={onCancel} colorScheme="gray">

@@ -47,14 +47,14 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
                         fontWeight="600"
                         color={useColorModeValue('gray.700', 'gray.300')}
                         cursor="pointer"
-                        onClick={() => handleCopyId(order.id)}
+                        onClick={() => handleCopyId(order.orderNumber.toString())}
                         _hover={{
                             textDecoration: 'underline',
                             opacity: 0.7,
                         }}
-                        title={`Click to copy full ID: ${order.id}`}
+                        title={`Click to copy full ID: ${order.orderNumber}`}
                     >
-                        #{order.id.substring(0, 7)}...
+                        #{order.orderNumber > 10000 ? `${order.orderNumber.toString().substring(0, 7)}...` : order.orderNumber}
                     </Text>
                 );
             case 'fileStatus':
@@ -66,10 +66,10 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
                     />
                 );
             case 'createdAt':
-                return <Text fontSize="13px" fontFamily="mono" color="gray.600">{new Date(order.createdAt).toLocaleDateString('uk-UA')}</Text>;
+                return <Text fontSize="13px" fontFamily="mono" color="gray.200">{new Date(order.createdAt).toLocaleDateString('uk-UA')}</Text>;
             case 'dueDate': {
                 const isLate = order.dueDate && new Date(order.dueDate) < new Date() && order.status !== 'DONE' && order.status !== 'PAID';
-                return <Text fontSize="13px" fontFamily="mono" color={isLate ? 'red.500' : 'gray.600'} fontWeight={isLate ? '600' : '400'}>
+                return <Text fontSize="13px" fontFamily="mono" color={isLate ? 'red.500' : 'gray.200'} fontWeight={isLate ? '600' : '400'}>
                     {order.dueDate ? new Date(order.dueDate).toLocaleDateString('uk-UA') : '—'}
                 </Text>;
             }
