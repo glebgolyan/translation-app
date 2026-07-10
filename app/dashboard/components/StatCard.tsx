@@ -17,14 +17,14 @@ export function StatCard({ label, value, icon, color, change }: StatCardProps) {
     const helpColor = useColorModeValue('gray.500', '#888888');
 
     return (
-        <Box bg={bg} borderRadius="8px" p={6} border="1px solid" borderColor={borderColor}>
+        <Box bg={bg} borderRadius="8px" p={{base: 3, md: 6}} border="1px solid" borderColor={borderColor}>
             <Flex justify="space-between" align="flex-start">
                 <Stat>
                     <StatLabel fontSize="12px" fontFamily="Syne" letterSpacing="0.06em"
                                textTransform="uppercase" color={labelColor} mb={2}>
                         {label}
                     </StatLabel>
-                    <StatNumber fontSize="28px" fontFamily="Syne" fontWeight="700"
+                    <StatNumber fontSize={{base: '16px', md: '28px'}} fontFamily="Syne" fontWeight="700"
                                 letterSpacing="-0.02em" color={valueColor}>
                         {value}
                     </StatNumber>
@@ -35,9 +35,9 @@ export function StatCard({ label, value, icon, color, change }: StatCardProps) {
                         </StatHelpText>
                     )}
                 </Stat>
-                <Box p={3} bg={`${color}22`} borderRadius="8px">
+                <Flex alignItems='center' justifyContent='center' p={3} bg={`${color}22`} borderRadius="8px">
                     <Icon as={icon} boxSize={5} color={color} />
-                </Box>
+                </Flex>
             </Flex>
         </Box>
     );

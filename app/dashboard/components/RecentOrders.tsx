@@ -3,6 +3,8 @@ import { Box, Flex, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { Order } from '@/entities/order/model/types';
 import { StatusBadge } from '@/shared/ui/StatusBadge';
 import { useT } from '@/shared/hooks/useT';
+import {redirect} from "next/navigation";
+import Link from "next/link";
 
 interface RecentOrdersProps {
     orders: Order[];
@@ -29,9 +31,10 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
                 <Text fontFamily="Syne" fontWeight="700" fontSize="15px" color={headerText}>
                     {t('dashboard.recentOrders')}
                 </Text>
-                <Text fontSize="12px" color="brand.400" cursor="pointer" fontFamily="DM Sans">
+
+                <Link href='orders' className='text-brand-500 hover:underline'>
                     {t('dashboard.viewAll')}
-                </Text>
+                </Link>
             </Flex>
 
             <VStack spacing={0} align="stretch"
@@ -45,6 +48,8 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
                         <Flex
                             key={order.id} px={6} py={4} align="center" gap={4}
                             _hover={{ bg: hoverBg }} cursor="pointer" transition="background 0.15s"
+                            flexWrap='wrap'
+                            justifyContent='space-between'
                         >
                             <Box flex={1}>
                                 <Text fontSize="14px" fontWeight="500" mb={0.5} color={clientNameColor}>
