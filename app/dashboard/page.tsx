@@ -37,7 +37,7 @@ export default function DashboardPage() {
 
     const totalApostilization = apostilization.reduce((sum, a) => sum + a.costPrice, 0);
 
-    const totalOrders = orders.reduce((sum, o) => sum + o.totalPrice, 0);
+    const totalOrders = orders.filter((order)=>order.status !== 'CANCELLED').reduce((sum, o) => sum + o.totalPrice, 0);
 
     const revenue = totalOrders + totalApostilization
 

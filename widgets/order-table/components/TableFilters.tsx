@@ -100,7 +100,7 @@ export function TableFilters({ filters, total, onChange }: TableFiltersProps) {
             </Select>
 
             {/* Date range pills */}
-            <HStack spacing={1}>
+            <Flex gap={2} flexWrap='wrap' alignItems='center'>
                 <Icon as={RiCalendarLine} color={totalColor} boxSize={4} />
                 {DATE_RANGES.map(range => {
                     const isActive = activeRange === range.value;
@@ -126,7 +126,7 @@ export function TableFilters({ filters, total, onChange }: TableFiltersProps) {
                         </Button>
                     );
                 })}
-            </HStack>
+            </Flex>
 
             <Text fontSize="13px" color={totalColor} ml="auto">
                 {total} orders

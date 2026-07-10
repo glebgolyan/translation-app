@@ -27,12 +27,12 @@ export function OrderDrawer({
     return (
         <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="xl">
             <DrawerOverlay />
-            <DrawerContent w="1000px" maxW="1000px">
+            <DrawerContent w="100%" maxW={{base: '350px', md: '450px', lg: '850px', xl: '1000px'}}>
                 <DrawerCloseButton />
                 <DrawerHeader fontFamily="Syne" fontWeight="700" borderBottom="1px solid" borderColor="gray.100" pb={4}>
                     {mode === 'create' ? t('orders.newOrder') : t('orders.editOrder')}
                 </DrawerHeader>
-                <DrawerBody py={6} overflowY="auto" width='1000px'>
+                <DrawerBody py={6} overflowY="auto" width={{base: '350px', md: '450px', lg: '850px', xl: '1000px'}}>
                     <OrderForm
                         order={order || undefined}
                         translators={translators}

@@ -1,5 +1,5 @@
 'use client';
-import { Box, Flex, Text, Button, Icon, useToast } from '@chakra-ui/react';
+import {Box, Flex, Text, Button, Icon, useToast, useBreakpointValue} from '@chakra-ui/react';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {RiAddLine, RiDeleteBinLine, RiDownloadCloud2Line} from 'react-icons/ri';
@@ -25,11 +25,14 @@ export default function OrdersPage() {
   const [formLoading, setFormLoading] = useState(false);
   const [fileMode, setFileMode] = useState<'download' | 'delete'>('download');
 
+  const isMobile = useBreakpointValue({base: true, xl: false});
+
   const { data: translators = [] } = useQuery({
     queryKey: ['translators'],
     queryFn: usersApi.getTranslators,
     enabled: user?.role === 'MANAGER' || user?.role === 'ADMIN',
   });
+
 
   const handleEdit = (order: Order) => {
     setSelectedOrder(order);
@@ -73,16 +76,16 @@ export default function OrdersPage() {
   if (!user) return null;
 
   return (
-      <Box p={8}>
-        <Flex justify="space-between" align="center" mb={6}>
+      <Box p={{base: 4, md: 8, lg: 12, xl: 16}}>
+        <Flex justify="space-between" align="center" mb={6} flexWrap='wrap' gap={4}>
           <Box>
             <Text fontFamily="Syne" fontWeight="800" fontSize="24px" letterSpacing="-0.02em">
               {t('orders.title')}
             </Text>
             <Text color="gray.400" fontSize="14px" mt={0.5}>{t('orders.subtitle')}</Text>
           </Box>
-          <Flex gap={2}>
-            {user.role === 'ADMIN' && (
+          <Flex gap={2} flexWrap='wrap'>
+            {user.role === 'ADMIN' && !isMobile &&(
                 <>
                   <Button
                       leftIcon={<Icon as={RiDownloadCloud2Line} />}

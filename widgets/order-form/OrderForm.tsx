@@ -125,7 +125,7 @@ export function OrderForm({
   return (
       <Box as="form" onSubmit={handleSubmit(handleFormSubmit)}>
         <VStack spacing={6} align="stretch">
-          <Grid gridTemplateColumns='1.2fr 1fr' gap={4}>
+          <Grid gridTemplateColumns={{base: '1fr', md: '1fr', lg: '1.2fr 1fr', xl: '1.2fr 1fr'}} gap={4}>
             <Flex flexDir='column' minW='250px'>
               {isManagerOrAdmin && (
                   <ClientInfoSection register={register} errors={errors} />
