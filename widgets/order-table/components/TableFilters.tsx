@@ -1,7 +1,7 @@
 'use client';
 import {
     Flex, InputGroup, InputLeftElement, Input, Select,
-    Icon, Text, Button, HStack, useColorModeValue,
+    Icon, Text, Button, useColorModeValue,
 } from '@chakra-ui/react';
 import { RiSearchLine, RiCalendarLine } from 'react-icons/ri';
 import { OrderFilters, OrderStatus } from '@/entities/order/model/types';

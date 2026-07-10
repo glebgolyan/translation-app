@@ -1,7 +1,7 @@
 'use client';
 import {
-    Box, Grid, GridItem, Text, Badge, HStack, VStack, Flex,
-    Icon, useColorModeValue, useBreakpointValue, Divider, IconButton, Tooltip,
+    Box, Grid, GridItem, Text, HStack, Flex,
+    Icon, useColorModeValue, Divider, IconButton, Tooltip,
 } from '@chakra-ui/react';
 import { RiEyeLine, RiEditLine } from 'react-icons/ri';
 import { useLanguageConfig } from '@/shared/hooks/useLanguageConfig';
