@@ -24,15 +24,6 @@ export function UserTable({ users, isLoading }: UserTableProps) {
     const queryClient = useQueryClient();
 
     const bg = useColorModeValue('white', '#1a1a1a');
-    const borderColor = useColorModeValue('gray.100', '#2e2e2e');
-    const dividerColor = useColorModeValue('gray.50', '#252525');
-    const headerText = useColorModeValue('gray.900', '#f0f0f0');
-    const clientNameColor = useColorModeValue('gray.800', '#e0e0e0');
-    const langColor = useColorModeValue('gray.400', '#666666');
-    const dateColor = useColorModeValue('gray.400', '#666666');
-    const priceColor = useColorModeValue('gray.700', '#d0d0d0');
-    const emptyColor = useColorModeValue('gray.400', '#555555');
-    const hoverBg = useColorModeValue('gray.50', '#222222');
 
     const roleMutation = useMutation({
         mutationFn: ({ id, role }: { id: string; role: UserRole }) => usersApi.updateRole(id, role),
