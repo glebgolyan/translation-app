@@ -7,6 +7,7 @@ import { StatusBadge } from '@/shared/ui/StatusBadge';
 import { useT } from '@/shared/hooks/useT';
 import {FileStatusBadge} from "@/widgets/order-table/components/FileStatusBadge";
 import {useLanguageConfig} from "@/shared/hooks/useLanguageConfig";
+import {useStatusConfig} from "@/widgets/order-table/hook/useStatusConfig";
 
 interface OrderRowProps {
     order: Order;
@@ -23,6 +24,8 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
     const { t } = useT();
 
     const toast = useToast();
+
+    const statusConfig = useStatusConfig();
 
     const handleCopyId = (fullId: string) => {
         navigator.clipboard.writeText(fullId);
@@ -175,7 +178,7 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
     };
 
     return (
-        <Tr transition="background 0.1s">
+        <Tr transition="background 0.1s" >
             {visibleColumns.map(col => (
                 <Td key={col.key} whiteSpace="nowrap">{renderCell(col.key)}</Td>
             ))}

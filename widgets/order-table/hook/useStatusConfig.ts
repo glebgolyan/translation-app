@@ -25,7 +25,7 @@ export function useStatusConfig() {
         },
         TAKEN: {
             label: t('status.TAKEN') || 'TAKEN',
-            colorScheme: 'green',
+            colorScheme: 'grey',
         },
         PAID: {
             label: t('status.PAID') || 'PAID',
@@ -37,7 +37,7 @@ export function useStatusConfig() {
         },
         CERTIFIED: {
             label: t('status.CERTIFIED') || 'CERTIFIED',
-            colorScheme: 'orange',
+            colorScheme: 'yellow',
         },
     };
 
