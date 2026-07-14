@@ -13,7 +13,7 @@ interface FileSectionProps {
     localFiles: File[];
     onAddFiles: (files: File[]) => void;
     onRemoveLocal: (index: number) => void;
-    onRemoveExisting?: (index: number) => void;
+    onRemoveExisting?: (filePath: string,index: number) => void;
     canUpload: boolean;
 }
 
@@ -81,7 +81,7 @@ export function FileSection({
                     {existingFiles.map((url, i) => (
                         <FileCard
                             key={`e-${i}`} url={url}
-                            onRemove={onRemoveExisting ? () => onRemoveExisting(i) : undefined}
+                            onRemove={onRemoveExisting ? () => onRemoveExisting(url, i) : undefined}
                             onPreview={() => handlePreview(url)}
                         />
                     ))}

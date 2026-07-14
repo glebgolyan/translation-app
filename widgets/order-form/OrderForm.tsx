@@ -20,6 +20,7 @@ import {CommentSection} from "@/widgets/order-form/components/CommentSection";
 import {UnreadBadge} from "@/widgets/order-table/components/UnreadBadge";
 import {Messenger} from "@/widgets/order-table/components/Messenger";
 import {useAuth} from "@/features/auth/model/useAuth";
+import {ordersApi} from "@/features/orders/api/ordersApi";
 
 const ACCEPTED_TYPES = [
   'application/pdf',
@@ -122,6 +123,24 @@ export function OrderForm({
     await onSubmit(values as UpdateOrderDto, originalLocal, translatedLocal);
   };
 
+  const handleDeleteExisting = async (filePath: string, index: number, type: 'original' | 'translated') => {
+    if(!isManagerOrAdmin || !order) return
+
+    if(type === 'original'){
+      //original
+      setExistingOriginal(prev => prev.filter((_, idx) => idx !== index))
+    }
+
+    // translated
+    if(type === 'translated'){
+      setExistingTranslated(prev => prev.filter((_, idx) => idx !== index))
+    }
+
+    await ordersApi.removeFile(order.id, filePath, type);
+    toast({ title: t('orders.deleteFiles'), status: 'success', duration: 2000 });
+
+  }
+
   return (
       <Box as="form" onSubmit={handleSubmit(handleFormSubmit)}>
         <VStack spacing={6} align="stretch">
@@ -158,7 +177,9 @@ export function OrderForm({
                     localFiles={originalLocal}
                     onAddFiles={addOriginalFiles}
                     onRemoveLocal={i => setOriginalLocal(prev => prev.filter((_, idx) => idx !== i))}
-                    onRemoveExisting={isManagerOrAdmin ? i => setExistingOriginal(prev => prev.filter((_, idx) => idx !== i)) : undefined}
+                    onRemoveExisting={
+                      (filePath, index) => handleDeleteExisting(filePath, index,'original')
+                  }
                     canUpload={userRole !== 'TRANSLATOR'}
                 />
                 {(isManagerOrAdmin || userRole === 'TRANSLATOR') && (
@@ -170,7 +191,9 @@ export function OrderForm({
                           localFiles={translatedLocal}
                           onAddFiles={addTranslatedFiles}
                           onRemoveLocal={i => setTranslatedLocal(prev => prev.filter((_, idx) => idx !== i))}
-                          onRemoveExisting={isManagerOrAdmin ? i => setExistingTranslated(prev => prev.filter((_, idx) => idx !== i)) : undefined}
+                          onRemoveExisting={
+                            (filePath, index) => handleDeleteExisting(filePath, index,'translated')
+                        }
                           canUpload={true}
                       />
                     </>

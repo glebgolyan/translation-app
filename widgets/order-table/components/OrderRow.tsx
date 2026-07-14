@@ -25,8 +25,6 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
 
     const toast = useToast();
 
-    const statusConfig = useStatusConfig();
-
     const handleCopyId = (fullId: string) => {
         navigator.clipboard.writeText(fullId);
         toast({

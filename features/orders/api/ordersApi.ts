@@ -49,4 +49,11 @@ export const ordersApi = {
     });
     return data;
   },
+
+  removeFile: async (orderId: string, filePath: string, fileType: 'original' | 'translated') => {
+    const { data } = await apiClient.delete(`/orders/${orderId}/files`, {
+      data: { filePath, fileType },
+    });
+    return data;
+  },
 };
