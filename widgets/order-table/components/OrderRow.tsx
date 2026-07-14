@@ -1,5 +1,17 @@
 'use client';
-import {Tr, Td, HStack, IconButton, Icon, Text, Box, useColorModeValue, Tooltip, useToast} from '@chakra-ui/react';
+import {
+    Tr,
+    Td,
+    HStack,
+    IconButton,
+    Icon,
+    Text,
+    Box,
+    useColorModeValue,
+    Tooltip,
+    useToast,
+    Avatar
+} from '@chakra-ui/react';
 import { RiEyeLine, RiEditLine, RiDeleteBinLine } from 'react-icons/ri';
 import { Order } from '@/entities/order/model/types';
 import { UserRole } from '@/entities/user/model/types';
@@ -35,6 +47,9 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
             isClosable: true,
         });
     };
+
+    const firstBg = useColorModeValue('white', '#1B1E22');
+    const secondBg = useColorModeValue('#f8f9fa', '#20252A');
 
     const { getLanguageName } = useLanguageConfig();
 
@@ -133,9 +148,21 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
                     {order.paymentType}{order.cardAmount ? ` / ₴${order.cardAmount}` : ''}
                 </Text>;
             case 'translator':
-                return <Text fontSize="13px" color={useColorModeValue('gray.700', 'gray.300')}>
-                    {order.translator?.name || t('orders.unassigned')}
-                </Text>;
+                return ( <Tooltip
+                        label={
+                            <Text fontSize="13px" color={useColorModeValue('gray.700', 'gray.300')}>
+                                {order.translator?.name || t('orders.unassigned')}
+                            </Text>
+                        }
+                        placement="top"
+                        hasArrow
+                        bg={useColorModeValue('gray.800', '#2a2a2a')}
+                        color="white"
+                        borderRadius="6px"
+                        p={2}
+                    >
+                        <Avatar size="xs" name={order.translator?.name} />
+                    </Tooltip>);
             case 'comment':
                 return order.comment ? (
                     <Tooltip
@@ -176,7 +203,7 @@ export function OrderRow({ order, visibleColumns, userRole, onView, onEdit, onDe
     };
 
     return (
-        <Tr transition="background 0.1s" >
+        <Tr transition="background 0.1s" bg={order?.orderNumber % 2 === 0 ? firstBg : secondBg} _hover={{ bg: useColorModeValue('gray.50', '#252525') }}>
             {visibleColumns.map(col => (
                 <Td key={col.key} whiteSpace="nowrap">{renderCell(col.key)}</Td>
             ))}
