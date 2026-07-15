@@ -25,7 +25,7 @@ apiClient.interceptors.response.use(
       if (refreshToken) {
         try {
           const { data } = await axios.post(`${BASE_URL}/auth/refresh`, { refreshToken });
-          Cookies.set('accessToken', data.accessToken, { expires: 1 });
+          Cookies.set('accessToken', data.accessToken, { expires: 3 });
           original.headers.Authorization = `Bearer ${data.accessToken}`;
           return apiClient(original);
         } catch {

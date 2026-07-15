@@ -50,7 +50,7 @@ export function UserTable({ users, isLoading }: UserTableProps) {
   const impersonateMutation = useMutation({
     mutationFn: (userId: string) => authApi.impersonate(userId),
     onSuccess: ({ tokens, user }) => {
-      Cookies.set('accessToken', tokens.accessToken, { expires: 1 });
+      Cookies.set('accessToken', tokens.accessToken, { expires: 3 });
       Cookies.set('refreshToken', tokens.refreshToken, { expires: 7 });
       toast({ title: `Now viewing as ${user.name}`, status: 'info', duration: 3000 });
       router.push('/dashboard');
