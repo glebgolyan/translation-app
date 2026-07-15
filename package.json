@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -H 0.0.0.0",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
@@ -29,10 +32,16 @@
     "zustand": "^5.0.13"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.6",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^10.7.0",
+    "eslint-config-next": "^16.2.10",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-simple-import-sort": "^13.0.0",
+    "prettier": "^3.9.5",
     "typescript": "^5"
   }
 }

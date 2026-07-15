@@ -38,12 +38,16 @@ export const ordersApi = {
     return data;
   },
 
-  uploadFiles: async (orderId: string, files: File[], type: 'original' | 'translated'): Promise<Order> => {
+  uploadFiles: async (
+    orderId: string,
+    files: File[],
+    type: 'original' | 'translated'
+  ): Promise<Order> => {
     const formData = new FormData();
-    files.forEach(f => formData.append('files', f));
+    files.forEach((f) => formData.append('files', f));
     formData.append('type', type);
-    console.log('--files--', files)
-    console.log('--formData--', formData)
+    console.log('--files--', files);
+    console.log('--formData--', formData);
     const { data } = await apiClient.post(`/orders/${orderId}/files`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });

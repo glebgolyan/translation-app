@@ -172,8 +172,8 @@
     "upload": "Upload",
     "language": "Language",
     "due": "Due",
-    "original": "original",
-    "translated": "translated"
+    "original": "orig",
+    "translated": "trans"
   },
   "languages": {
     "english": "English",

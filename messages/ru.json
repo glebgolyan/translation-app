@@ -9,7 +9,6 @@
     "translatorStats": "Статистика переводчиков",
     "apostilization": "Апостиль",
     "messages": "Сообщения"
-
   },
   "apostilization": {
     "title": "Апостиль",
@@ -173,8 +172,8 @@
     "upload": "Загрузить",
     "language": "Язык",
     "due": "До",
-    "original": "оригинал",
-    "translated": "перевод"
+    "original": "ориг",
+    "translated": "пере"
   },
   "languages": {
     "english": "Английский",

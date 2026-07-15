@@ -74,6 +74,7 @@ src/
 ## 🚀 Setup
 
 ### Prerequisites
+
 - Node.js 18+
 - PostgreSQL
 - AWS S3 bucket (for file storage)
@@ -105,8 +106,9 @@ Open [http://localhost:3000](http://localhost:3000)
 ## 🗄 Database Schema
 
 ### Users
+
 | Field     | Type     |
-|-----------|----------|
+| --------- | -------- |
 | id        | cuid     |
 | email     | String   |
 | password  | String   |
@@ -116,83 +118,87 @@ Open [http://localhost:3000](http://localhost:3000)
 | createdAt | DateTime |
 
 ### Orders
-| Field            | Type     |
-|------------------|----------|
-| id               | cuid     |
-| createdAt        | DateTime |
-| dueDate          | DateTime?|
-| sourceLanguage   | String   |
-| targetLanguage   | String   |
-| clientName       | String   |
-| phone            | String   |
-| documentType     | String?  |
-| documentCount    | Int      |
-| notarizationCount| Int      |
-| totalPrice       | Float    |
-| deposit          | Float    |
-| remainingAmount  | Float    |
-| paymentType      | Enum     |
-| cardAmount       | Float?   |
-| status           | Enum     |
-| originalFiles    | String[] |
-| translatedFiles  | String[] |
-| clientId         | FK User  |
-| translatorId     | FK User? |
+
+| Field             | Type      |
+| ----------------- | --------- |
+| id                | cuid      |
+| createdAt         | DateTime  |
+| dueDate           | DateTime? |
+| sourceLanguage    | String    |
+| targetLanguage    | String    |
+| clientName        | String    |
+| phone             | String    |
+| documentType      | String?   |
+| documentCount     | Int       |
+| notarizationCount | Int       |
+| totalPrice        | Float     |
+| deposit           | Float     |
+| remainingAmount   | Float     |
+| paymentType       | Enum      |
+| cardAmount        | Float?    |
+| status            | Enum      |
+| originalFiles     | String[]  |
+| translatedFiles   | String[]  |
+| clientId          | FK User   |
+| translatorId      | FK User?  |
 
 ---
 
 ## 📡 API Endpoints
 
 ### Auth
-| Method | Path                        | Roles | Description      |
-|--------|-----------------------------|-------|------------------|
-| POST   | /api/auth/register          | —     | Register client  |
-| POST   | /api/auth/login             | —     | Login            |
-| GET    | /api/auth/me                | All   | Current user     |
-| POST   | /api/auth/refresh           | —     | Refresh tokens   |
-| POST   | /api/auth/impersonate/:id   | ADMIN | Login as user    |
+
+| Method | Path                      | Roles | Description     |
+| ------ | ------------------------- | ----- | --------------- |
+| POST   | /api/auth/register        | —     | Register client |
+| POST   | /api/auth/login           | —     | Login           |
+| GET    | /api/auth/me              | All   | Current user    |
+| POST   | /api/auth/refresh         | —     | Refresh tokens  |
+| POST   | /api/auth/impersonate/:id | ADMIN | Login as user   |
 
 ### Orders
-| Method | Path                        | Roles                 | Description      |
-|--------|-----------------------------|----------------------|------------------|
-| GET    | /api/orders                 | All                  | List (RBAC)      |
-| POST   | /api/orders                 | All                  | Create order     |
-| GET    | /api/orders/:id             | All                  | Get order        |
-| PATCH  | /api/orders/:id             | MANAGER, ADMIN       | Update order     |
-| DELETE | /api/orders/:id             | ADMIN                | Delete order     |
-| PATCH  | /api/orders/:id/assign      | MANAGER, ADMIN       | Assign translator|
-| POST   | /api/orders/:id/files       | MANAGER, TRANSLATOR  | Upload files     |
+
+| Method | Path                   | Roles               | Description       |
+| ------ | ---------------------- | ------------------- | ----------------- |
+| GET    | /api/orders            | All                 | List (RBAC)       |
+| POST   | /api/orders            | All                 | Create order      |
+| GET    | /api/orders/:id        | All                 | Get order         |
+| PATCH  | /api/orders/:id        | MANAGER, ADMIN      | Update order      |
+| DELETE | /api/orders/:id        | ADMIN               | Delete order      |
+| PATCH  | /api/orders/:id/assign | MANAGER, ADMIN      | Assign translator |
+| POST   | /api/orders/:id/files  | MANAGER, TRANSLATOR | Upload files      |
 
 ### Users
-| Method | Path                  | Roles | Description   |
-|--------|-----------------------|-------|---------------|
-| GET    | /api/users            | ADMIN | List users    |
-| PATCH  | /api/users/:id/role   | ADMIN | Change role   |
-| DELETE | /api/users/:id        | ADMIN | Delete user   |
+
+| Method | Path                | Roles | Description |
+| ------ | ------------------- | ----- | ----------- |
+| GET    | /api/users          | ADMIN | List users  |
+| PATCH  | /api/users/:id/role | ADMIN | Change role |
+| DELETE | /api/users/:id      | ADMIN | Delete user |
 
 ---
 
 ## 🔐 RBAC Summary
 
-| Action                    | CLIENT | MANAGER | TRANSLATOR | ADMIN |
-|---------------------------|--------|---------|------------|-------|
-| Create order              | ✅     | ✅      | —          | ✅    |
-| View own orders           | ✅     | ✅      | ✅         | ✅    |
-| View all orders           | —      | ✅      | —          | ✅    |
-| Edit order details        | —      | ✅      | —          | ✅    |
-| Assign translator         | —      | ✅      | —          | ✅    |
-| Upload original files     | ✅     | ✅      | —          | ✅    |
-| Upload translated files   | —      | ✅      | ✅         | ✅    |
-| Manage users              | —      | —       | —          | ✅    |
-| Impersonate user          | —      | —       | —          | ✅    |
+| Action                  | CLIENT | MANAGER | TRANSLATOR | ADMIN |
+| ----------------------- | ------ | ------- | ---------- | ----- |
+| Create order            | ✅     | ✅      | —          | ✅    |
+| View own orders         | ✅     | ✅      | ✅         | ✅    |
+| View all orders         | —      | ✅      | —          | ✅    |
+| Edit order details      | —      | ✅      | —          | ✅    |
+| Assign translator       | —      | ✅      | —          | ✅    |
+| Upload original files   | ✅     | ✅      | —          | ✅    |
+| Upload translated files | —      | ✅      | ✅         | ✅    |
+| Manage users            | —      | —       | —          | ✅    |
+| Impersonate user        | —      | —       | —          | ✅    |
 
 ---
 
 ## 🎨 UI Pages by Role
 
-| Role       | Pages Available                                   |
-|------------|---------------------------------------------------|
-| CLIENT     | Dashboard, My Orders (create + view)              |
-| MANAGER    | Dashboard, Orders (full table + edit + assign)    |
-| TRANSLATOR | Dashboard, Assignments (view + upload translation)|
-| ADMIN      | Dashboard, Orders, Users (full control)           |
+| Role       | Pages Available                                    |
+| ---------- | -------------------------------------------------- |
+| CLIENT     | Dashboard, My Orders (create + view)               |
+| MANAGER    | Dashboard, Orders (full table + edit + assign)     |
+| TRANSLATOR | Dashboard, Assignments (view + upload translation) |
+| ADMIN      | Dashboard, Orders, Users (full control)            |

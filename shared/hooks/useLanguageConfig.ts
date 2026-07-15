@@ -2,89 +2,89 @@
 import { useT } from '@/shared/hooks/useT';
 
 export const AVAILABLE_LANGUAGES = [
-    'English',
-    'Ukrainian',
-    'Russian',
-    'Polish',
-    'German',
-    'French',
-    'Spanish',
-    'Italian',
-    'Portuguese',
-    'Dutch',
-    'Czech',
-    'Slovak',
-    'Hungarian',
-    'Romanian',
-    'Moldovan',
-    'Bulgarian',
-    'Serbian',
-    'Croatian',
-    'Bosnian',
-    'Slovenian',
-    'Montenegrin',
-    'Macedonian',
-    'Albanian',
-    'Greek',
-    'Turkish',
+  'English',
+  'Ukrainian',
+  'Russian',
+  'Polish',
+  'German',
+  'French',
+  'Spanish',
+  'Italian',
+  'Portuguese',
+  'Dutch',
+  'Czech',
+  'Slovak',
+  'Hungarian',
+  'Romanian',
+  'Moldovan',
+  'Bulgarian',
+  'Serbian',
+  'Croatian',
+  'Bosnian',
+  'Slovenian',
+  'Montenegrin',
+  'Macedonian',
+  'Albanian',
+  'Greek',
+  'Turkish',
 
-    'Lithuanian',
-    'Latvian',
-    'Estonian',
-    'Finnish',
-    'Swedish',
-    'Norwegian',
-    'Danish',
-    'Icelandic',
+  'Lithuanian',
+  'Latvian',
+  'Estonian',
+  'Finnish',
+  'Swedish',
+  'Norwegian',
+  'Danish',
+  'Icelandic',
 
-    'Belarusian',
-    'Armenian',
-    'Azerbaijani',
-    'Georgian',
-    'Kazakh',
-    'Uzbek',
-    'Kyrgyz',
-    'Tajik',
-    'Turkmen',
+  'Belarusian',
+  'Armenian',
+  'Azerbaijani',
+  'Georgian',
+  'Kazakh',
+  'Uzbek',
+  'Kyrgyz',
+  'Tajik',
+  'Turkmen',
 
-    'Chinese',
-    'Japanese',
-    'Korean',
-    'Vietnamese',
-    'Thai',
-    'Indonesian',
-    'Malay',
-    'Hindi',
-    'Urdu',
+  'Chinese',
+  'Japanese',
+  'Korean',
+  'Vietnamese',
+  'Thai',
+  'Indonesian',
+  'Malay',
+  'Hindi',
+  'Urdu',
 
-    'Arabic',
-    'Hebrew',
-    'Persian',
+  'Arabic',
+  'Hebrew',
+  'Persian',
 
-    'Swahili',
-    'Afrikaans',
+  'Swahili',
+  'Afrikaans',
 
-    'Latin',
+  'Latin',
 ];
 
 export function useLanguageConfig() {
-    const { t } = useT();
+  const { t } = useT();
 
-    const getLanguageName = (lang: string) => {
-        const key = `languages.${lang.toLowerCase()}`;
-        return t(key) || lang;
-    };
+  const getLanguageName = (lang: string) => {
+    const key = `languages.${lang.toLowerCase()}`;
+    return t(key) || lang;
+  };
 
-    const getLanguageList = () => {
-        return AVAILABLE_LANGUAGES.map(lang => ({
-            value: lang,
-            label: getLanguageName(lang),
-        }));
-    };
+  const getLanguageList = () => {
+    return AVAILABLE_LANGUAGES.map((lang) => ({
+      value: lang,
+      label: getLanguageName(lang),
+    }));
+  };
 
-    return {
-        getLanguageName,
-        getLanguageList,
-        AVAILABLE_LANGUAGES,
-    };
+  return {
+    getLanguageName,
+    getLanguageList,
+    AVAILABLE_LANGUAGES,
+  };
 }

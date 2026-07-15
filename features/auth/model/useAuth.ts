@@ -11,10 +11,17 @@ export function useAuth() {
 
   useEffect(() => {
     const token = Cookies.get('accessToken');
-    if (!token) { setLoading(false); return; }
-    authApi.me()
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    authApi
+      .me()
       .then(setUser)
-      .catch(() => { Cookies.remove('accessToken'); Cookies.remove('refreshToken'); })
+      .catch(() => {
+        Cookies.remove('accessToken');
+        Cookies.remove('refreshToken');
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -26,16 +33,21 @@ export function useAuth() {
     return user;
   }, []);
 
-  const register = useCallback(async (data: { email: string; password: string; name: string; phone?: string }) => {
-    const { user, tokens } = await authApi.register(data);
-    Cookies.set('accessToken', tokens.accessToken, { expires: 1 });
-    Cookies.set('refreshToken', tokens.refreshToken, { expires: 7 });
-    setUser(user);
-    return user;
-  }, []);
+  const register = useCallback(
+    async (data: { email: string; password: string; name: string; phone?: string }) => {
+      const { user, tokens } = await authApi.register(data);
+      Cookies.set('accessToken', tokens.accessToken, { expires: 1 });
+      Cookies.set('refreshToken', tokens.refreshToken, { expires: 7 });
+      setUser(user);
+      return user;
+    },
+    []
+  );
 
   const logout = useCallback(async () => {
-    try { await authApi.logout(); } catch {}
+    try {
+      await authApi.logout();
+    } catch {}
     Cookies.remove('accessToken');
     Cookies.remove('refreshToken');
     setUser(null);

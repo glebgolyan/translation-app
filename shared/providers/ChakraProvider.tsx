@@ -161,9 +161,9 @@ const theme = extendTheme({
 
 export function AppChakraProvider({ children }: { children: React.ReactNode }) {
   return (
-      <>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-        <ChakraProvider theme={theme}>{children}</ChakraProvider>
-      </>
+    <>
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <ChakraProvider theme={theme}>{children}</ChakraProvider>
+    </>
   );
 }
