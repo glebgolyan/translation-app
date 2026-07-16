@@ -2,7 +2,6 @@
 import {
   Tr,
   Td,
-  HStack,
   IconButton,
   Icon,
   Text,
@@ -30,14 +29,7 @@ interface OrderRowProps {
   onDelete?: (order: Order) => void;
 }
 
-export function OrderRow({
-  order,
-  visibleColumns,
-  userRole,
-  onView,
-  onEdit,
-  onDelete,
-}: OrderRowProps) {
+export function OrderRow({ order, visibleColumns, userRole, onEdit, onDelete }: OrderRowProps) {
   const { t } = useT();
 
   const toast = useToast();
