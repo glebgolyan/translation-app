@@ -58,7 +58,10 @@ export function OrderRow({ order, visibleColumns, userRole, onEdit, onDelete }: 
   const isClosed =
     order.dueDate &&
     new Date(order.dueDate) < new Date() &&
-    (order.status === 'DONE' || order.status === 'TAKEN' || order.status === 'CERTIFIED');
+    (order.status === 'DONE' ||
+      order.status === 'TAKEN' ||
+      order.status === 'CERTIFIED' ||
+      order.status === 'CANCELLED');
 
   const renderCell = (colKey: string) => {
     switch (colKey) {
