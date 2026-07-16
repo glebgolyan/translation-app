@@ -196,7 +196,7 @@ export function OrderRow({ order, visibleColumns, userRole, onEdit, onDelete }: 
               >
                 ₴{order.totalPrice.toLocaleString()}
               </Text>
-              {order.remainingAmount > 0 && (
+              {!isClosed && order.remainingAmount > 0 && (
                 <Text
                   fontSize='10px'
                   fontFamily='mono'
