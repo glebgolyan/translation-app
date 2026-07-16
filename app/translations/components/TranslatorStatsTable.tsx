@@ -314,7 +314,7 @@ export function TranslatorStatsTable() {
                           fontSize='13px'
                           color={useColorModeValue('gray.700', 'gray.300')}
                         >
-                          {row.translatorNamee || t('orders.unassigned')}
+                          {row.translatorName || t('orders.unassigned')}
                         </Text>
                       }
                       placement='top'
@@ -455,7 +455,7 @@ export function TranslatorStatsTable() {
                               fontSize='13px'
                               color={useColorModeValue('gray.700', 'gray.500')}
                             >
-                              {row.translatorNamee || t('orders.unassigned')}
+                              {row.translatorName || t('orders.unassigned')}
                             </Text>
                           }
                           placement='top'
@@ -586,7 +586,7 @@ export function TranslatorStatsTable() {
                             fontSize='13px'
                             color={useColorModeValue('gray.700', 'gray.300')}
                           >
-                            {row.translatorNamee || t('orders.unassigned')}
+                            {row.translatorName || t('orders.unassigned')}
                           </Text>
                         }
                         placement='top'
