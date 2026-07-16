@@ -10,7 +10,6 @@ export default function TranslationsPage() {
   const router = useRouter();
 
   const textColor = useColorModeValue('gray.900', '#f0f0f0');
-  const subtitleColor = useColorModeValue('gray.400', '#666666');
 
   useEffect(() => {
     if (user && user.role !== 'MANAGER' && user.role !== 'ADMIN') {
@@ -33,11 +32,11 @@ export default function TranslationsPage() {
           Translator Statistics
         </Text>
         <Text
-          color={subtitleColor}
+          color='grey.500'
           fontSize='14px'
           mt={0.5}
         >
-          Words translated by translators per day
+          Нужно заплатить в гривне
         </Text>
       </Box>
 

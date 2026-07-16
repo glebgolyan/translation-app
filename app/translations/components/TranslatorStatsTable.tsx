@@ -18,18 +18,25 @@ import {
   Center,
   Spinner,
   VStack,
+  Avatar,
+  Tooltip,
 } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 import { translatorStatsApi } from '@/features/translator-stats/api/translatorStatsApi';
+import { useT } from '@/shared/hooks/useT';
 
 export function TranslatorStatsTable() {
+  const { t } = useT();
+
   const toast = useToast();
+
   const [month, setMonth] = useState(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
   });
+
   const [editingCell, setEditingCell] = useState<string | null>(null);
   const [cellValue, setCellValue] = useState('');
 
@@ -272,7 +279,7 @@ export function TranslatorStatsTable() {
                     key={day}
                     width='50px'
                     textAlign='center'
-                    color={thColor}
+                    color='grey.500'
                     fontSize='11px'
                     px={1}
                     py={2}
@@ -301,7 +308,27 @@ export function TranslatorStatsTable() {
                     bg={bg}
                     zIndex={1}
                   >
-                    {row.translatorName}
+                    <Tooltip
+                      label={
+                        <Text
+                          fontSize='13px'
+                          color={useColorModeValue('gray.700', 'gray.300')}
+                        >
+                          {row.translatorNamee || t('orders.unassigned')}
+                        </Text>
+                      }
+                      placement='top'
+                      hasArrow
+                      bg={useColorModeValue('gray.800', '#2a2a2a')}
+                      color='white'
+                      borderRadius='6px'
+                      p={2}
+                    >
+                      <Avatar
+                        size='xs'
+                        name={row.translatorName}
+                      />
+                    </Tooltip>
                   </Td>
                   {Array.from({ length: actualDaysInMonth }, (_, i) => i + 1).map((day) => {
                     const cellKey = `${row.translatorId}-${day}`;
@@ -343,7 +370,7 @@ export function TranslatorStatsTable() {
                           <Text
                             fontSize='13px'
                             fontWeight={wordCount > 0 ? '600' : '400'}
-                            color={wordCount > 0 ? 'brand.500' : thColor}
+                            color={wordCount > 0 ? 'grey.500' : thColor}
                             onClick={() =>
                               handleCellClick(statId, wordCount, row.translatorId, day)
                             }
@@ -422,12 +449,32 @@ export function TranslatorStatsTable() {
                         px={4}
                         py={3}
                       >
-                        {row.translatorName}
+                        <Tooltip
+                          label={
+                            <Text
+                              fontSize='13px'
+                              color={useColorModeValue('gray.700', 'gray.500')}
+                            >
+                              {row.translatorNamee || t('orders.unassigned')}
+                            </Text>
+                          }
+                          placement='top'
+                          hasArrow
+                          bg={useColorModeValue('gray.800', '#2a2a2a')}
+                          color='white'
+                          borderRadius='6px'
+                          p={2}
+                        >
+                          <Avatar
+                            size='xs'
+                            name={row.translatorName}
+                          />
+                        </Tooltip>
                       </Td>
                       <Td
                         fontSize='14px'
                         fontWeight='700'
-                        color={weekTotal > 0 ? summaryTextColor : thColor}
+                        color='grey.500'
                         px={4}
                         py={3}
                         textAlign='right'
@@ -533,7 +580,27 @@ export function TranslatorStatsTable() {
                       px={4}
                       py={3}
                     >
-                      {row.translatorName}
+                      <Tooltip
+                        label={
+                          <Text
+                            fontSize='13px'
+                            color={useColorModeValue('gray.700', 'gray.300')}
+                          >
+                            {row.translatorNamee || t('orders.unassigned')}
+                          </Text>
+                        }
+                        placement='top'
+                        hasArrow
+                        bg={useColorModeValue('gray.800', '#2a2a2a')}
+                        color='white'
+                        borderRadius='6px'
+                        p={2}
+                      >
+                        <Avatar
+                          size='xs'
+                          name={row.translatorName}
+                        />
+                      </Tooltip>
                     </Td>
                     <Td
                       fontSize='14px'

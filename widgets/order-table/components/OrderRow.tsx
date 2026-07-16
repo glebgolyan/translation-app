@@ -13,14 +13,13 @@ import {
   Avatar,
   Flex,
 } from '@chakra-ui/react';
-import { RiEyeLine, RiEditLine, RiDeleteBinLine } from 'react-icons/ri';
+import { RiEditLine, RiDeleteBinLine } from 'react-icons/ri';
 import { Order } from '@/entities/order/model/types';
 import { UserRole } from '@/entities/user/model/types';
 import { StatusBadge } from '@/shared/ui/StatusBadge';
 import { useT } from '@/shared/hooks/useT';
 import { FileStatusBadge } from '@/widgets/order-table/components/FileStatusBadge';
 import { useLanguageConfig } from '@/shared/hooks/useLanguageConfig';
-import { useStatusConfig } from '@/widgets/order-table/hook/useStatusConfig';
 
 interface OrderRowProps {
   order: Order;
