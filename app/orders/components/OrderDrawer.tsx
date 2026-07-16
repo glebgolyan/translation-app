@@ -19,7 +19,15 @@ interface OrderDrawerProps {
   translators: User[];
   mode: 'create' | 'edit';
   isLoading: boolean;
-  onSubmit: (data: UpdateOrderDto, originalFiles: File[], translatedFiles: File[]) => Promise<void>;
+  onSubmit: (
+    data: UpdateOrderDto,
+    originalFiles: File[],
+    translatedFiles: File[],
+    statsEntry?: {
+      wordCount: number;
+      date: Date;
+    }
+  ) => Promise<void>;
   userRole: string;
 }
 

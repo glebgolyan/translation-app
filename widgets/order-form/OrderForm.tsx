@@ -1,9 +1,24 @@
 'use client';
-import { Box, VStack, HStack, Button, Text, Divider, Icon, Flex, Grid } from '@chakra-ui/react';
+import {
+  Box,
+  VStack,
+  HStack,
+  Button,
+  Text,
+  Divider,
+  Icon,
+  Flex,
+  Grid,
+  Input,
+  NumberInputField,
+  NumberInput,
+  FormLabel,
+  FormControl,
+} from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { RiSaveLine } from 'react-icons/ri';
 import { useToast } from '@chakra-ui/react';
 import { Order, UpdateOrderDto } from '@/entities/order/model/types';
@@ -54,7 +69,15 @@ type OrderFormValues = z.infer<typeof orderSchema>;
 interface OrderFormProps {
   order?: Order;
   translators?: User[];
-  onSubmit: (data: UpdateOrderDto, originalFiles: File[], translatedFiles: File[]) => Promise<void>;
+  onSubmit: (
+    data: UpdateOrderDto,
+    originalFiles: File[],
+    translatedFiles: File[],
+    statsEntry?: {
+      wordCount: number;
+      date: Date;
+    }
+  ) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
   mode?: 'create' | 'edit';
@@ -82,6 +105,8 @@ export function OrderForm({
   const [existingTranslated, setExistingTranslated] = useState<string[]>(
     order?.translatedFiles || []
   );
+  const [words, setWords] = useState(0);
+  const [wordsPrice, setWordsPrice] = useState(0);
 
   const {
     register,
@@ -138,8 +163,15 @@ export function OrderForm({
     setTranslatedLocal((prev) => [...prev, ...valid]);
   }, []);
 
+  const wordCount = useMemo(() => {
+    return (words / 1800) * wordsPrice;
+  }, [words, wordsPrice]);
+
   const handleFormSubmit = async (values: OrderFormValues) => {
-    await onSubmit(values as UpdateOrderDto, originalLocal, translatedLocal);
+    await onSubmit(values as UpdateOrderDto, originalLocal, translatedLocal, {
+      wordCount,
+      date: new Date(),
+    });
   };
 
   const handleDeleteExisting = async (
@@ -210,6 +242,51 @@ export function OrderForm({
             )}
 
             {isManagerOrAdmin && <CommentSection register={register} />}
+
+            {isManagerOrAdmin && (
+              <Grid
+                mt={2}
+                templateColumns='repeat(2, 1fr)'
+                gap={4}
+              >
+                <Flex
+                  flexDirection='column'
+                  alignItems='flex-start'
+                  justifyContent='center'
+                >
+                  <FormControl>
+                    <FormLabel fontSize='13px'>{t('orders.wordsCount')}</FormLabel>
+
+                    <NumberInput
+                      size='sm'
+                      min={0}
+                      value={words}
+                      onChange={(_, v) => setWords(isNaN(v) ? 0 : v)}
+                    >
+                      <NumberInputField />
+                    </NumberInput>
+                  </FormControl>
+                </Flex>
+                <Flex
+                  flexDirection='column'
+                  alignItems='flex-start'
+                  justifyContent='center'
+                >
+                  <FormControl>
+                    <FormLabel fontSize='13px'>{t('orders.priceFor')}</FormLabel>
+
+                    <NumberInput
+                      size='sm'
+                      min={0}
+                      value={wordsPrice}
+                      onChange={(_, v) => setWordsPrice(isNaN(v) ? 0 : v)}
+                    >
+                      <NumberInputField />
+                    </NumberInput>
+                  </FormControl>
+                </Flex>
+              </Grid>
+            )}
           </Flex>
 
           <Flex flexDir='column'>

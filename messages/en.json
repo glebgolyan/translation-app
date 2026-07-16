@@ -32,6 +32,7 @@
     "status": "Status",
     "inWork": "In Work",
     "done": "Done",
+    "TAKEN": "TAKEN",
     "save": "Save",
     "cancel": "Cancel",
     "actions": "Actions",
@@ -123,7 +124,9 @@
     "fileStatus": "File Status",
     "filesDeleted": "Files deleted",
     "deletedByAdmin": "Deleted by Admin",
-    "file": "file"
+    "file": "file",
+    "wordsCount": "Words count",
+    "priceFor": "Price by 1800"
   },
   "status": {
     "NEW": "NEW",
