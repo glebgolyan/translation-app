@@ -2,7 +2,7 @@
 import { useT } from '@/shared/hooks/useT';
 
 export type OrderStatus =
-  'NEW' | 'IN_PROGRESS' | 'DONE' | 'TAKEN' | 'PAID' | 'CANCELLED' | 'CERTIFIED';
+  'NEW' | 'IN_PROGRESS' | 'DONE' | 'TAKEN' | 'PAID' | 'CANCELLED' | 'CERTIFIED' | 'ARCHIVE';
 
 interface StatusConfig {
   label: string;
@@ -39,6 +39,10 @@ export function useStatusConfig() {
     CERTIFIED: {
       label: t('status.CERTIFIED') || 'CERTIFIED',
       colorScheme: 'yellow',
+    },
+    ARCHIVE: {
+      label: t('status.ARCHIVE') || 'ARCHIVE',
+      colorScheme: 'grey',
     },
   };
 

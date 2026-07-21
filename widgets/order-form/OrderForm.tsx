@@ -60,7 +60,16 @@ const orderSchema = z.object({
   comment: z.string().optional(),
   cardAmount: z.number().optional(),
   translatorId: z.string().optional(),
-  status: z.enum(['NEW', 'IN_PROGRESS', 'DONE', 'PAID', 'CANCELLED', 'CERTIFIED', 'TAKEN']),
+  status: z.enum([
+    'NEW',
+    'IN_PROGRESS',
+    'DONE',
+    'PAID',
+    'CANCELLED',
+    'CERTIFIED',
+    'TAKEN',
+    'ARCHIVE',
+  ]),
   dueDate: z.string().optional(),
 });
 

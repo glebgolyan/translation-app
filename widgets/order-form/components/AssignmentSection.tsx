@@ -60,6 +60,7 @@ export function AssignmentSection({ register, translators }: AssignmentSectionPr
             <option value='DONE'>{t('status.DONE')}</option>
             <option value='TAKEN'>{t('status.TAKEN')}</option>
             <option value='PAID'>{t('status.PAID')}</option>
+            <option value='ARCHIVE'>{t('status.ARCHIVE')}</option>
           </Select>
         </FormControl>
       </Grid>

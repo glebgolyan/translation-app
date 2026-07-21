@@ -135,6 +135,7 @@
     "TAKEN": "TAKEN",
     "PAID": "PAID",
     "CANCELLED": "CANCELLED",
+    "ARCHIVE": "ARCHIVE",
     "CERTIFIED": "CERTIFIED"
   },
   "assignments": {

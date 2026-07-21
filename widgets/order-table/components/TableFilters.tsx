@@ -118,6 +118,7 @@ export function TableFilters({ filters, total, onChange }: TableFiltersProps) {
         <option value='DONE'>{t('status.DONE')}</option>
         <option value='TAKEN'>{t('status.TAKEN')}</option>
         <option value='PAID'>{t('status.PAID')}</option>
+        <option value='ARCHIVE'>{t('status.ARCHIVE')}</option>
       </Select>
 
       {/* Date range pills */}

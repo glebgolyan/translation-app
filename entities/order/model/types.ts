@@ -1,7 +1,7 @@
 // entities/order/model/types.ts
 
 export type OrderStatus =
-  'NEW' | 'IN_PROGRESS' | 'DONE' | 'PAID' | 'CANCELLED' | 'CERTIFIED' | 'TAKEN';
+  'NEW' | 'IN_PROGRESS' | 'DONE' | 'PAID' | 'CANCELLED' | 'CERTIFIED' | 'TAKEN' | 'ARCHIVE';
 export type PaymentType = 'cash' | 'card' | 'mixed';
 
 export interface Order {

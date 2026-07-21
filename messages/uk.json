@@ -135,6 +135,7 @@
     "TAKEN": "Забрали",
     "PAID": "ОПЛАЧЕНО",
     "CANCELLED": "Відміна",
+    "ARCHIVE": "Архів",
     "CERTIFIED": "Завірено"
   },
   "assignments": {

@@ -39,7 +39,9 @@ export default function DashboardPage() {
   const inProgress = orders.filter(
     (o) => o.status === 'IN_PROGRESS' || o.status === 'DONE' || o.status === 'NEW'
   ).length;
-  const done = orders.filter((o) => o.status === 'CERTIFIED' || o.status === 'TAKEN').length;
+  const done = orders.filter(
+    (o) => o.status === 'CERTIFIED' || o.status === 'TAKEN' || o.status === 'ARCHIVE'
+  ).length;
 
   const totalApostilization = apostilization.reduce((sum, a) => sum + a.costPrice, 0);
 
