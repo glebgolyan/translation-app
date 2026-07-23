@@ -20,12 +20,12 @@ export default function TranslationsPage() {
   if (!user || (user.role !== 'MANAGER' && user.role !== 'ADMIN')) return null;
 
   return (
-    <Box p={8}>
+    <Box p={{ base: 4, md: 8 }}>
       <Box mb={8}>
         <Text
           fontFamily='Syne'
           fontWeight='800'
-          fontSize='24px'
+          fontSize={{ base: '16px', md: '24px' }}
           letterSpacing='-0.02em'
           color={textColor}
         >

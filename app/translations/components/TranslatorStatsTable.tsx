@@ -20,6 +20,7 @@ import {
   VStack,
   Avatar,
   Tooltip,
+  Grid,
 } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -49,7 +50,7 @@ export function TranslatorStatsTable() {
   const cellInputBg = useColorModeValue('white', '#252525');
   const summaryBg = useColorModeValue('brand.50', '#1a2540');
   const summaryTextColor = useColorModeValue('brand.700', 'brand.300');
-  const weekHeaderColor = useColorModeValue('gray.600', '#999999');
+  const weekHeaderColor = useColorModeValue('gray.500', '#999999');
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['translator-stats', month],
@@ -210,14 +211,16 @@ export function TranslatorStatsTable() {
   }
 
   return (
-    <VStack
-      spacing={8}
-      align='stretch'
+    <Grid
+      gridTemplateColumns='1fr'
+      gap={4}
+      maxW='100%'
+      width='100%'
     >
       {/* Month selector */}
       <Flex
         gap={4}
-        align='center'
+        flexDir={{ base: 'column', md: 'row' }}
       >
         <Text
           fontFamily='Syne'
@@ -257,6 +260,7 @@ export function TranslatorStatsTable() {
         borderRadius='8px'
         border='1px solid'
         borderColor={borderColor}
+        maxW='100%'
         overflow='hidden'
       >
         <Box overflowX='auto'>
@@ -389,136 +393,141 @@ export function TranslatorStatsTable() {
       </Box>
 
       {/* Weekly summary tables */}
-      {weekTotals.map((week) => (
-        <Box key={week.number}>
-          <Text
-            fontFamily='Syne'
-            fontWeight='700'
-            fontSize='14px'
-            color={weekHeaderColor}
-            mb={4}
-          >
-            Week {week.number} (Days {week.startDay}-{week.endDay})
-          </Text>
-          <Box
-            bg={bg}
-            borderRadius='8px'
-            border='1px solid'
-            borderColor={borderColor}
-            overflow='hidden'
-          >
-            <Table
-              variant='simple'
-              size='sm'
+      <Grid
+        gridTemplateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
+        gap={6}
+      >
+        {weekTotals.map((week) => (
+          <Box key={week.number}>
+            <Text
+              fontFamily='Syne'
+              fontWeight='700'
+              fontSize='14px'
+              color={weekHeaderColor}
+              mb={4}
             >
-              <Thead bg={theadBg}>
-                <Tr>
-                  <Th
-                    color={thColor}
-                    fontSize='12px'
-                    px={4}
-                    py={3}
-                  >
-                    Translator
-                  </Th>
-                  <Th
-                    color={thColor}
-                    fontSize='12px'
-                    px={4}
-                    py={3}
-                    textAlign='right'
-                  >
-                    Week Total
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {stats.map((row: any) => {
-                  const weekTotal = week.translators[row.translatorId]?.total || 0;
-                  return (
-                    <Tr
-                      key={`${week.number}-${row.translatorId}`}
-                      _hover={{ bg: hoverBg }}
-                      bg={weekTotal > 0 ? summaryBg : 'transparent'}
-                      transition='background 0.1s'
+              Week {week.number} (Days {week.startDay}-{week.endDay})
+            </Text>
+            <Box
+              bg={bg}
+              borderRadius='8px'
+              border='1px solid'
+              borderColor={borderColor}
+              overflow='hidden'
+            >
+              <Table
+                variant='simple'
+                size='sm'
+              >
+                <Thead bg={theadBg}>
+                  <Tr>
+                    <Th
+                      color={thColor}
+                      fontSize='12px'
+                      px={4}
+                      py={3}
                     >
-                      <Td
-                        fontSize='13px'
-                        fontWeight='500'
-                        color={tdColor}
-                        px={4}
-                        py={3}
+                      Translator
+                    </Th>
+                    <Th
+                      color={thColor}
+                      fontSize='12px'
+                      px={4}
+                      py={3}
+                      textAlign='right'
+                    >
+                      Week Total
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {stats.map((row: any) => {
+                    const weekTotal = week.translators[row.translatorId]?.total || 0;
+                    return (
+                      <Tr
+                        key={`${week.number}-${row.translatorId}`}
+                        _hover={{ bg: hoverBg }}
+                        bg={weekTotal > 0 ? summaryBg : 'transparent'}
+                        transition='background 0.1s'
                       >
-                        <Tooltip
-                          label={
-                            <Text
-                              fontSize='13px'
-                              color={useColorModeValue('gray.700', 'gray.500')}
-                            >
-                              {row.translatorName || t('orders.unassigned')}
-                            </Text>
-                          }
-                          placement='top'
-                          hasArrow
-                          bg={useColorModeValue('gray.800', '#2a2a2a')}
-                          color='white'
-                          borderRadius='6px'
-                          p={2}
+                        <Td
+                          fontSize='13px'
+                          fontWeight='500'
+                          color={tdColor}
+                          px={4}
+                          py={3}
                         >
-                          <Avatar
-                            size='xs'
-                            name={row.translatorName}
-                          />
-                        </Tooltip>
-                      </Td>
-                      <Td
-                        fontSize='14px'
-                        fontWeight='700'
-                        color='grey.500'
-                        px={4}
-                        py={3}
-                        textAlign='right'
-                        fontFamily='mono'
-                      >
-                        {weekTotal.toLocaleString()}
-                      </Td>
-                    </Tr>
-                  );
-                })}
-                {/* Week subtotal */}
-                <Tr bg={summaryBg}>
-                  <Td
-                    fontSize='13px'
-                    fontWeight='700'
-                    color={summaryTextColor}
-                    px={4}
-                    py={3}
-                  >
-                    Week Total
-                  </Td>
-                  <Td
-                    fontSize='15px'
-                    fontWeight='800'
-                    color={summaryTextColor}
-                    px={4}
-                    py={3}
-                    textAlign='right'
-                    fontFamily='mono'
-                  >
-                    {stats
-                      .reduce(
-                        (sum: number, row: any) =>
-                          sum + (week.translators[row.translatorId]?.total || 0),
-                        0
-                      )
-                      .toLocaleString()}
-                  </Td>
-                </Tr>
-              </Tbody>
-            </Table>
+                          <Tooltip
+                            label={
+                              <Text
+                                fontSize='13px'
+                                color={useColorModeValue('gray.700', 'gray.500')}
+                              >
+                                {row.translatorName || t('orders.unassigned')}
+                              </Text>
+                            }
+                            placement='top'
+                            hasArrow
+                            bg={useColorModeValue('gray.800', '#2a2a2a')}
+                            color='white'
+                            borderRadius='6px'
+                            p={2}
+                          >
+                            <Avatar
+                              size='xs'
+                              name={row.translatorName}
+                            />
+                          </Tooltip>
+                        </Td>
+                        <Td
+                          fontSize='14px'
+                          fontWeight='700'
+                          color='grey.500'
+                          px={4}
+                          py={3}
+                          textAlign='right'
+                          fontFamily='mono'
+                        >
+                          {weekTotal.toLocaleString()}
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+                  {/* Week subtotal */}
+                  <Tr bg={summaryBg}>
+                    <Td
+                      fontSize='13px'
+                      fontWeight='700'
+                      color={summaryTextColor}
+                      px={4}
+                      py={3}
+                    >
+                      Week Total
+                    </Td>
+                    <Td
+                      fontSize='15px'
+                      fontWeight='800'
+                      color={summaryTextColor}
+                      px={4}
+                      py={3}
+                      textAlign='right'
+                      fontFamily='mono'
+                    >
+                      {stats
+                        .reduce(
+                          (sum: number, row: any) =>
+                            sum + (week.translators[row.translatorId]?.total || 0),
+                          0
+                        )
+                        .toLocaleString()}
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </Box>
           </Box>
-        </Box>
-      ))}
+        ))}
+      </Grid>
 
       {/* Grand total table */}
       <Box>
@@ -647,6 +656,6 @@ export function TranslatorStatsTable() {
           </Table>
         </Box>
       </Box>
-    </VStack>
+    </Grid>
   );
 }
