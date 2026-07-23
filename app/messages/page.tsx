@@ -28,7 +28,7 @@ export default function MessagesPage() {
   }
 
   return (
-    <Box p={8}>
+    <Box p={{ base: 4, md: 8 }}>
       <Box mb={6}>
         <Text
           fontFamily='Syne'
@@ -52,11 +52,12 @@ export default function MessagesPage() {
 
       <Flex
         gap={6}
-        h='calc(100vh - 200px)'
+        h={{ base: 'auto', md: 'calc(100vh - 200px)' }}
+        flexDirection={{ base: 'column', md: 'row' }}
       >
         {/* Conversations List - Left */}
         <Box
-          flex='0 0 320px'
+          flex={{ base: '0 0 280px', md: '0 0 320px' }}
           border='1px solid'
           borderColor={dividerColor}
           borderRadius='8px'
