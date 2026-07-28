@@ -180,12 +180,11 @@ export function TranslatorStatsTable() {
 
   const handleSaveCell = async (translatorId: string, day: number, statId: string | null) => {
     const wordCount = parseInt(cellValue) || 0;
+
     try {
-      if (statId) {
-        await translatorStatsApi.update(statId, wordCount);
-      } else {
-        await translatorStatsApi.createOrUpdate(translatorId, month, day, wordCount);
-      }
+      // ✅ Always use setDayTotal — replaces manual entry, keeps order entries
+      await translatorStatsApi.setDayTotal(translatorId, month, day, wordCount);
+
       toast({ title: 'Updated', status: 'success', duration: 1500 });
       refetch();
     } catch (err: any) {
@@ -196,7 +195,27 @@ export function TranslatorStatsTable() {
         duration: 2000,
       });
     }
+
     setEditingCell(null);
+
+    // const wordCount = parseInt(cellValue) || 0;
+    // try {
+    //   if (statId) {
+    //     await translatorStatsApi.update(statId, wordCount);
+    //   } else {
+    //     await translatorStatsApi.createOrUpdate(translatorId, month, day, wordCount);
+    //   }
+    //   toast({ title: 'Updated', status: 'success', duration: 1500 });
+    //   refetch();
+    // } catch (err: any) {
+    //   toast({
+    //     title: 'Failed to update',
+    //     description: err?.response?.data?.message || 'Unknown error',
+    //     status: 'error',
+    //     duration: 2000,
+    //   });
+    // }
+    // setEditingCell(null);
   };
 
   if (isLoading) {

@@ -20,4 +20,14 @@ export const translatorStatsApi = {
     });
     return data;
   },
+
+  setDayTotal: async (translatorId: string, month: string, day: number, wordCount: number) => {
+    const { data } = await apiClient.patch('/translator-stats/set-day', {
+      translatorId,
+      month,
+      day,
+      wordCount,
+    });
+    return data;
+  },
 };
