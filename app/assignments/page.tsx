@@ -392,8 +392,15 @@ export default function AssignmentsPage() {
   });
 
   const statusMutation = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: OrderStatus }) =>
-      ordersApi.update(id, { status }),
+    mutationFn: ({
+      id,
+      status,
+      orderNumber,
+    }: {
+      id: string;
+      status: OrderStatus;
+      orderNumber: number;
+    }) => ordersApi.update(id, { status, orderNumber }),
     onSuccess: (updated) => {
       queryClient.invalidateQueries({ queryKey: ['orders'] });
       setSelectedOrder(updated);
@@ -454,7 +461,7 @@ export default function AssignmentsPage() {
   const handleStatusChange = (status: OrderStatus) => {
     if (!selectedOrder) return;
     setSelectedStatus(status);
-    statusMutation.mutate({ id: selectedOrder.id, status });
+    statusMutation.mutate({ id: selectedOrder.id, status, orderNumber: selectedOrder.orderNumber });
   };
 
   const orders = data?.data || [];

@@ -14,6 +14,7 @@ import { StatCard } from './components/StatCard';
 import { RecentOrders } from './components/RecentOrders';
 import { apostilizationApi } from '@/features/apostilization/api/apostilizationApi';
 import { useState } from 'react';
+import { getDateRange } from '@/widgets/order-table/components/TableFilters';
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -24,9 +25,11 @@ export default function DashboardPage() {
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
   });
 
+  const { dateFrom } = getDateRange('month');
+
   const { data: ordersData } = useQuery({
-    queryKey: ['orders', 'dashboard'],
-    queryFn: () => ordersApi.getAll({ limit: 50 }),
+    queryKey: ['orders', 'dashboard', dateFrom],
+    queryFn: () => ordersApi.getAll({ limit: 120, dateFrom }),
   });
 
   const { data: apostilization = [] } = useQuery({
@@ -50,6 +53,11 @@ export default function DashboardPage() {
     .reduce((sum, o) => sum + o.totalPrice, 0);
 
   const revenue = totalOrders + totalApostilization;
+
+  const totalCard = orders
+    .filter((order) => order.status !== 'CANCELLED')
+    .filter((order) => order.paymentType === 'card')
+    .reduce((sum, o) => sum + o.totalPrice, 0);
 
   return (
     <Box p={8}>
@@ -81,7 +89,7 @@ export default function DashboardPage() {
           value={total}
           icon={RiFileList3Line}
           color='#4d76ff'
-          change={12}
+          change={0}
         />
         <StatCard
           label={t('dashboard.inProgress')}
@@ -94,15 +102,16 @@ export default function DashboardPage() {
           value={done}
           icon={RiCheckboxCircleLine}
           color='#00b894'
-          change={8}
+          change={0}
         />
         {user?.role === 'ADMIN' && (
           <StatCard
             label={t('dashboard.revenue')}
             value={`₴${revenue.toLocaleString()}`}
+            totalCard={totalCard}
             icon={RiMoneyDollarCircleLine}
             color='#a29bfe'
-            change={5}
+            change={0}
           />
         )}
       </Grid>

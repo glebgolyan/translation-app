@@ -14,12 +14,13 @@ import {
 interface StatCardProps {
   label: string;
   value: string | number;
+  totalCard?: number;
   icon: React.ElementType;
   color: string;
   change?: number;
 }
 
-export function StatCard({ label, value, icon, color, change }: StatCardProps) {
+export function StatCard({ label, value, icon, color, change, totalCard }: StatCardProps) {
   const bg = useColorModeValue('white', '#1a1a1a');
   const borderColor = useColorModeValue('gray.100', '#2e2e2e');
   const labelColor = useColorModeValue('gray.400', '#666666');
@@ -49,15 +50,29 @@ export function StatCard({ label, value, icon, color, change }: StatCardProps) {
           >
             {label}
           </StatLabel>
-          <StatNumber
-            fontSize={{ base: '16px', md: '28px' }}
-            fontFamily='Syne'
-            fontWeight='700'
-            letterSpacing='-0.02em'
-            color={valueColor}
-          >
-            {value}
-          </StatNumber>
+          <Flex>
+            <StatNumber
+              fontSize={{ base: '16px', md: '28px' }}
+              fontFamily='Syne'
+              fontWeight='700'
+              letterSpacing='-0.02em'
+              color={valueColor}
+            >
+              {value}
+            </StatNumber>
+
+            {totalCard && (
+              <StatNumber
+                fontSize={{ base: '16px', md: '28px' }}
+                fontFamily='Syne'
+                fontWeight='700'
+                letterSpacing='-0.02em'
+                color={valueColor}
+              >
+                -- card{` ₴${totalCard.toLocaleString()}`}
+              </StatNumber>
+            )}
+          </Flex>
           {change !== undefined && (
             <StatHelpText
               fontSize='12px'

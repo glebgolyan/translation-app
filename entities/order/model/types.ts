@@ -67,6 +67,7 @@ export interface UpdateOrderDto {
   status?: OrderStatus;
   originalFiles?: string[];
   translatedFiles?: string[];
+  orderNumber: number;
 }
 
 export interface OrderFilters {

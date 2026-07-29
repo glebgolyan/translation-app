@@ -13,6 +13,7 @@ import {
 import { RiSearchLine, RiCalendarLine } from 'react-icons/ri';
 import { OrderFilters, OrderStatus } from '@/entities/order/model/types';
 import { useT } from '@/shared/hooks/useT';
+import { useState } from 'react';
 
 interface TableFiltersProps {
   filters: OrderFilters;
@@ -29,24 +30,51 @@ const DATE_RANGES: { value: DateRange; label: string }[] = [
   { value: 'year', label: 'Last year' },
 ];
 
-function getDateRange(range: DateRange): { dateFrom?: string; dateTo?: string } {
+// function getDateRange(range: DateRange): { dateFrom?: string; dateTo?: string } {
+//   if (range === 'all') return {};
+//   const now = new Date();
+//   const to = now.toISOString();
+//   let from: Date;
+//
+//   if (range === 'week') {
+//     from = new Date();
+//     from.setDate(now.getDate() - 7);
+//   } else if (range === 'month') {
+//     from = new Date();
+//     from.setMonth(now.getMonth() - 1);
+//   } else {
+//     from = new Date();
+//     from.setFullYear(now.getFullYear() - 1);
+//   }
+//
+//   return { dateFrom: from.toISOString(), dateTo: to };
+// }
+
+export function getDateRange(range: DateRange): { dateFrom?: string; dateTo?: string } {
   if (range === 'all') return {};
+
   const now = new Date();
-  const to = now.toISOString();
-  let from: Date;
 
   if (range === 'week') {
-    from = new Date();
-    from.setDate(now.getDate() - 7);
-  } else if (range === 'month') {
-    from = new Date();
-    from.setMonth(now.getMonth() - 1);
-  } else {
-    from = new Date();
-    from.setFullYear(now.getFullYear() - 1);
+    const day = now.getDay();
+    const diff = day === 0 ? -6 : 1 - day; // shift to Monday
+    const monday = new Date(now);
+    monday.setDate(now.getDate() + diff);
+    monday.setHours(0, 0, 0, 0);
+    return { dateFrom: monday.toISOString().split('T')[0], dateTo: '' };
   }
 
-  return { dateFrom: from.toISOString(), dateTo: to };
+  if (range === 'month') {
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    return { dateFrom: firstDay.toISOString().split('T')[0], dateTo: '' };
+  }
+
+  if (range === 'year') {
+    const firstDay = new Date(now.getFullYear(), 0, 1);
+    return { dateFrom: firstDay.toISOString().split('T')[0], dateTo: '' };
+  }
+
+  return {};
 }
 
 export function TableFilters({ filters, total, onChange }: TableFiltersProps) {
@@ -58,18 +86,12 @@ export function TableFilters({ filters, total, onChange }: TableFiltersProps) {
   const inactiveColor = useColorModeValue('gray.600', '#888888');
   const totalColor = useColorModeValue('gray.400', '#666666');
 
-  const activeRange: DateRange = (() => {
-    if (!filters.dateFrom) return 'all';
-    const diff = Date.now() - new Date(filters.dateFrom).getTime();
-    const days = diff / (1000 * 60 * 60 * 24);
-    if (days <= 8) return 'week';
-    if (days <= 32) return 'month';
-    return 'year';
-  })();
+  const [activeRange, setActiveRange] = useState<DateRange>('all');
 
   const handleRangeChange = (range: DateRange) => {
     const { dateFrom, dateTo } = getDateRange(range);
     onChange({ ...filters, dateFrom, dateTo, page: 1 });
+    setActiveRange(range);
   };
 
   return (

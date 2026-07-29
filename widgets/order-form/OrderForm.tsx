@@ -60,6 +60,7 @@ const orderSchema = z.object({
   comment: z.string().optional(),
   cardAmount: z.number().optional(),
   translatorId: z.string().optional(),
+  orderNumber: z.number().optional(),
   status: z.enum([
     'NEW',
     'IN_PROGRESS',
@@ -127,6 +128,7 @@ export function OrderForm({
   } = useForm<OrderFormValues>({
     resolver: zodResolver(orderSchema) as any,
     defaultValues: {
+      orderNumber: order?.orderNumber || undefined,
       sourceLanguage: order?.sourceLanguage || '',
       targetLanguage: order?.targetLanguage || '',
       clientName: order?.clientName || '',

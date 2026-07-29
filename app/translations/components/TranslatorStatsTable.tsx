@@ -197,25 +197,6 @@ export function TranslatorStatsTable() {
     }
 
     setEditingCell(null);
-
-    // const wordCount = parseInt(cellValue) || 0;
-    // try {
-    //   if (statId) {
-    //     await translatorStatsApi.update(statId, wordCount);
-    //   } else {
-    //     await translatorStatsApi.createOrUpdate(translatorId, month, day, wordCount);
-    //   }
-    //   toast({ title: 'Updated', status: 'success', duration: 1500 });
-    //   refetch();
-    // } catch (err: any) {
-    //   toast({
-    //     title: 'Failed to update',
-    //     description: err?.response?.data?.message || 'Unknown error',
-    //     status: 'error',
-    //     duration: 2000,
-    //   });
-    // }
-    // setEditingCell(null);
   };
 
   if (isLoading) {
@@ -244,7 +225,7 @@ export function TranslatorStatsTable() {
         <Text
           fontFamily='Syne'
           fontWeight='600'
-          fontSize='14px'
+          fontSize={{ base: '16px', md: '24px' }}
         >
           {monthDate.toLocaleDateString('uk-UA', { month: 'long', year: 'numeric' })}
         </Text>
@@ -290,7 +271,7 @@ export function TranslatorStatsTable() {
             <Thead bg={theadBg}>
               <Tr>
                 <Th
-                  width='140px'
+                  width='120px'
                   color={thColor}
                   fontSize='12px'
                   px={3}

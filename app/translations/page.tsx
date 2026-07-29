@@ -33,7 +33,7 @@ export default function TranslationsPage() {
         </Text>
         <Text
           color='grey.500'
-          fontSize='14px'
+          fontSize={{ base: '14px', md: '18px' }}
           mt={0.5}
         >
           Нужно заплатить в гривне
