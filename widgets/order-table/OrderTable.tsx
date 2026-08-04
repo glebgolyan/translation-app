@@ -41,7 +41,13 @@ const COLUMNS: Column[] = [
   { key: 'createdAt', labelKey: 'orders.received', sortable: true, width: '90px' },
   { key: 'dueDate', labelKey: 'orders.deadline', sortable: true, width: '90px' },
   { key: 'languages', labelKey: 'orders.languages', width: '160px' },
-  { key: 'fileStatus', labelKey: 'orders.fileStatus', roles: ['MANAGER', 'ADMIN'], width: '120px' },
+  {
+    key: 'notarizationCount',
+    labelKey: 'orders.notarizationCount',
+    roles: ['MANAGER', 'ADMIN'],
+    width: '60px',
+  },
+  // { key: 'fileStatus', labelKey: 'orders.fileStatus', roles: ['MANAGER', 'ADMIN'], width: '120px' },
   {
     key: 'clientName',
     labelKey: 'orders.clientName',
@@ -101,6 +107,7 @@ export function OrderTable({ userRole, onEdit, onView, onDelete }: OrderTablePro
   const orders = data?.data || [];
   const total = data?.total || 0;
   const totalPages = data?.totalPages || 1;
+  console.log('orders', orders);
 
   const visibleColumns = COLUMNS.filter((col) => !col.roles || col.roles.includes(userRole));
 

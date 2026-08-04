@@ -91,6 +91,16 @@ export function OrderRow({ order, visibleColumns, userRole, onEdit, onDelete }: 
             filesDeletedAt={order.filesDeletedAt}
           />
         );
+      case 'notarizationCount':
+        return (
+          <Text
+            fontSize='16px'
+            fontFamily='mono'
+            color='gray.100'
+          >
+            {order.notarizationCount}
+          </Text>
+        );
       case 'createdAt':
         return (
           <Text
