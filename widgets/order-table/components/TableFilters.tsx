@@ -21,10 +21,11 @@ interface TableFiltersProps {
   onChange: (filters: OrderFilters) => void;
 }
 
-type DateRange = 'all' | 'week' | 'month' | 'year';
+type DateRange = 'all' | 'today' | 'week' | 'month' | 'year';
 
 const DATE_RANGES: { value: DateRange; label: string }[] = [
   { value: 'all', label: 'All time' },
+  { value: 'today', label: 'Today' },
   { value: 'week', label: 'Last week' },
   { value: 'month', label: 'Last month' },
   { value: 'year', label: 'Last year' },
@@ -50,17 +51,28 @@ const DATE_RANGES: { value: DateRange; label: string }[] = [
 //   return { dateFrom: from.toISOString(), dateTo: to };
 // }
 
-export function getDateRange(range: DateRange): { dateFrom?: string; dateTo?: string } {
+export function getDateRange(range: DateRange): {
+  dateFrom?: string;
+  dateTo?: string;
+  endDate?: string;
+} {
   if (range === 'all') return {};
 
   const now = new Date();
 
+  const day = now.getDay();
+  const diff = day === 0 ? -6 : 1 - day; // shift to Monday
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + diff);
+  monday.setHours(0, 0, 0, 0);
+
+  if (range === 'today') {
+    return {
+      endDate: now.toISOString().split('T')[0],
+    };
+  }
+
   if (range === 'week') {
-    const day = now.getDay();
-    const diff = day === 0 ? -6 : 1 - day; // shift to Monday
-    const monday = new Date(now);
-    monday.setDate(now.getDate() + diff);
-    monday.setHours(0, 0, 0, 0);
     return { dateFrom: monday.toISOString().split('T')[0], dateTo: '' };
   }
 
@@ -89,8 +101,8 @@ export function TableFilters({ filters, total, onChange }: TableFiltersProps) {
   const [activeRange, setActiveRange] = useState<DateRange>('all');
 
   const handleRangeChange = (range: DateRange) => {
-    const { dateFrom, dateTo } = getDateRange(range);
-    onChange({ ...filters, dateFrom, dateTo, page: 1 });
+    const { dateFrom, dateTo, endDate } = getDateRange(range);
+    onChange({ ...filters, dateFrom, dateTo, endDate, page: 1 });
     setActiveRange(range);
   };
 

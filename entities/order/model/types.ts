@@ -82,6 +82,7 @@ export interface OrderFilters {
   sortOrder?: 'asc' | 'desc';
   dateFrom?: string;
   dateTo?: string;
+  endDate?: string;
 }
 
 export interface PaginatedOrders {

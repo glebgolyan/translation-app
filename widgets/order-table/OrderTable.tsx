@@ -99,6 +99,8 @@ export function OrderTable({ userRole, onEdit, onView, onDelete }: OrderTablePro
     sortOrder: 'desc',
   });
 
+  console.log('--filters--', filters);
+
   const { data, isLoading } = useQuery({
     queryKey: ['orders', filters],
     queryFn: () => ordersApi.getAll(filters),
