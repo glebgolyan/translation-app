@@ -21,15 +21,7 @@ interface TableFiltersProps {
   onChange: (filters: OrderFilters) => void;
 }
 
-type DateRange = 'all' | 'today' | 'week' | 'month' | 'year';
-
-const DATE_RANGES: { value: DateRange; label: string }[] = [
-  { value: 'all', label: 'All time' },
-  { value: 'today', label: 'Today' },
-  { value: 'week', label: 'Last week' },
-  { value: 'month', label: 'Last month' },
-  { value: 'year', label: 'Last year' },
-];
+type DateRange = 'all' | 'today' | 'tomorrow' | 'week' | 'month' | 'year';
 
 // function getDateRange(range: DateRange): { dateFrom?: string; dateTo?: string } {
 //   if (range === 'all') return {};
@@ -60,11 +52,21 @@ export function getDateRange(range: DateRange): {
 
   const now = new Date();
 
+  const tomorrow = new Date(now);
+  tomorrow.setDate(now.getDate() + 2);
+  tomorrow.setHours(0, 0, 0, 0);
+
   const day = now.getDay();
   const diff = day === 0 ? -6 : 1 - day; // shift to Monday
   const monday = new Date(now);
   monday.setDate(now.getDate() + diff);
   monday.setHours(0, 0, 0, 0);
+
+  if (range === 'tomorrow') {
+    return {
+      endDate: tomorrow.toISOString().split('T')[0],
+    };
+  }
 
   if (range === 'today') {
     return {
@@ -99,6 +101,15 @@ export function TableFilters({ filters, total, onChange }: TableFiltersProps) {
   const totalColor = useColorModeValue('gray.400', '#666666');
 
   const [activeRange, setActiveRange] = useState<DateRange>('all');
+
+  const DATE_RANGES: { value: DateRange; label: string }[] = [
+    { value: 'all', label: t('dateRanges.all') },
+    { value: 'today', label: t('dateRanges.today') },
+    { value: 'tomorrow', label: t('dateRanges.tomorrow') },
+    { value: 'week', label: t('dateRanges.week') },
+    { value: 'month', label: t('dateRanges.month') },
+    { value: 'year', label: t('dateRanges.year') },
+  ];
 
   const handleRangeChange = (range: DateRange) => {
     const { dateFrom, dateTo, endDate } = getDateRange(range);

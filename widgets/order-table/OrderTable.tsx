@@ -99,8 +99,6 @@ export function OrderTable({ userRole, onEdit, onView, onDelete }: OrderTablePro
     sortOrder: 'desc',
   });
 
-  console.log('--filters--', filters);
-
   const { data, isLoading } = useQuery({
     queryKey: ['orders', filters],
     queryFn: () => ordersApi.getAll(filters),
@@ -109,7 +107,6 @@ export function OrderTable({ userRole, onEdit, onView, onDelete }: OrderTablePro
   const orders = data?.data || [];
   const total = data?.total || 0;
   const totalPages = data?.totalPages || 1;
-  console.log('orders', orders);
 
   const visibleColumns = COLUMNS.filter((col) => !col.roles || col.roles.includes(userRole));
 
