@@ -15,6 +15,7 @@ import { RecentOrders } from './components/RecentOrders';
 import { apostilizationApi } from '@/features/apostilization/api/apostilizationApi';
 import { useState } from 'react';
 import { getDateRange } from '@/widgets/order-table/components/TableFilters';
+import { translatorStatsApi } from '@/features/translator-stats/api/translatorStatsApi';
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -26,6 +27,39 @@ export default function DashboardPage() {
   });
 
   const { dateFrom } = getDateRange('month');
+
+  const { data } = useQuery({
+    queryKey: ['translator-stats', month],
+    queryFn: () => translatorStatsApi.getByMonth(month),
+  });
+
+  const stats = data?.data || [];
+
+  const [year, monthNum] = month.split('-');
+
+  const monthDate = new Date(`${year}-${monthNum}-01`);
+  const actualDaysInMonth = new Date(
+    monthDate.getFullYear(),
+    monthDate.getMonth() + 1,
+    0
+  ).getDate();
+
+  // Calculate grand totals
+  const grandTotals: any = {};
+  stats.forEach((row: any) => {
+    let total = 0;
+    for (let day = 1; day <= actualDaysInMonth; day++) {
+      total += row[`day${day}`] || 0;
+    }
+    grandTotals[row.translatorId] = {
+      translatorName: row.translatorName,
+      total,
+    };
+  });
+
+  const totalStats = stats
+    .reduce((sum: number, row: any) => sum + (grandTotals[row.translatorId]?.total || 0), 0)
+    .toLocaleString();
 
   const { data: ordersData } = useQuery({
     queryKey: ['orders', 'dashboard', dateFrom],
@@ -59,6 +93,11 @@ export default function DashboardPage() {
     .filter((order) => order.paymentType === 'card')
     .reduce((sum, o) => sum + o.totalPrice, 0);
 
+  const totalNotarizationCount = orders
+    .filter((order) => order.status !== 'CANCELLED')
+    .reduce((sum, o) => sum + o.notarizationCount, 0);
+
+  const totalNotarizationValue = totalNotarizationCount * 200;
   return (
     <Box p={8}>
       <Box mb={8}>
@@ -109,6 +148,17 @@ export default function DashboardPage() {
             label={t('dashboard.revenue')}
             value={`₴${revenue.toLocaleString()}`}
             totalCard={totalCard}
+            icon={RiMoneyDollarCircleLine}
+            color='#a29bfe'
+            change={0}
+          />
+        )}
+
+        {user?.role === 'ADMIN' && (
+          <StatCard
+            label={t('status.CERTIFIED')}
+            value={`₴${totalNotarizationValue.toLocaleString()}`}
+            totalCard={totalStats}
             icon={RiMoneyDollarCircleLine}
             color='#a29bfe'
             change={0}
