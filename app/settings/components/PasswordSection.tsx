@@ -107,7 +107,7 @@ export function PasswordSection() {
         </Text>
       </Box>
 
-      <Box p={6}>
+      <Box p={{ base: 4, md: 6 }}>
         <Box
           as='form'
           onSubmit={handleSubmit(onSubmit)}
