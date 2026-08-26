@@ -27,8 +27,16 @@ export function useAuth() {
 
   const login = useCallback(async (email: string, password: string) => {
     const { user, tokens } = await authApi.login({ email, password });
-    Cookies.set('accessToken', tokens.accessToken, { expires: 3 });
-    Cookies.set('refreshToken', tokens.refreshToken, { expires: 7 });
+    Cookies.set('accessToken', tokens.accessToken, {
+      expires: 3,
+      secure: window.location.protocol === 'https:',
+      sameSite: 'strict',
+    });
+    Cookies.set('refreshToken', tokens.refreshToken, {
+      expires: 7,
+      secure: window.location.protocol === 'https:',
+      sameSite: 'strict',
+    });
     setUser(user);
     return user;
   }, []);
@@ -36,8 +44,16 @@ export function useAuth() {
   const register = useCallback(
     async (data: { email: string; password: string; name: string; phone?: string }) => {
       const { user, tokens } = await authApi.register(data);
-      Cookies.set('accessToken', tokens.accessToken, { expires: 3 });
-      Cookies.set('refreshToken', tokens.refreshToken, { expires: 7 });
+      Cookies.set('accessToken', tokens.accessToken, {
+        expires: 3,
+        secure: window.location.protocol === 'https:',
+        sameSite: 'strict',
+      });
+      Cookies.set('refreshToken', tokens.refreshToken, {
+        expires: 7,
+        secure: window.location.protocol === 'https:',
+        sameSite: 'strict',
+      });
       setUser(user);
       return user;
     },
