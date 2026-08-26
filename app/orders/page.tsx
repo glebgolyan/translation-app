@@ -1,6 +1,7 @@
 'use client';
 import { Box, Flex, Text, Button, Icon, useToast, useBreakpointValue } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { RiAddLine, RiDeleteBinLine, RiDownloadCloud2Line } from 'react-icons/ri';
 import { useDisclosure } from '@chakra-ui/react';
@@ -16,6 +17,7 @@ import { translatorStatsApi } from '@/features/translator-stats/api/translatorSt
 
 export default function OrdersPage() {
   const { user } = useAuth();
+  const router = useRouter();
   const { t } = useT();
   const toast = useToast();
   const queryClient = useQueryClient();
@@ -37,6 +39,12 @@ export default function OrdersPage() {
     queryFn: usersApi.getTranslators,
     enabled: user?.role === 'MANAGER' || user?.role === 'ADMIN',
   });
+
+  useEffect(() => {
+    if (user && user.role !== 'MANAGER' && user.role !== 'ADMIN') {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
 
   const handleEdit = (order: Order) => {
     setSelectedOrder(order);
@@ -102,7 +110,7 @@ export default function OrdersPage() {
     }
   };
 
-  if (!user) return null;
+  if (!user || (user.role !== 'MANAGER' && user.role !== 'ADMIN')) return null;
 
   return (
     <Box p={{ base: 4, md: 8, lg: 12, xl: 16 }}>

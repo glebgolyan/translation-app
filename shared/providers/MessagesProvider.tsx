@@ -1,6 +1,7 @@
 'use client';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
+import Cookies from 'js-cookie';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from '@/features/auth/model/useAuth';
 
@@ -23,6 +24,9 @@ export function MessagesProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!user?.id) return;
 
+    const token = Cookies.get('accessToken');
+    if (!token) return;
+
     // Get base URL by removing /api from NEXT_PUBLIC_API_URL
     const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
 
@@ -30,9 +34,8 @@ export function MessagesProvider({ children }: { children: React.ReactNode }) {
 
     const socket = io(`${baseUrl}/messages`, {
       auth: {
-        userId: user.id,
+        token,
       },
-      query: { userId: user.id },
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,

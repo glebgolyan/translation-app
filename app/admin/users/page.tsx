@@ -2,16 +2,31 @@
 import { Box, Text, Flex, Icon } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { RiUserLine } from 'react-icons/ri';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { usersApi } from '@/features/admin/api/usersApi';
+import { useAuth } from '@/features/auth/model/useAuth';
 import { useT } from '@/shared/hooks/useT';
 import { UserTable } from './components/UserTable';
 
 export default function AdminUsersPage() {
   const { t } = useT();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user && user.role !== 'ADMIN') {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
+
   const { data: users = [], isLoading } = useQuery({
     queryKey: ['users'],
     queryFn: usersApi.getAll,
+    enabled: user?.role === 'ADMIN',
   });
+
+  if (!user || user.role !== 'ADMIN') return null;
 
   return (
     <Box p={8}>
