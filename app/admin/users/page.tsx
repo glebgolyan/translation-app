@@ -29,7 +29,7 @@ export default function AdminUsersPage() {
   if (!user || user.role !== 'ADMIN') return null;
 
   return (
-    <Box p={8}>
+    <Box p={{ base: 4, md: 8 }}>
       <Flex
         align='center'
         gap={3}
@@ -44,7 +44,7 @@ export default function AdminUsersPage() {
           <Text
             fontFamily='Syne'
             fontWeight='800'
-            fontSize='24px'
+            fontSize={{ base: '20px', md: '24px' }}
             letterSpacing='-0.02em'
           >
             {t('users.title')}
@@ -59,9 +59,9 @@ export default function AdminUsersPage() {
       </Flex>
 
       <Box
-        bg='white'
+        bg={{ base: 'transparent', md: 'white' }}
         borderRadius='8px'
-        border='1px solid'
+        border={{ base: 'none', md: '1px solid' }}
         borderColor='gray.100'
         overflow='hidden'
       >
