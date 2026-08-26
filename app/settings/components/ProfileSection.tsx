@@ -105,30 +105,34 @@ export function ProfileSection({ user, onUpdate }: ProfileSectionProps) {
         </Text>
       </Box>
 
-      <Box p={6}>
+      <Box p={{ base: 4, md: 6 }}>
         {/* Avatar + role */}
         <HStack
           spacing={4}
           mb={8}
+          align='flex-start'
         >
           <Avatar
             size='lg'
             name={user.name}
             bg='brand.100'
             color='brand.700'
+            flexShrink={0}
           />
-          <Box>
+          <Box minW={0}>
             <Text
               fontFamily='Syne'
               fontWeight='700'
               fontSize='18px'
               color={textColor}
+              noOfLines={1}
             >
               {user.name}
             </Text>
             <HStack
               spacing={2}
               mt={1}
+              flexWrap='wrap'
             >
               <Badge
                 px={2}
@@ -146,6 +150,7 @@ export function ProfileSection({ user, onUpdate }: ProfileSectionProps) {
               <Text
                 fontSize='13px'
                 color={labelColor}
+                noOfLines={1}
               >
                 {user.email}
               </Text>
@@ -158,7 +163,7 @@ export function ProfileSection({ user, onUpdate }: ProfileSectionProps) {
           onSubmit={handleSubmit(onSubmit)}
         >
           <Grid
-            templateColumns='repeat(2, 1fr)'
+            templateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)' }}
             gap={4}
             mb={6}
           >

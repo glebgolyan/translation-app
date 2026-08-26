@@ -20,14 +20,14 @@ export default function SettingsPage() {
 
   return (
     <Box
-      p={8}
+      p={{ base: 4, md: 8 }}
       maxW='800px'
     >
       <Box mb={8}>
         <Text
           fontFamily='Syne'
           fontWeight='800'
-          fontSize='24px'
+          fontSize={{ base: '20px', md: '24px' }}
           letterSpacing='-0.02em'
           color={textColor}
         >
