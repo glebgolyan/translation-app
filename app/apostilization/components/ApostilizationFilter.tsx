@@ -63,7 +63,7 @@ export function ApostilizationFilter({
     >
       {/* Search input */}
       <InputGroup
-        maxW='240px'
+        maxW={{ base: 'full', sm: '240px' }}
         size='sm'
       >
         <InputLeftElement pointerEvents='none'>

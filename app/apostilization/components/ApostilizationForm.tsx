@@ -92,7 +92,7 @@ export function ApostilizationForm({
         align='stretch'
       >
         <Grid
-          templateColumns='repeat(2, 1fr)'
+          templateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)' }}
           gap={4}
         >
           <FormControl isInvalid={!!errors.dateOfTaking}>
@@ -196,7 +196,7 @@ export function ApostilizationForm({
             {t('apostilization.payment')}
           </Text>
           <Grid
-            templateColumns='repeat(3, 1fr)'
+            templateColumns={{ base: '1fr', sm: 'repeat(3, 1fr)' }}
             gap={4}
           >
             <FormControl isInvalid={!!errors.sum}>
@@ -263,7 +263,7 @@ export function ApostilizationForm({
         </Box>
 
         <Grid
-          templateColumns='repeat(2, 1fr)'
+          templateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)' }}
           gap={4}
         >
           <FormControl isInvalid={!!errors.paymentType}>

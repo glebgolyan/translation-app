@@ -106,18 +106,20 @@ export default function ApostilizationPage() {
   };
 
   return (
-    <Box p={8}>
+    <Box p={{ base: 4, md: 8 }}>
       {/* Header */}
       <Flex
         justify='space-between'
-        align='center'
+        align={{ base: 'flex-start', sm: 'center' }}
+        direction={{ base: 'column', sm: 'row' }}
+        gap={3}
         mb={8}
       >
         <Box>
           <Text
             fontFamily='Syne'
             fontWeight='800'
-            fontSize='24px'
+            fontSize={{ base: '20px', md: '24px' }}
             letterSpacing='-0.02em'
             color={textColor}
           >
@@ -134,6 +136,7 @@ export default function ApostilizationPage() {
         <Button
           leftIcon={<Icon as={RiAddLine} />}
           size='sm'
+          w={{ base: 'full', sm: 'auto' }}
           onClick={() => {
             setSelectedItem(null);
             onOpen();

@@ -15,6 +15,11 @@ import {
   Spinner,
   useToast,
   Select,
+  useBreakpointValue,
+  Grid,
+  Text,
+  Divider,
+  Flex,
 } from '@chakra-ui/react';
 import { RiEditLine, RiDeleteBinLine } from 'react-icons/ri';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -32,12 +37,15 @@ export function ApostilizationTable({ month, search, onEdit }: ApostilizationTab
   const toast = useToast();
   const queryClient = useQueryClient();
 
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   const bg = useColorModeValue('white', '#1a1a1a');
   const borderColor = useColorModeValue('gray.100', '#2e2e2e');
   const theadBg = useColorModeValue('gray.50', '#222222');
   const thColor = useColorModeValue('gray.500', '#666666');
   const tdColor = useColorModeValue('gray.800', '#e0e0e0');
   const hoverBg = useColorModeValue('gray.50', '#222222');
+  const labelColor = useColorModeValue('gray.500', 'gray.400');
 
   const { data: items = [], isLoading } = useQuery({
     queryKey: ['apostilization', month, search],
@@ -66,6 +74,152 @@ export function ApostilizationTable({ month, search, onEdit }: ApostilizationTab
       <Center py={12}>
         <Spinner color='brand.500' />
       </Center>
+    );
+  }
+
+  if (isMobile) {
+    return (
+      <Grid
+        templateColumns='1fr'
+        gap={3}
+      >
+        {items.map((item: any) => (
+          <Box
+            key={item.id}
+            bg={bg}
+            border='1px solid'
+            borderColor={borderColor}
+            borderRadius='12px'
+            p={4}
+          >
+            <Flex
+              justify='space-between'
+              align='center'
+              mb={2}
+            >
+              <Text
+                fontSize='13px'
+                fontWeight='700'
+              >
+                {item.clientName}
+              </Text>
+              <Text
+                fontSize='12px'
+                fontFamily='mono'
+                color={labelColor}
+              >
+                {new Date(item.dateOfTaking).toLocaleDateString('uk-UA')}
+              </Text>
+            </Flex>
+
+            <Text
+              fontSize='12px'
+              color={labelColor}
+              mb={1}
+            >
+              {item.documentType}
+            </Text>
+            <Text
+              fontSize='12px'
+              color={labelColor}
+              mb={3}
+            >
+              {item.contact}
+            </Text>
+
+            <Divider
+              borderColor={borderColor}
+              mb={3}
+            />
+
+            <Grid
+              templateColumns='1fr 1fr'
+              gap={3}
+              mb={3}
+            >
+              <Box>
+                <Text
+                  fontSize='10px'
+                  color={labelColor}
+                  fontWeight='600'
+                  textTransform='uppercase'
+                  letterSpacing='0.06em'
+                  mb={0.5}
+                >
+                  {t('apostilization.sum')}
+                </Text>
+                <Text
+                  fontSize='13px'
+                  fontFamily='mono'
+                  fontWeight='600'
+                  color={tdColor}
+                >
+                  ₴{item.sum.toLocaleString()}
+                </Text>
+              </Box>
+              <Box>
+                <Text
+                  fontSize='10px'
+                  color={labelColor}
+                  fontWeight='600'
+                  textTransform='uppercase'
+                  letterSpacing='0.06em'
+                  mb={0.5}
+                >
+                  {t('apostilization.remaining')}
+                </Text>
+                <Text
+                  fontSize='13px'
+                  fontFamily='mono'
+                  fontWeight='600'
+                  color={item.remainingAmount > 0 ? 'orange.500' : 'green.500'}
+                >
+                  ₴{item.remainingAmount.toLocaleString()}
+                </Text>
+              </Box>
+            </Grid>
+
+            <Flex
+              justify='space-between'
+              align='center'
+            >
+              <Select
+                size='xs'
+                value={item.status}
+                onChange={(e) => updateMutation.mutate({ id: item.id, status: e.target.value })}
+                maxW='140px'
+                fontFamily='Syne'
+                fontWeight='600'
+                fontSize='11px'
+              >
+                <option value='IN_PROGRESS'>{t('apostilization.inWork')}</option>
+                <option value='DONE'>{t('apostilization.done')}</option>
+                <option value='TAKEN'>{t('apostilization.TAKEN')}</option>
+              </Select>
+
+              <HStack spacing={1}>
+                <IconButton
+                  aria-label='Edit'
+                  icon={<Icon as={RiEditLine} />}
+                  size='sm'
+                  variant='ghost'
+                  colorScheme='brand'
+                  onClick={() => onEdit(item)}
+                />
+                <IconButton
+                  aria-label='Delete'
+                  icon={<Icon as={RiDeleteBinLine} />}
+                  size='sm'
+                  variant='ghost'
+                  colorScheme='red'
+                  onClick={() => deleteMutation.mutate(item.id)}
+                  isLoading={deleteMutation.isPending}
+                />
+              </HStack>
+            </Flex>
+          </Box>
+        ))}
+      </Grid>
     );
   }
 
