@@ -8,7 +8,8 @@
     "settings": "Settings",
     "translatorStats": "Translator Stats",
     "apostilization": "Apostilization",
-    "messages": "Messages"
+    "messages": "Messages",
+    "requests": "Requests"
   },
   "apostilization": {
     "title": "Apostilization",
@@ -245,5 +246,39 @@
     "swahili": "Swahili",
     "afrikaans": "Afrikaans",
     "latin": "Latin"
+  },
+  "requests": {
+    "title": "Requests",
+    "subtitle": "Leads submitted from the website, waiting for review",
+    "searchPlaceholder": "Search name, phone, email...",
+    "all": "All",
+    "pending": "Pending",
+    "converted": "Converted",
+    "date": "Date",
+    "files": "Files",
+    "file": "file",
+    "status": "Status",
+    "preferredContact": "Preferred Contact",
+    "attachedFiles": "Attached Files",
+    "filesCarryOverNote": "These files will be attached to the order automatically.",
+    "convertToOrder": "Convert to Order",
+    "convertSuccess": "Request converted to order",
+    "deleteSuccess": "Request deleted",
+    "delete": "Delete",
+    "deleteConfirmTitle": "Delete this request?",
+    "deleteConfirmBody": "This will permanently delete the request and all its attached files. This can't be undone.",
+    "empty": "No requests found",
+    "contact": {
+      "EMAIL": "Email",
+      "VIBER": "Viber",
+      "WHATSAPP": "WhatsApp",
+      "TELEGRAM": "Telegram"
+    },
+    "createRequest": "New Request",
+    "createSuccess": "Request created",
+    "selectLanguage": "Select language",
+    "unsupportedFormat": "unsupported format",
+    "exceedsMaxSize": "exceeds 50MB",
+    "maxSize": "max 50MB"
   }
 }

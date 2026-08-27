@@ -28,6 +28,7 @@ import {
   RiMenuUnfoldLine,
   RiBarChart2Line,
   RiChat3Line,
+  RiInboxLine,
 } from 'react-icons/ri';
 import { User, UserRole } from '@/entities/user/model/types';
 import { LanguageSwitcher } from '@/shared/ui/LanguageSwitcher';
@@ -84,6 +85,12 @@ const NAV_ITEMS: NavItem[] = [
     roles: ['MANAGER', 'ADMIN'],
   },
   { labelKey: 'nav.orders', href: '/orders', icon: RiFileList3Line, roles: ['MANAGER', 'ADMIN'] },
+  {
+    labelKey: 'nav.requests',
+    href: '/requests',
+    icon: RiInboxLine,
+    roles: ['MANAGER', 'ADMIN'],
+  },
   {
     labelKey: 'nav.translatorStats',
     href: '/translations',

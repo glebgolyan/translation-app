@@ -8,7 +8,8 @@
     "settings": "Налаштування",
     "translatorStats": "Статистика перекладачів",
     "apostilization": "Апостиль",
-    "messages": "Повідомлення"
+    "messages": "Повідомлення",
+    "requests": "Заявки"
   },
   "apostilization": {
     "title": "Апостиль",
@@ -245,5 +246,39 @@
     "swahili": "Суахілі",
     "afrikaans": "Африкаанс",
     "latin": "Латина"
+  },
+  "requests": {
+    "title": "Заявки",
+    "subtitle": "Заявки з сайту, що очікують обробки",
+    "searchPlaceholder": "Пошук за ім'ям, телефоном, email...",
+    "all": "Усі",
+    "pending": "Очікують",
+    "converted": "Оформлені",
+    "date": "Дата",
+    "files": "Файли",
+    "file": "файл",
+    "status": "Статус",
+    "preferredContact": "Зв'язок",
+    "attachedFiles": "Прикріплені файли",
+    "filesCarryOverNote": "Ці файли автоматично прикріпляться до замовлення.",
+    "convertToOrder": "Оформити в замовлення",
+    "convertSuccess": "Заявку оформлено в замовлення",
+    "deleteSuccess": "Заявку видалено",
+    "delete": "Видалити",
+    "deleteConfirmTitle": "Видалити цю заявку?",
+    "deleteConfirmBody": "Заявку та всі прикріплені файли буде видалено безповоротно.",
+    "empty": "Заявок не знайдено",
+    "contact": {
+      "EMAIL": "Email",
+      "VIBER": "Viber",
+      "WHATSAPP": "WhatsApp",
+      "TELEGRAM": "Telegram"
+    },
+    "createRequest": "Нова заявка",
+    "createSuccess": "Заявку створено",
+    "selectLanguage": "Оберіть мову",
+    "unsupportedFormat": "непідтримуваний формат",
+    "exceedsMaxSize": "перевищує 50MB",
+    "maxSize": "до 50MB"
   }
 }
