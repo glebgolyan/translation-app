@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import Cookies from 'js-cookie';
 import { RiChatSmileLine } from 'react-icons/ri';
 import { messagesApi } from '@/features/messages/api/messagesApi';
 import { useAuth } from '@/features/auth/model/useAuth';
@@ -65,6 +66,9 @@ export function Messenger({ orderId, translatorId, onNewMessage }: MessengerProp
   useEffect(() => {
     if (!user?.id) return;
 
+    const token = Cookies.get('accessToken');
+    if (!token) return;
+
     // Get base URL by removing /api from NEXT_PUBLIC_API_URL
     const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
 
@@ -73,7 +77,7 @@ export function Messenger({ orderId, translatorId, onNewMessage }: MessengerProp
     console.log('Connecting to socket.io at:', baseUrl, 'namespace: /messages');
 
     const socket = io(`${baseUrl}/messages`, {
-      query: { userId: user.id },
+      auth: { token },
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
