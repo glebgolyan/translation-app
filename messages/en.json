@@ -273,6 +273,12 @@
       "VIBER": "Viber",
       "WHATSAPP": "WhatsApp",
       "TELEGRAM": "Telegram"
-    }
+    },
+    "createRequest": "New Request",
+    "createSuccess": "Request created",
+    "selectLanguage": "Select language",
+    "unsupportedFormat": "unsupported format",
+    "exceedsMaxSize": "exceeds 50MB",
+    "maxSize": "max 50MB"
   }
 }

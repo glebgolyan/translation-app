@@ -273,6 +273,12 @@
       "VIBER": "Viber",
       "WHATSAPP": "WhatsApp",
       "TELEGRAM": "Telegram"
-    }
+    },
+    "createRequest": "Нова заявка",
+    "createSuccess": "Заявку створено",
+    "selectLanguage": "Оберіть мову",
+    "unsupportedFormat": "непідтримуваний формат",
+    "exceedsMaxSize": "перевищує 50MB",
+    "maxSize": "до 50MB"
   }
 }

@@ -17,6 +17,15 @@ export interface OrderRequest {
   convertedAt?: string | null;
 }
 
+export interface CreateOrderRequestInput {
+  sourceLanguage: string;
+  targetLanguage: string;
+  clientName: string;
+  phone: string;
+  email?: string;
+  preferredContact: PreferredContact;
+}
+
 export interface OrderRequestFilters {
   search?: string;
   converted?: boolean;

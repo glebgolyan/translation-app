@@ -3,6 +3,8 @@ import {
   Box,
   Text,
   Flex,
+  Icon,
+  Button,
   useToast,
   useColorModeValue,
   Drawer,
@@ -11,15 +13,21 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   DrawerOverlay,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
   AlertDialog,
   AlertDialogBody,
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
-  Button,
   useDisclosure,
 } from '@chakra-ui/react';
+import { RiAddLine } from 'react-icons/ri';
 import { useAuth } from '@/features/auth/model/useAuth';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -27,9 +35,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { RequestsFilter } from './components/RequestsFilter';
 import { RequestsTable } from './components/RequestsTable';
 import { ConvertRequestForm } from './components/ConvertRequestForm';
+import { CreateRequestForm } from './components/CreateRequestForm';
 import { orderRequestsApi } from '@/features/order-requests/api/orderRequestsApi';
 import { usersApi } from '@/features/admin/api/usersApi';
-import { OrderRequest } from '@/entities/order-request/model/types';
+import { CreateOrderRequestInput, OrderRequest } from '@/entities/order-request/model/types';
 import { useT } from '@/shared/hooks/useT';
 
 export default function RequestsPage() {
@@ -40,6 +49,7 @@ export default function RequestsPage() {
   const queryClient = useQueryClient();
   const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
+  const { isOpen: isCreateOpen, onOpen: onCreateOpen, onClose: onCreateClose } = useDisclosure();
   const cancelRef = useRef<HTMLButtonElement>(null);
 
   const [search, setSearch] = useState('');
@@ -70,6 +80,24 @@ export default function RequestsPage() {
       toast({ title: t('requests.convertSuccess'), status: 'success', duration: 2500 });
       onDrawerClose();
       setSelectedRequest(null);
+    },
+    onError: (err: any) => {
+      toast({
+        title: t('common.error'),
+        description: err?.response?.data?.message || err?.message,
+        status: 'error',
+        duration: 4000,
+      });
+    },
+  });
+
+  const createMutation = useMutation({
+    mutationFn: ({ data, files }: { data: CreateOrderRequestInput; files: File[] }) =>
+      orderRequestsApi.createManual(data, files),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['order-requests'] });
+      toast({ title: t('requests.createSuccess'), status: 'success', duration: 2500 });
+      onCreateClose();
     },
     onError: (err: any) => {
       toast({
@@ -138,6 +166,14 @@ export default function RequestsPage() {
             {t('requests.subtitle')}
           </Text>
         </Box>
+        <Button
+          leftIcon={<Icon as={RiAddLine} />}
+          size='sm'
+          w={{ base: 'full', sm: 'auto' }}
+          onClick={onCreateOpen}
+        >
+          {t('requests.createRequest')}
+        </Button>
       </Flex>
 
       <RequestsFilter
@@ -189,6 +225,35 @@ export default function RequestsPage() {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
+
+      <Modal
+        isOpen={isCreateOpen}
+        onClose={onCreateClose}
+        size={{ base: 'full', md: 'xl' }}
+        scrollBehavior='inside'
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalHeader
+            fontFamily='Syne'
+            fontWeight='700'
+            borderBottom='1px solid'
+            borderColor='gray.100'
+          >
+            {t('requests.createRequest')}
+          </ModalHeader>
+          <ModalBody py={6}>
+            <CreateRequestForm
+              onSubmit={async (data, files) => {
+                await createMutation.mutateAsync({ data, files });
+              }}
+              onCancel={onCreateClose}
+              isLoading={createMutation.isPending}
+            />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
 
       <AlertDialog
         isOpen={isDeleteOpen}
