@@ -8,7 +8,8 @@
     "settings": "Настройки",
     "translatorStats": "Статистика переводчиков",
     "apostilization": "Апостиль",
-    "messages": "Сообщения"
+    "messages": "Сообщения",
+    "requests": "Заявки"
   },
   "apostilization": {
     "title": "Апостиль",
@@ -245,5 +246,33 @@
     "swahili": "Суахили",
     "afrikaans": "Африкаанс",
     "latin": "Латынь"
+  },
+  "requests": {
+    "title": "Заявки",
+    "subtitle": "Заявки с сайта, ожидающие обработки",
+    "searchPlaceholder": "Поиск по имени, телефону, email...",
+    "all": "Все",
+    "pending": "Ожидают",
+    "converted": "Оформлены",
+    "date": "Дата",
+    "files": "Файлы",
+    "file": "файл",
+    "status": "Статус",
+    "preferredContact": "Связь",
+    "attachedFiles": "Прикреплённые файлы",
+    "filesCarryOverNote": "Эти файлы автоматически прикрепятся к заказу.",
+    "convertToOrder": "Оформить в заказ",
+    "convertSuccess": "Заявка оформлена в заказ",
+    "deleteSuccess": "Заявка удалена",
+    "delete": "Удалить",
+    "deleteConfirmTitle": "Удалить эту заявку?",
+    "deleteConfirmBody": "Заявка и все прикреплённые файлы будут удалены безвозвратно.",
+    "empty": "Заявок не найдено",
+    "contact": {
+      "EMAIL": "Email",
+      "VIBER": "Viber",
+      "WHATSAPP": "WhatsApp",
+      "TELEGRAM": "Telegram"
+    }
   }
 }
