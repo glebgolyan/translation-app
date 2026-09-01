@@ -156,7 +156,7 @@
     "translatedFiles": "Переведённые файлы",
     "noOriginalFiles": "Оригинальных файлов ещё нет",
     "dropTranslated": "Перетащите или выберите файлы",
-    "fileFormats": "PDF, изображения, Word (.doc, .docx) · макс 50МБ",
+    "fileFormats": "PDF, изображения, Word (.doc, .docx) · макс 100МБ",
     "uploading": "Загрузка…",
     "open": "Открыть",
     "new": "Новый",
@@ -278,7 +278,7 @@
     "createSuccess": "Заявка создана",
     "selectLanguage": "Выберите язык",
     "unsupportedFormat": "неподдерживаемый формат",
-    "exceedsMaxSize": "превышает 50MB",
-    "maxSize": "до 50MB"
+    "exceedsMaxSize": "превышает 100MB",
+    "maxSize": "до 100MB"
   }
 }

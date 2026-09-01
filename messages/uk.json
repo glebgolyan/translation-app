@@ -156,7 +156,7 @@
     "translatedFiles": "Перекладені файли",
     "noOriginalFiles": "Оригінальних файлів ще немає",
     "dropTranslated": "Перетягніть або оберіть файли",
-    "fileFormats": "PDF, зображення, Word (.doc, .docx) · макс 50МБ",
+    "fileFormats": "PDF, зображення, Word (.doc, .docx) · макс 100МБ",
     "uploading": "Завантаження…",
     "open": "Відкрити",
     "new": "Нове",
@@ -278,7 +278,7 @@
     "createSuccess": "Заявку створено",
     "selectLanguage": "Оберіть мову",
     "unsupportedFormat": "непідтримуваний формат",
-    "exceedsMaxSize": "перевищує 50MB",
-    "maxSize": "до 50MB"
+    "exceedsMaxSize": "перевищує 100MB",
+    "maxSize": "до 100MB"
   }
 }

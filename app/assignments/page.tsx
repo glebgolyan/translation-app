@@ -427,8 +427,8 @@ export default function AssignmentsPage() {
           toast({ title: `${f.name}: unsupported format`, status: 'error', duration: 2000 });
           return false;
         }
-        if (f.size > 50 * 1024 * 1024) {
-          toast({ title: `${f.name}: exceeds 50MB`, status: 'error', duration: 2000 });
+        if (f.size > 100 * 1024 * 1024) {
+          toast({ title: `${f.name}: exceeds 100MB`, status: 'error', duration: 2000 });
           return false;
         }
         return true;
@@ -858,7 +858,7 @@ export default function AssignmentsPage() {
                       color='gray.300'
                       mt={0.5}
                     >
-                      PDF, Images, Word (.doc, .docx) · max 50MB
+                      PDF, Images, Word (.doc, .docx) · max 100MB
                     </Text>
                   </Box>
 
