@@ -158,8 +158,8 @@ export function OrderForm({
           toast({ title: `${f.name}: unsupported format`, status: 'error', duration: 2000 });
           return false;
         }
-        if (f.size > 50 * 1024 * 1024) {
-          toast({ title: `${f.name}: exceeds 50MB`, status: 'error', duration: 2000 });
+        if (f.size > 100 * 1024 * 1024) {
+          toast({ title: `${f.name}: exceeds 100MB`, status: 'error', duration: 2000 });
           return false;
         }
         return true;

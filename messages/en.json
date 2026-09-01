@@ -156,7 +156,7 @@
     "translatedFiles": "Translated Files",
     "noOriginalFiles": "No original files uploaded yet",
     "dropTranslated": "Drop files or browse",
-    "fileFormats": "PDF, Images, Word (.doc, .docx) · max 50MB",
+    "fileFormats": "PDF, Images, Word (.doc, .docx) · max 100MB",
     "uploading": "Uploading…",
     "open": "Open",
     "new": "New",
@@ -278,7 +278,7 @@
     "createSuccess": "Request created",
     "selectLanguage": "Select language",
     "unsupportedFormat": "unsupported format",
-    "exceedsMaxSize": "exceeds 50MB",
-    "maxSize": "max 50MB"
+    "exceedsMaxSize": "exceeds 100MB",
+    "maxSize": "max 100MB"
   }
 }
