@@ -3,6 +3,7 @@ import { Box, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useAuth } from '@/features/auth/model/useAuth';
 import { ProfileSection } from './components/ProfileSection';
 import { PasswordSection } from './components/PasswordSection';
+import { DesktopAppSection } from './components/DesktopAppSection';
 import { User } from '@/entities/user/model/types';
 
 export default function SettingsPage() {
@@ -51,6 +52,7 @@ export default function SettingsPage() {
           onUpdate={handleProfileUpdate}
         />
         <PasswordSection />
+        <DesktopAppSection />
       </VStack>
     </Box>
   );
