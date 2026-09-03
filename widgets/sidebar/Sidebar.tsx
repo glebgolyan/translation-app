@@ -31,6 +31,7 @@ import {
   RiInboxLine,
 } from 'react-icons/ri';
 import { User, UserRole } from '@/entities/user/model/types';
+import { logout } from '@/features/auth/model/useAuth';
 import { LanguageSwitcher } from '@/shared/ui/LanguageSwitcher';
 import { ThemeToggle } from '@/shared/ui/ThemeToggle';
 import { useT } from '@/shared/hooks/useT';
@@ -123,10 +124,9 @@ const ROLE_COLORS: Record<UserRole, string> = {
 
 interface SidebarProps {
   user: User;
-  onLogout: () => void;
 }
 
-export function Sidebar({ user, onLogout }: SidebarProps) {
+export function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname();
   const { t } = useT();
   const { collapsed, toggle } = useSidebarStore();
@@ -402,7 +402,7 @@ export function Sidebar({ user, onLogout }: SidebarProps) {
           >
             <MenuItem
               icon={<Icon as={RiLogoutBoxLine} />}
-              onClick={onLogout}
+              onClick={() => logout()}
               color='red.500'
               fontFamily='DM Sans'
               fontSize='14px'

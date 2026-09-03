@@ -1,4 +1,5 @@
 // features/orders/api/ordersApi.ts
+import { AxiosInstance } from 'axios';
 import { apiClient } from '@/shared/api/client';
 import {
   Order,
@@ -9,8 +10,11 @@ import {
 } from '@/entities/order/model/types';
 
 export const ordersApi = {
-  getAll: async (filters?: OrderFilters): Promise<PaginatedOrders> => {
-    const { data } = await apiClient.get('/orders', { params: filters });
+  // Optional `client` lets Server Components prefetch with
+  // shared/api/serverClient.ts's server-side axios instance instead of the
+  // browser-cookie-based default — same query, same function, no duplication.
+  getAll: async (filters?: OrderFilters, client: AxiosInstance = apiClient): Promise<PaginatedOrders> => {
+    const { data } = await client.get('/orders', { params: filters });
     return data;
   },
 

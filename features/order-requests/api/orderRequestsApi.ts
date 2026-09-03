@@ -1,3 +1,4 @@
+import { AxiosInstance } from 'axios';
 import { apiClient } from '@/shared/api/client';
 import {
   CreateOrderRequestInput,
@@ -8,8 +9,11 @@ import {
 import { Order, UpdateOrderDto } from '@/entities/order/model/types';
 
 export const orderRequestsApi = {
-  getAll: async (filters?: OrderRequestFilters): Promise<PaginatedOrderRequests> => {
-    const { data } = await apiClient.get('/order-requests', { params: filters });
+  getAll: async (
+    filters?: OrderRequestFilters,
+    client: AxiosInstance = apiClient
+  ): Promise<PaginatedOrderRequests> => {
+    const { data } = await client.get('/order-requests', { params: filters });
     return data;
   },
 

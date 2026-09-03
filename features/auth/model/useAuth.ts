@@ -5,6 +5,20 @@ import Cookies from 'js-cookie';
 import { User } from '@/entities/user/model/types';
 import { authApi } from '../api/authApi';
 
+// Standalone so components that already have `user` from elsewhere (e.g. a
+// Server Component page passing down the result of getServerUser()) can log
+// out without pulling in the rest of useAuth()'s client-side session-fetch
+// machinery — calling useAuth() just for `logout` would still fire its own
+// GET /auth/me on mount, defeating the point.
+export async function logout() {
+  try {
+    await authApi.logout();
+  } catch {}
+  Cookies.remove('accessToken');
+  Cookies.remove('refreshToken');
+  window.location.href = '/login';
+}
+
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -60,15 +74,10 @@ export function useAuth() {
     []
   );
 
-  const logout = useCallback(async () => {
-    try {
-      await authApi.logout();
-    } catch {}
-    Cookies.remove('accessToken');
-    Cookies.remove('refreshToken');
+  const doLogout = useCallback(async () => {
     setUser(null);
-    window.location.href = '/login';
+    await logout();
   }, []);
 
-  return { user, loading, login, register, logout };
+  return { user, loading, login, register, logout: doLogout };
 }

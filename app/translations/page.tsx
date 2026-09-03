@@ -1,46 +1,29 @@
-'use client';
-import { Box, Text, useColorModeValue } from '@chakra-ui/react';
-import { useAuth } from '@/features/auth/model/useAuth';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { TranslatorStatsTable } from './components/TranslatorStatsTable';
+import { redirect } from 'next/navigation';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { getServerUser } from '@/shared/lib/serverAuth';
+import { createServerApiClient } from '@/shared/api/serverClient';
+import { translatorStatsApi } from '@/features/translator-stats/api/translatorStatsApi';
+import { TranslationsContent } from './components/TranslationsContent';
 
-export default function TranslationsPage() {
-  const { user } = useAuth();
-  const router = useRouter();
+export default async function TranslationsPage() {
+  const user = await getServerUser();
+  if (!user) redirect('/login');
+  if (user.role !== 'MANAGER' && user.role !== 'ADMIN') redirect('/dashboard');
 
-  const textColor = useColorModeValue('gray.900', '#f0f0f0');
+  const client = createServerApiClient();
+  const queryClient = new QueryClient();
 
-  useEffect(() => {
-    if (user && user.role !== 'MANAGER' && user.role !== 'ADMIN') {
-      router.push('/dashboard');
-    }
-  }, [user, router]);
+  const now = new Date();
+  const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 
-  if (!user || (user.role !== 'MANAGER' && user.role !== 'ADMIN')) return null;
+  await queryClient.prefetchQuery({
+    queryKey: ['translator-stats', month],
+    queryFn: () => translatorStatsApi.getByMonth(month, client),
+  });
 
   return (
-    <Box p={{ base: 4, md: 8 }}>
-      <Box mb={8}>
-        <Text
-          fontFamily='Syne'
-          fontWeight='800'
-          fontSize={{ base: '16px', md: '24px' }}
-          letterSpacing='-0.02em'
-          color={textColor}
-        >
-          Translator Statistics
-        </Text>
-        <Text
-          color='grey.500'
-          fontSize={{ base: '14px', md: '18px' }}
-          mt={0.5}
-        >
-          Нужно заплатить в гривне
-        </Text>
-      </Box>
-
-      <TranslatorStatsTable />
-    </Box>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <TranslationsContent />
+    </HydrationBoundary>
   );
 }

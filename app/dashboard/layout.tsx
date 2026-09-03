@@ -1,52 +1,13 @@
-'use client';
-import { Box, Center, Spinner } from '@chakra-ui/react';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { Sidebar, useSidebarStore } from '@/widgets/sidebar/Sidebar';
-import { useAuth } from '@/features/auth/model/useAuth';
+import { redirect } from 'next/navigation';
+import { Sidebar } from '@/widgets/sidebar/Sidebar';
+import { getServerUser } from '@/shared/lib/serverAuth';
+import { LayoutContent } from './components/LayoutContent';
 
-export default function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading, logout } = useAuth();
-  const router = useRouter();
-  const { collapsed } = useSidebarStore();
-
-  useEffect(() => {
-    if (!loading && !user) router.push('/login');
-  }, [user, loading, router]);
-
-  if (loading) {
-    return (
-      <Center h='100vh'>
-        <Spinner
-          size='xl'
-          color='brand.500'
-          thickness='3px'
-        />
-      </Center>
-    );
-  }
-
-  if (!user) return null;
+export default async function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
+  const user = await getServerUser();
+  if (!user) redirect('/login');
 
   return (
-    <Box
-      display='flex'
-      minH='100vh'
-      bg='bg.app'
-    >
-      <Sidebar
-        user={user}
-        onLogout={logout}
-      />
-      <Box
-        ml={collapsed ? '64px' : '240px'}
-        flex={1}
-        minH='100vh'
-        bg='bg.app'
-        transition='margin-left 0.2s ease'
-      >
-        {children}
-      </Box>
-    </Box>
+    <LayoutContent sidebar={<Sidebar user={user} />}>{children}</LayoutContent>
   );
 }
