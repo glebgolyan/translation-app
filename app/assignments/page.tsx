@@ -6,16 +6,17 @@ import { ordersApi } from '@/features/orders/api/ordersApi';
 import { AssignmentsContent } from './components/AssignmentsContent';
 
 export default async function AssignmentsPage() {
-  const user = await getServerUser();
-  if (!user) redirect('/login');
-
   const client = createServerApiClient();
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ['orders', 'assigned'],
-    queryFn: () => ordersApi.getAll({ limit: 50 }, client),
-  });
+  const [user] = await Promise.all([
+    getServerUser(),
+    queryClient.prefetchQuery({
+      queryKey: ['orders', 'assigned'],
+      queryFn: () => ordersApi.getAll({ limit: 50 }, client),
+    }),
+  ]);
+  if (!user) redirect('/login');
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

@@ -7,15 +7,12 @@ import { usersApi } from '@/features/admin/api/usersApi';
 import { RequestsContent } from './components/RequestsContent';
 
 export default async function RequestsPage() {
-  const user = await getServerUser();
-  if (!user) redirect('/login');
-  if (user.role !== 'MANAGER' && user.role !== 'ADMIN') redirect('/dashboard');
-
   const client = createServerApiClient();
   const queryClient = new QueryClient();
   const defaultFilters = { search: '', converted: undefined };
 
-  await Promise.all([
+  const [user] = await Promise.all([
+    getServerUser(),
     queryClient.prefetchQuery({
       queryKey: ['translators'],
       queryFn: () => usersApi.getTranslators(client),
@@ -25,6 +22,8 @@ export default async function RequestsPage() {
       queryFn: () => orderRequestsApi.getAll(defaultFilters, client),
     }),
   ]);
+  if (!user) redirect('/login');
+  if (user.role !== 'MANAGER' && user.role !== 'ADMIN') redirect('/dashboard');
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

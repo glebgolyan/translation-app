@@ -8,16 +8,15 @@ import { OrderFilters } from '@/entities/order/model/types';
 import { OrdersContent } from './components/OrdersContent';
 
 export default async function OrdersPage() {
-  const user = await getServerUser();
-  if (!user) redirect('/login');
-  if (user.role !== 'MANAGER' && user.role !== 'ADMIN') redirect('/dashboard');
-
   const client = createServerApiClient();
   const queryClient = new QueryClient();
   // Mirrors widgets/order-table/OrderTable.tsx's default `filters` state.
   const defaultFilters: OrderFilters = { page: 1, limit: 20, sortBy: 'createdAt', sortOrder: 'desc' };
 
-  await Promise.all([
+  // Auth check and data prefetch don't depend on each other — run them
+  // concurrently instead of waiting for the session lookup first.
+  const [user] = await Promise.all([
+    getServerUser(),
     queryClient.prefetchQuery({
       queryKey: ['translators'],
       queryFn: () => usersApi.getTranslators(client),
@@ -27,6 +26,8 @@ export default async function OrdersPage() {
       queryFn: () => ordersApi.getAll(defaultFilters, client),
     }),
   ]);
+  if (!user) redirect('/login');
+  if (user.role !== 'MANAGER' && user.role !== 'ADMIN') redirect('/dashboard');
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

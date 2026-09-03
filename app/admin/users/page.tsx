@@ -6,17 +6,18 @@ import { usersApi } from '@/features/admin/api/usersApi';
 import { AdminUsersContent } from './components/AdminUsersContent';
 
 export default async function AdminUsersPage() {
-  const user = await getServerUser();
-  if (!user) redirect('/login');
-  if (user.role !== 'ADMIN') redirect('/dashboard');
-
   const client = createServerApiClient();
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ['users'],
-    queryFn: () => usersApi.getAll(client),
-  });
+  const [user] = await Promise.all([
+    getServerUser(),
+    queryClient.prefetchQuery({
+      queryKey: ['users'],
+      queryFn: () => usersApi.getAll(client),
+    }),
+  ]);
+  if (!user) redirect('/login');
+  if (user.role !== 'ADMIN') redirect('/dashboard');
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
