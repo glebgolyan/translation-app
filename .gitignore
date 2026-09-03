@@ -7,3 +7,4 @@ out/
 build/
 *.log
 .DS_Store
+tsconfig.tsbuildinfo

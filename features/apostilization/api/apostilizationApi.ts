@@ -1,3 +1,4 @@
+import { AxiosInstance } from 'axios';
 import { apiClient } from '@/shared/api/client';
 import { Apostilization } from '@/entities/apostilization/model/types';
 
@@ -7,11 +8,14 @@ export const apostilizationApi = {
     return data;
   },
 
-  getAll: async (filters?: { month?: string; search?: string }): Promise<Apostilization[]> => {
+  getAll: async (
+    filters?: { month?: string; search?: string },
+    client: AxiosInstance = apiClient
+  ): Promise<Apostilization[]> => {
     const params = new URLSearchParams();
     if (filters?.month) params.append('month', filters.month);
     if (filters?.search) params.append('search', filters.search);
-    const { data } = await apiClient.get(`/apostilization?${params.toString()}`);
+    const { data } = await client.get(`/apostilization?${params.toString()}`);
     return data;
   },
 

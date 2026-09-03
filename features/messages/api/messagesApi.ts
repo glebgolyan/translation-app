@@ -1,13 +1,14 @@
+import { AxiosInstance } from 'axios';
 import { apiClient } from '@/shared/api/client';
 
 export const messagesApi = {
-  getAllConversations: async () => {
-    const { data } = await apiClient.get('/messages/conversations/all');
+  getAllConversations: async (client: AxiosInstance = apiClient) => {
+    const { data } = await client.get('/messages/conversations/all');
     return data;
   },
 
-  getTranslatorConversations: async () => {
-    const { data } = await apiClient.get('/messages/conversations/translator');
+  getTranslatorConversations: async (client: AxiosInstance = apiClient) => {
+    const { data } = await client.get('/messages/conversations/translator');
     return data;
   },
 

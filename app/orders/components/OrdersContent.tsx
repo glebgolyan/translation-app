@@ -1,0 +1,196 @@
+'use client';
+import { Box, Flex, Text, Button, Icon, useToast, useBreakpointValue } from '@chakra-ui/react';
+import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { RiAddLine, RiDeleteBinLine, RiDownloadCloud2Line } from 'react-icons/ri';
+import { useDisclosure } from '@chakra-ui/react';
+import { OrderTable } from '@/widgets/order-table/OrderTable';
+import { OrderDrawer } from './OrderDrawer';
+import { ordersApi } from '@/features/orders/api/ordersApi';
+import { usersApi } from '@/features/admin/api/usersApi';
+import { User } from '@/entities/user/model/types';
+import { Order, UpdateOrderDto } from '@/entities/order/model/types';
+import { useT } from '@/shared/hooks/useT';
+import { FileManagementDialog } from '@/app/orders/components/FileManagementDialog';
+import { translatorStatsApi } from '@/features/translator-stats/api/translatorStatsApi';
+
+export function OrdersContent({ user }: { user: User }) {
+  const { t } = useT();
+  const toast = useToast();
+  const queryClient = useQueryClient();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isFileDialogOpen,
+    onOpen: onFileDialogOpen,
+    onClose: onFileDialogClose,
+  } = useDisclosure();
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [formMode, setFormMode] = useState<'create' | 'edit'>('create');
+  const [formLoading, setFormLoading] = useState(false);
+  const [fileMode, setFileMode] = useState<'download' | 'delete'>('download');
+
+  const isMobile = useBreakpointValue({ base: true, xl: false });
+
+  const { data: translators = [] } = useQuery({
+    queryKey: ['translators'],
+    queryFn: () => usersApi.getTranslators(),
+  });
+
+  const handleEdit = (order: Order) => {
+    setSelectedOrder(order);
+    setFormMode('edit');
+    onOpen();
+  };
+
+  const handleCreate = () => {
+    setSelectedOrder(null);
+    setFormMode('create');
+    onOpen();
+  };
+
+  const handleFormSubmit = async (
+    data: UpdateOrderDto,
+    originalFiles: File[],
+    translatedFiles: File[],
+    statsEntry?: { wordCount: number; date: Date }
+  ) => {
+    setFormLoading(true);
+    try {
+      let order: Order;
+      if (formMode === 'edit' && selectedOrder) {
+        order = await ordersApi.update(selectedOrder.id, data);
+        toast({ title: t('orders.saveChanges'), status: 'success', duration: 2000 });
+      } else {
+        order = await ordersApi.create(data as any);
+        toast({ title: t('orders.createOrder'), status: 'success', duration: 2000 });
+      }
+      if (originalFiles.length > 0)
+        await ordersApi.uploadFiles(order.id, originalFiles, 'original');
+      if (translatedFiles.length > 0)
+        await ordersApi.uploadFiles(order.id, translatedFiles, 'translated');
+
+      // ✅ Save translator stats if provided
+      if (statsEntry && statsEntry.wordCount > 0 && order.translatorId) {
+        const date = new Date(statsEntry.date);
+        const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        const day = date.getDate();
+
+        await translatorStatsApi
+          .createOrUpdate(order.translatorId, month, day, statsEntry.wordCount)
+          .catch((err) => console.error('Stats update failed:', err));
+
+        toast({
+          title: '📊 Stats updated',
+          description: `Added ${statsEntry.wordCount} HRN to translator stats`,
+          status: 'info',
+          duration: 3000,
+        });
+      }
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      onClose();
+    } catch (err: any) {
+      toast({
+        title: t('common.error'),
+        description: err?.response?.data?.message || err?.message,
+        status: 'error',
+        duration: 4000,
+      });
+    } finally {
+      setFormLoading(false);
+    }
+  };
+
+  return (
+    <Box p={{ base: 4, md: 8, lg: 12, xl: 16 }}>
+      <Flex
+        justify='space-between'
+        align='center'
+        mb={6}
+        flexWrap='wrap'
+        gap={4}
+      >
+        <Box>
+          <Text
+            fontFamily='Syne'
+            fontWeight='800'
+            fontSize='24px'
+            letterSpacing='-0.02em'
+          >
+            {t('orders.title')}
+          </Text>
+          <Text
+            color='gray.400'
+            fontSize='14px'
+            mt={0.5}
+          >
+            {t('orders.subtitle')}
+          </Text>
+        </Box>
+        <Flex
+          gap={2}
+          flexWrap='wrap'
+        >
+          {user.role === 'ADMIN' && !isMobile && (
+            <>
+              <Button
+                leftIcon={<Icon as={RiDownloadCloud2Line} />}
+                size='sm'
+                variant='outline'
+                onClick={() => {
+                  setFileMode('download');
+                  onFileDialogOpen();
+                }}
+              >
+                {t('orders.downloadFiles') || 'Download Files'}
+              </Button>
+              <Button
+                leftIcon={<Icon as={RiDeleteBinLine} />}
+                size='sm'
+                colorScheme='red'
+                variant='outline'
+                onClick={() => {
+                  setFileMode('delete');
+                  onFileDialogOpen();
+                }}
+              >
+                {t('orders.deleteFiles') || 'Delete Files'}
+              </Button>
+            </>
+          )}
+          {(user.role === 'MANAGER' || user.role === 'ADMIN') && (
+            <Button
+              leftIcon={<Icon as={RiAddLine} />}
+              size='sm'
+              onClick={handleCreate}
+            >
+              {t('orders.newOrder')}
+            </Button>
+          )}
+        </Flex>
+      </Flex>
+
+      <OrderTable
+        userRole={user.role}
+        onEdit={handleEdit}
+        onView={handleEdit}
+      />
+
+      <OrderDrawer
+        isOpen={isOpen}
+        onClose={onClose}
+        order={selectedOrder}
+        translators={translators}
+        mode={formMode}
+        isLoading={formLoading}
+        onSubmit={handleFormSubmit}
+        userRole={user.role}
+      />
+
+      <FileManagementDialog
+        isOpen={isFileDialogOpen}
+        onClose={onFileDialogClose}
+        mode={fileMode}
+      />
+    </Box>
+  );
+}

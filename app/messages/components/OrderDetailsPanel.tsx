@@ -39,7 +39,7 @@ export function OrderDetailsPanel({ conversation }: OrderDetailsPanelProps) {
 
   const { data: translators = [] } = useQuery({
     queryKey: ['translators'],
-    queryFn: usersApi.getTranslators,
+    queryFn: () => usersApi.getTranslators(),
     enabled: user?.role === 'MANAGER' || user?.role === 'ADMIN',
   });
 

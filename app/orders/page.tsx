@@ -1,208 +1,37 @@
-'use client';
-import { Box, Flex, Text, Button, Icon, useToast, useBreakpointValue } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { RiAddLine, RiDeleteBinLine, RiDownloadCloud2Line } from 'react-icons/ri';
-import { useDisclosure } from '@chakra-ui/react';
-import { OrderTable } from '@/widgets/order-table/OrderTable';
-import { OrderDrawer } from './components/OrderDrawer';
+import { redirect } from 'next/navigation';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { getServerUser } from '@/shared/lib/serverAuth';
+import { createServerApiClient } from '@/shared/api/serverClient';
 import { ordersApi } from '@/features/orders/api/ordersApi';
 import { usersApi } from '@/features/admin/api/usersApi';
-import { useAuth } from '@/features/auth/model/useAuth';
-import { Order, UpdateOrderDto } from '@/entities/order/model/types';
-import { useT } from '@/shared/hooks/useT';
-import { FileManagementDialog } from '@/app/orders/components/FileManagementDialog';
-import { translatorStatsApi } from '@/features/translator-stats/api/translatorStatsApi';
+import { OrderFilters } from '@/entities/order/model/types';
+import { OrdersContent } from './components/OrdersContent';
 
-export default function OrdersPage() {
-  const { user } = useAuth();
-  const router = useRouter();
-  const { t } = useT();
-  const toast = useToast();
-  const queryClient = useQueryClient();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isFileDialogOpen,
-    onOpen: onFileDialogOpen,
-    onClose: onFileDialogClose,
-  } = useDisclosure();
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [formMode, setFormMode] = useState<'create' | 'edit'>('create');
-  const [formLoading, setFormLoading] = useState(false);
-  const [fileMode, setFileMode] = useState<'download' | 'delete'>('download');
+export default async function OrdersPage() {
+  const client = createServerApiClient();
+  const queryClient = new QueryClient();
+  // Mirrors widgets/order-table/OrderTable.tsx's default `filters` state.
+  const defaultFilters: OrderFilters = { page: 1, limit: 20, sortBy: 'createdAt', sortOrder: 'desc' };
 
-  const isMobile = useBreakpointValue({ base: true, xl: false });
-
-  const { data: translators = [] } = useQuery({
-    queryKey: ['translators'],
-    queryFn: usersApi.getTranslators,
-    enabled: user?.role === 'MANAGER' || user?.role === 'ADMIN',
-  });
-
-  useEffect(() => {
-    if (user && user.role !== 'MANAGER' && user.role !== 'ADMIN') {
-      router.push('/dashboard');
-    }
-  }, [user, router]);
-
-  const handleEdit = (order: Order) => {
-    setSelectedOrder(order);
-    setFormMode('edit');
-    onOpen();
-  };
-
-  const handleCreate = () => {
-    setSelectedOrder(null);
-    setFormMode('create');
-    onOpen();
-  };
-
-  const handleFormSubmit = async (
-    data: UpdateOrderDto,
-    originalFiles: File[],
-    translatedFiles: File[],
-    statsEntry?: { wordCount: number; date: Date }
-  ) => {
-    setFormLoading(true);
-    try {
-      let order: Order;
-      if (formMode === 'edit' && selectedOrder) {
-        order = await ordersApi.update(selectedOrder.id, data);
-        toast({ title: t('orders.saveChanges'), status: 'success', duration: 2000 });
-      } else {
-        order = await ordersApi.create(data as any);
-        toast({ title: t('orders.createOrder'), status: 'success', duration: 2000 });
-      }
-      if (originalFiles.length > 0)
-        await ordersApi.uploadFiles(order.id, originalFiles, 'original');
-      if (translatedFiles.length > 0)
-        await ordersApi.uploadFiles(order.id, translatedFiles, 'translated');
-
-      // ✅ Save translator stats if provided
-      if (statsEntry && statsEntry.wordCount > 0 && order.translatorId) {
-        const date = new Date(statsEntry.date);
-        const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-        const day = date.getDate();
-
-        await translatorStatsApi
-          .createOrUpdate(order.translatorId, month, day, statsEntry.wordCount)
-          .catch((err) => console.error('Stats update failed:', err));
-
-        toast({
-          title: '📊 Stats updated',
-          description: `Added ${statsEntry.wordCount} HRN to translator stats`,
-          status: 'info',
-          duration: 3000,
-        });
-      }
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
-      onClose();
-    } catch (err: any) {
-      toast({
-        title: t('common.error'),
-        description: err?.response?.data?.message || err?.message,
-        status: 'error',
-        duration: 4000,
-      });
-    } finally {
-      setFormLoading(false);
-    }
-  };
-
-  if (!user || (user.role !== 'MANAGER' && user.role !== 'ADMIN')) return null;
+  // Auth check and data prefetch don't depend on each other — run them
+  // concurrently instead of waiting for the session lookup first.
+  const [user] = await Promise.all([
+    getServerUser(),
+    queryClient.prefetchQuery({
+      queryKey: ['translators'],
+      queryFn: () => usersApi.getTranslators(client),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ['orders', defaultFilters],
+      queryFn: () => ordersApi.getAll(defaultFilters, client),
+    }),
+  ]);
+  if (!user) redirect('/login');
+  if (user.role !== 'MANAGER' && user.role !== 'ADMIN') redirect('/dashboard');
 
   return (
-    <Box p={{ base: 4, md: 8, lg: 12, xl: 16 }}>
-      <Flex
-        justify='space-between'
-        align='center'
-        mb={6}
-        flexWrap='wrap'
-        gap={4}
-      >
-        <Box>
-          <Text
-            fontFamily='Syne'
-            fontWeight='800'
-            fontSize='24px'
-            letterSpacing='-0.02em'
-          >
-            {t('orders.title')}
-          </Text>
-          <Text
-            color='gray.400'
-            fontSize='14px'
-            mt={0.5}
-          >
-            {t('orders.subtitle')}
-          </Text>
-        </Box>
-        <Flex
-          gap={2}
-          flexWrap='wrap'
-        >
-          {user.role === 'ADMIN' && !isMobile && (
-            <>
-              <Button
-                leftIcon={<Icon as={RiDownloadCloud2Line} />}
-                size='sm'
-                variant='outline'
-                onClick={() => {
-                  setFileMode('download');
-                  onFileDialogOpen();
-                }}
-              >
-                {t('orders.downloadFiles') || 'Download Files'}
-              </Button>
-              <Button
-                leftIcon={<Icon as={RiDeleteBinLine} />}
-                size='sm'
-                colorScheme='red'
-                variant='outline'
-                onClick={() => {
-                  setFileMode('delete');
-                  onFileDialogOpen();
-                }}
-              >
-                {t('orders.deleteFiles') || 'Delete Files'}
-              </Button>
-            </>
-          )}
-          {(user.role === 'MANAGER' || user.role === 'ADMIN') && (
-            <Button
-              leftIcon={<Icon as={RiAddLine} />}
-              size='sm'
-              onClick={handleCreate}
-            >
-              {t('orders.newOrder')}
-            </Button>
-          )}
-        </Flex>
-      </Flex>
-
-      <OrderTable
-        userRole={user.role}
-        onEdit={handleEdit}
-        onView={handleEdit}
-      />
-
-      <OrderDrawer
-        isOpen={isOpen}
-        onClose={onClose}
-        order={selectedOrder}
-        translators={translators}
-        mode={formMode}
-        isLoading={formLoading}
-        onSubmit={handleFormSubmit}
-        userRole={user.role}
-      />
-
-      <FileManagementDialog
-        isOpen={isFileDialogOpen}
-        onClose={onFileDialogClose}
-        mode={fileMode}
-      />
-    </Box>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <OrdersContent user={user} />
+    </HydrationBoundary>
   );
 }

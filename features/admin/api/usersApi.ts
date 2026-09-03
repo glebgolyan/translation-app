@@ -1,10 +1,11 @@
 // features/admin/api/usersApi.ts
+import { AxiosInstance } from 'axios';
 import { apiClient } from '@/shared/api/client';
 import { User, UserRole } from '@/entities/user/model/types';
 
 export const usersApi = {
-  getAll: async (): Promise<User[]> => {
-    const { data } = await apiClient.get('/users');
+  getAll: async (client: AxiosInstance = apiClient): Promise<User[]> => {
+    const { data } = await client.get('/users');
     return data;
   },
 
@@ -22,8 +23,8 @@ export const usersApi = {
     await apiClient.delete(`/users/${id}`);
   },
 
-  getTranslators: async (): Promise<User[]> => {
-    const { data } = await apiClient.get('/users?role=TRANSLATOR');
+  getTranslators: async (client: AxiosInstance = apiClient): Promise<User[]> => {
+    const { data } = await client.get('/users?role=TRANSLATOR');
     return data;
   },
 };

@@ -1,8 +1,9 @@
+import { AxiosInstance } from 'axios';
 import { apiClient } from '@/shared/api/client';
 
 export const translatorStatsApi = {
-  getByMonth: async (month: string) => {
-    const { data } = await apiClient.get(`/translator-stats?month=${month}`);
+  getByMonth: async (month: string, client: AxiosInstance = apiClient) => {
+    const { data } = await client.get(`/translator-stats?month=${month}`);
     return data;
   },
 
