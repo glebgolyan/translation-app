@@ -14,7 +14,7 @@ import { StatCard } from './StatCard';
 import { RecentOrders } from './RecentOrders';
 import { apostilizationApi } from '@/features/apostilization/api/apostilizationApi';
 import { useState } from 'react';
-import { getDateRange } from '@/shared/lib/dateRange';
+import { getDateRange, getPreviousMonthRange, percentChange } from '@/shared/lib/dateRange';
 import { translatorStatsApi } from '@/features/translator-stats/api/translatorStatsApi';
 
 export function DashboardContent({ user }: { user: User }) {
@@ -24,8 +24,14 @@ export function DashboardContent({ user }: { user: User }) {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
   });
+  const [prevMonth] = useState(() => {
+    const now = new Date();
+    const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    return `${prev.getFullYear()}-${String(prev.getMonth() + 1).padStart(2, '0')}`;
+  });
 
   const { dateFrom } = getDateRange('month');
+  const { dateFrom: prevDateFrom, dateTo: prevDateTo } = getPreviousMonthRange();
 
   const { data } = useQuery({
     queryKey: ['translator-stats', month],
@@ -70,6 +76,19 @@ export function DashboardContent({ user }: { user: User }) {
     queryFn: () => apostilizationApi.getAll({ month }),
   });
 
+  // Last month's equivalents, purely for the "% from last month" badges —
+  // same shape of query/aggregation as the current-month figures below,
+  // just against the previous month's bounded date range.
+  const { data: prevOrdersData } = useQuery({
+    queryKey: ['orders', 'dashboard', 'prev', prevDateFrom, prevDateTo],
+    queryFn: () => ordersApi.getAll({ limit: 200, dateFrom: prevDateFrom, dateTo: prevDateTo }),
+  });
+
+  const { data: prevApostilization = [] } = useQuery({
+    queryKey: ['apostilization', 'prev', prevMonth],
+    queryFn: () => apostilizationApi.getAll({ month: prevMonth }),
+  });
+
   const orders = ordersData?.data || [];
   const total = ordersData?.total || 0;
   const inProgress = orders.filter(
@@ -97,6 +116,31 @@ export function DashboardContent({ user }: { user: User }) {
     .reduce((sum, o) => sum + o.notarizationCount, 0);
 
   const totalNotarizationValue = totalNotarizationCount * 200;
+
+  // Same aggregation, previous month's data.
+  const prevOrders = prevOrdersData?.data || [];
+  const prevTotal = prevOrdersData?.total || 0;
+  const prevInProgress = prevOrders.filter(
+    (o) => o.status === 'IN_PROGRESS' || o.status === 'DONE' || o.status === 'NEW'
+  ).length;
+  const prevDone = prevOrders.filter(
+    (o) => o.status === 'CERTIFIED' || o.status === 'TAKEN' || o.status === 'ARCHIVE'
+  ).length;
+  const prevTotalApostilization = prevApostilization.reduce((sum, a) => sum + a.costPrice, 0);
+  const prevTotalOrders = prevOrders
+    .filter((order) => order.status !== 'CANCELLED')
+    .reduce((sum, o) => sum + o.totalPrice, 0);
+  const prevRevenue = prevTotalOrders + prevTotalApostilization;
+  const prevNotarizationCount = prevOrders
+    .filter((order) => order.status !== 'CANCELLED')
+    .reduce((sum, o) => sum + o.notarizationCount, 0);
+  const prevNotarizationValue = prevNotarizationCount * 200;
+
+  const totalChange = percentChange(total, prevTotal);
+  const inProgressChange = percentChange(inProgress, prevInProgress);
+  const doneChange = percentChange(done, prevDone);
+  const revenueChange = percentChange(revenue, prevRevenue);
+  const notarizationChange = percentChange(totalNotarizationValue, prevNotarizationValue);
   return (
     <Box p={8}>
       <Box mb={8}>
@@ -127,20 +171,21 @@ export function DashboardContent({ user }: { user: User }) {
           value={total}
           icon={RiFileList3Line}
           color='#4d76ff'
-          change={0}
+          change={totalChange}
         />
         <StatCard
           label={t('dashboard.inProgress')}
           value={inProgress}
           icon={RiTimeLine}
           color='#fdcb6e'
+          change={inProgressChange}
         />
         <StatCard
           label={t('dashboard.completed')}
           value={done}
           icon={RiCheckboxCircleLine}
           color='#00b894'
-          change={0}
+          change={doneChange}
         />
         {user?.role === 'ADMIN' && (
           <StatCard
@@ -149,7 +194,7 @@ export function DashboardContent({ user }: { user: User }) {
             totalCard={totalCard}
             icon={RiMoneyDollarCircleLine}
             color='#a29bfe'
-            change={0}
+            change={revenueChange}
           />
         )}
 
@@ -160,7 +205,7 @@ export function DashboardContent({ user }: { user: User }) {
             totalCard={totalStats}
             icon={RiMoneyDollarCircleLine}
             color='#a29bfe'
-            change={0}
+            change={notarizationChange}
           />
         )}
       </Grid>

@@ -50,3 +50,27 @@ export function getDateRange(range: DateRange): {
 
   return {};
 }
+
+// Bounded range for the full previous calendar month (unlike getDateRange's
+// 'month', which is open-ended from the 1st of *this* month to now) — used
+// for month-over-month comparisons. dateTo is the 1st of the current month,
+// not the last day of the previous one: the backend applies it as `lte`
+// against midnight, so using the next month's start correctly includes the
+// previous month's last day in full instead of cutting it off at midnight.
+export function getPreviousMonthRange(): { dateFrom: string; dateTo: string } {
+  const now = new Date();
+  const firstDayOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const firstDayOfPrevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  return {
+    dateFrom: firstDayOfPrevMonth.toISOString().split('T')[0],
+    dateTo: firstDayOfThisMonth.toISOString().split('T')[0],
+  };
+}
+
+// Rounds to the nearest whole percent; treats "0 last month, some this
+// month" as a full 100% increase rather than dividing by zero, and "0 both
+// months" as no change.
+export function percentChange(current: number, previous: number): number {
+  if (previous === 0) return current > 0 ? 100 : 0;
+  return Math.round(((current - previous) / previous) * 100);
+}
