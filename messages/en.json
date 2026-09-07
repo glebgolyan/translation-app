@@ -67,7 +67,10 @@
     "revenue": "Revenue",
     "recentOrders": "Recent Orders",
     "viewAll": "View all →",
-    "noOrders": "No orders yet"
+    "noOrders": "No orders yet",
+    "notarization": "Notarization",
+    "cardPayments": "Paid by card",
+    "translatorPayouts": "Translator payouts"
   },
   "orders": {
     "title": "Orders",

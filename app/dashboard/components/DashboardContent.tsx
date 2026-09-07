@@ -200,7 +200,8 @@ export function DashboardContent({ user }: { user: User }) {
           <StatCard
             label={t('dashboard.revenue')}
             value={`₴${revenue.toLocaleString()}`}
-            totalCard={totalCard}
+            secondaryLabel={t('dashboard.cardPayments')}
+            secondaryValue={totalCard}
             icon={RiMoneyDollarCircleLine}
             color='#a29bfe'
             change={revenueChange}
@@ -209,9 +210,10 @@ export function DashboardContent({ user }: { user: User }) {
 
         {isAdmin && (
           <StatCard
-            label={t('status.CERTIFIED')}
+            label={t('dashboard.notarization')}
             value={`₴${totalNotarizationValue.toLocaleString()}`}
-            totalCard={totalStats}
+            secondaryLabel={t('dashboard.translatorPayouts')}
+            secondaryValue={totalStats}
             icon={RiMoneyDollarCircleLine}
             color='#a29bfe'
             change={notarizationChange}

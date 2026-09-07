@@ -67,7 +67,10 @@
     "revenue": "Доход",
     "recentOrders": "Последние заказы",
     "viewAll": "Посмотреть все →",
-    "noOrders": "Заказов ещё нет"
+    "noOrders": "Заказов ещё нет",
+    "notarization": "Нотариальное заверение",
+    "cardPayments": "Оплачено картой",
+    "translatorPayouts": "Выплаты переводчикам"
   },
   "orders": {
     "title": "Заказы",

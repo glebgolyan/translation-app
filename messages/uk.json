@@ -67,7 +67,10 @@
     "revenue": "Дохід",
     "recentOrders": "Останні замовлення",
     "viewAll": "Переглянути всі →",
-    "noOrders": "Замовлень ще немає"
+    "noOrders": "Замовлень ще немає",
+    "notarization": "Нотаріальне посвідчення",
+    "cardPayments": "Оплачено карткою",
+    "translatorPayouts": "Виплати перекладачам"
   },
   "orders": {
     "title": "Замовлення",
