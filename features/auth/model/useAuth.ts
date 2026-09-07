@@ -24,8 +24,16 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = Cookies.get('accessToken');
-    if (!token) {
+    // Gate on EITHER token, not just accessToken: a page reload after the
+    // access token has expired (but the refresh token is still valid) used
+    // to skip straight to "logged out" here without ever attempting a
+    // request — GET /auth/me was never called, so the response
+    // interceptor's refresh flow (shared/api/client.ts) never got a chance
+    // to run. Calling authApi.me() unconditionally when either cookie is
+    // present lets a missing/expired access token 401 and trigger that
+    // refresh, instead of forcing a re-login on every reload.
+    const hasSession = Cookies.get('accessToken') || Cookies.get('refreshToken');
+    if (!hasSession) {
       setLoading(false);
       return;
     }
@@ -42,12 +50,12 @@ export function useAuth() {
   const login = useCallback(async (email: string, password: string) => {
     const { user, tokens } = await authApi.login({ email, password });
     Cookies.set('accessToken', tokens.accessToken, {
-      expires: 3,
+      expires: 7,
       secure: window.location.protocol === 'https:',
       sameSite: 'strict',
     });
     Cookies.set('refreshToken', tokens.refreshToken, {
-      expires: 7,
+      expires: 30,
       secure: window.location.protocol === 'https:',
       sameSite: 'strict',
     });
@@ -59,12 +67,12 @@ export function useAuth() {
     async (data: { email: string; password: string; name: string; phone?: string }) => {
       const { user, tokens } = await authApi.register(data);
       Cookies.set('accessToken', tokens.accessToken, {
-        expires: 3,
+        expires: 7,
         secure: window.location.protocol === 'https:',
         sameSite: 'strict',
       });
       Cookies.set('refreshToken', tokens.refreshToken, {
-        expires: 7,
+        expires: 30,
         secure: window.location.protocol === 'https:',
         sameSite: 'strict',
       });

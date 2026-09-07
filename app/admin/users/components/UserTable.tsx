@@ -61,12 +61,12 @@ export function UserTable({ users, isLoading }: UserTableProps) {
     mutationFn: (userId: string) => authApi.impersonate(userId),
     onSuccess: ({ tokens, user }) => {
       Cookies.set('accessToken', tokens.accessToken, {
-        expires: 3,
+        expires: 7,
         secure: window.location.protocol === 'https:',
         sameSite: 'strict',
       });
       Cookies.set('refreshToken', tokens.refreshToken, {
-        expires: 7,
+        expires: 30,
         secure: window.location.protocol === 'https:',
         sameSite: 'strict',
       });

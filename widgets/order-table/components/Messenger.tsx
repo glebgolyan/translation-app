@@ -257,6 +257,16 @@ export function Messenger({ orderId, translatorId, onNewMessage }: MessengerProp
                 borderBottomRightRadius={msg.senderId === user?.id ? '2px' : '8px'}
                 opacity={msg.id.startsWith('temp-') ? 0.7 : 1}
               >
+                {msg.senderId !== user?.id && (
+                  <Text
+                    fontSize='11px'
+                    fontWeight='600'
+                    color='gray.500'
+                    mb={0.5}
+                  >
+                    {msg.sender?.name || msg.sender?.email || 'Unknown'}
+                  </Text>
+                )}
                 {msg.text && (
                   <Text
                     fontSize='13px'

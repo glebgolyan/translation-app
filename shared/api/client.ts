@@ -24,19 +24,30 @@ apiClient.interceptors.response.use(
       const refreshToken = Cookies.get('refreshToken');
       if (refreshToken) {
         try {
+          // POST /auth/refresh returns { user, tokens: { accessToken, refreshToken } } —
+          // this used to read `data.accessToken` (always undefined), so the
+          // access-token cookie never actually got refreshed and the
+          // refresh token itself was never rotated, defeating the point of
+          // a 30-day refresh window: any 401 on an already-expired access
+          // token just fell straight through to the catch block below and
+          // logged the user out, no matter how recently they'd been active.
           const { data } = await axios.post(`${BASE_URL}/auth/refresh`, { refreshToken });
-          Cookies.set('accessToken', data.accessToken, {
-            expires: 3,
+          const cookieOpts = {
             secure: window.location.protocol === 'https:',
-            sameSite: 'strict',
-          });
-          original.headers.Authorization = `Bearer ${data.accessToken}`;
+            sameSite: 'strict' as const,
+          };
+          Cookies.set('accessToken', data.tokens.accessToken, { ...cookieOpts, expires: 7 });
+          Cookies.set('refreshToken', data.tokens.refreshToken, { ...cookieOpts, expires: 30 });
+          original.headers.Authorization = `Bearer ${data.tokens.accessToken}`;
           return apiClient(original);
         } catch {
           Cookies.remove('accessToken');
           Cookies.remove('refreshToken');
           window.location.href = '/login';
         }
+      } else {
+        Cookies.remove('accessToken');
+        window.location.href = '/login';
       }
     }
     return Promise.reject(error);
