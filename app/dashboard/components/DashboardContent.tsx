@@ -33,9 +33,16 @@ export function DashboardContent({ user }: { user: User }) {
   const { dateFrom } = getDateRange('month');
   const { dateFrom: prevDateFrom, dateTo: prevDateTo } = getPreviousMonthRange();
 
+  const isAdmin = user.role === 'ADMIN';
+
+  // Revenue/notarization cards are ADMIN-only — don't fetch their
+  // underlying data for other roles (mirrors the role-gated prefetch in
+  // page.tsx; `enabled: false` here also stops any accidental refetch,
+  // e.g. via a stray invalidateQueries elsewhere touching these keys).
   const { data } = useQuery({
     queryKey: ['translator-stats', month],
     queryFn: () => translatorStatsApi.getByMonth(month),
+    enabled: isAdmin,
   });
 
   const stats = data?.data || [];
@@ -74,6 +81,7 @@ export function DashboardContent({ user }: { user: User }) {
   const { data: apostilization = [] } = useQuery({
     queryKey: ['apostilization'],
     queryFn: () => apostilizationApi.getAll({ month }),
+    enabled: isAdmin,
   });
 
   // Last month's equivalents, purely for the "% from last month" badges —
@@ -87,6 +95,7 @@ export function DashboardContent({ user }: { user: User }) {
   const { data: prevApostilization = [] } = useQuery({
     queryKey: ['apostilization', 'prev', prevMonth],
     queryFn: () => apostilizationApi.getAll({ month: prevMonth }),
+    enabled: isAdmin,
   });
 
   const orders = ordersData?.data || [];
@@ -162,7 +171,7 @@ export function DashboardContent({ user }: { user: User }) {
       </Box>
 
       <Grid
-        templateColumns={{ base: '1fr', lg: `repeat(${user?.role === 'ADMIN' ? 4 : 3}, 1fr)` }}
+        templateColumns={{ base: '1fr', lg: `repeat(${isAdmin ? 4 : 3}, 1fr)` }}
         gap={4}
         mb={8}
       >
@@ -187,7 +196,7 @@ export function DashboardContent({ user }: { user: User }) {
           color='#00b894'
           change={doneChange}
         />
-        {user?.role === 'ADMIN' && (
+        {isAdmin && (
           <StatCard
             label={t('dashboard.revenue')}
             value={`₴${revenue.toLocaleString()}`}
@@ -198,7 +207,7 @@ export function DashboardContent({ user }: { user: User }) {
           />
         )}
 
-        {user?.role === 'ADMIN' && (
+        {isAdmin && (
           <StatCard
             label={t('status.CERTIFIED')}
             value={`₴${totalNotarizationValue.toLocaleString()}`}

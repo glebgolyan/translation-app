@@ -19,35 +19,42 @@ export default async function DashboardPage() {
   const prevMonth = `${prevMonthDate.getFullYear()}-${String(prevMonthDate.getMonth() + 1).padStart(2, '0')}`;
   const { dateFrom: prevDateFrom, dateTo: prevDateTo } = getPreviousMonthRange();
 
-  // Auth check and data prefetch don't depend on each other — run them
-  // concurrently instead of waiting for the session lookup before even
-  // starting the page's own queries. Halves the round-trip latency on
-  // every navigation to this page.
+  // Auth check and the orders prefetch (needed by every role — total/in
+  // progress/completed are shown to everyone) run concurrently, same as
+  // before. Revenue/notarization are ADMIN-only cards, so their underlying
+  // data (apostilization, translator-stats) is fetched in a second,
+  // role-gated step below instead of unconditionally here — no point
+  // hitting those endpoints for a MANAGER/TRANSLATOR who'll never see the
+  // result.
   const [user] = await Promise.all([
     getServerUser(),
-    queryClient.prefetchQuery({
-      queryKey: ['translator-stats', month],
-      queryFn: () => translatorStatsApi.getByMonth(month, client),
-    }),
     queryClient.prefetchQuery({
       queryKey: ['orders', 'dashboard', dateFrom],
       queryFn: () => ordersApi.getAll({ limit: 120, dateFrom }, client),
     }),
     queryClient.prefetchQuery({
-      queryKey: ['apostilization'],
-      queryFn: () => apostilizationApi.getAll({ month }, client),
-    }),
-    // "% from last month" comparisons — same shape as above, previous month.
-    queryClient.prefetchQuery({
       queryKey: ['orders', 'dashboard', 'prev', prevDateFrom, prevDateTo],
       queryFn: () => ordersApi.getAll({ limit: 200, dateFrom: prevDateFrom, dateTo: prevDateTo }, client),
     }),
-    queryClient.prefetchQuery({
-      queryKey: ['apostilization', 'prev', prevMonth],
-      queryFn: () => apostilizationApi.getAll({ month: prevMonth }, client),
-    }),
   ]);
   if (!user) redirect('/login');
+
+  if (user.role === 'ADMIN') {
+    await Promise.all([
+      queryClient.prefetchQuery({
+        queryKey: ['translator-stats', month],
+        queryFn: () => translatorStatsApi.getByMonth(month, client),
+      }),
+      queryClient.prefetchQuery({
+        queryKey: ['apostilization'],
+        queryFn: () => apostilizationApi.getAll({ month }, client),
+      }),
+      queryClient.prefetchQuery({
+        queryKey: ['apostilization', 'prev', prevMonth],
+        queryFn: () => apostilizationApi.getAll({ month: prevMonth }, client),
+      }),
+    ]);
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
