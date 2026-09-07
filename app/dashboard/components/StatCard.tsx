@@ -7,6 +7,7 @@ import {
   StatNumber,
   StatHelpText,
   StatArrow,
+  Text,
   Icon,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -14,13 +15,26 @@ import {
 interface StatCardProps {
   label: string;
   value: string | number;
-  totalCard?: number;
+  secondaryLabel?: string;
+  // translatorStatsApi's response isn't typed (comes back as `any` from
+  // axios), so the value already arrives pre-formatted as a string in one
+  // of the two current callers — accept either rather than reformatting
+  // (or mangling) whichever one shows up.
+  secondaryValue?: number | string;
   icon: React.ElementType;
   color: string;
   change?: number;
 }
 
-export function StatCard({ label, value, icon, color, change, totalCard }: StatCardProps) {
+export function StatCard({
+  label,
+  value,
+  icon,
+  color,
+  change,
+  secondaryLabel,
+  secondaryValue,
+}: StatCardProps) {
   const bg = useColorModeValue('white', '#1a1a1a');
   const borderColor = useColorModeValue('gray.100', '#2e2e2e');
   const labelColor = useColorModeValue('gray.400', '#666666');
@@ -50,29 +64,27 @@ export function StatCard({ label, value, icon, color, change, totalCard }: StatC
           >
             {label}
           </StatLabel>
-          <Flex>
-            <StatNumber
-              fontSize={{ base: '16px', md: '28px' }}
-              fontFamily='Syne'
-              fontWeight='700'
-              letterSpacing='-0.02em'
-              color={valueColor}
-            >
-              {value}
-            </StatNumber>
+          <StatNumber
+            fontSize={{ base: '16px', md: '28px' }}
+            fontFamily='Syne'
+            fontWeight='700'
+            letterSpacing='-0.02em'
+            color={valueColor}
+          >
+            {value}
+          </StatNumber>
 
-            {totalCard && (
-              <StatNumber
-                fontSize={{ base: '16px', md: '28px' }}
-                fontFamily='Syne'
-                fontWeight='700'
-                letterSpacing='-0.02em'
-                color={valueColor}
-              >
-                -- card{` ₴${totalCard.toLocaleString()}`}
-              </StatNumber>
-            )}
-          </Flex>
+          {secondaryValue !== undefined && (
+            <Text
+              fontSize='12px'
+              color={helpColor}
+              mt={1}
+            >
+              {secondaryLabel}: ₴
+              {typeof secondaryValue === 'number' ? secondaryValue.toLocaleString() : secondaryValue}
+            </Text>
+          )}
+
           {change !== undefined && (
             <StatHelpText
               fontSize='12px'
