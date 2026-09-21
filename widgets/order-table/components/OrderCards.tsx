@@ -18,7 +18,7 @@ import { useT } from '@/shared/hooks/useT';
 import { Order } from '@/entities/order/model/types';
 import { UserRole } from '@/entities/user/model/types';
 import { FileStatusBadge } from '@/widgets/order-table/components/FileStatusBadge';
-import { StatusBadge } from '@/shared/ui/StatusBadge';
+import { StatusBadge } from '@/entities/order/ui/StatusBadge';
 
 interface OrderRowProps {
   order: Order;

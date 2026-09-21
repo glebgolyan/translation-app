@@ -1,8 +1,7 @@
 'use client';
+// entities/order/lib/useStatusConfig.ts
 import { useT } from '@/shared/hooks/useT';
-
-export type OrderStatus =
-  'NEW' | 'IN_PROGRESS' | 'DONE' | 'TAKEN' | 'PAID' | 'CANCELLED' | 'CERTIFIED' | 'ARCHIVE';
+import { OrderStatus } from '../model/types';
 
 interface StatusConfig {
   label: string;

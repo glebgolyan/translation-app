@@ -1,4 +1,13 @@
 'use client';
+// features/files/ui/FileCard.tsx
+//
+// Single implementation of the file-card/preview-modal trio, shared by
+// widgets/order-form (client/manager order forms) and the translator
+// assignments page (app/assignments). These used to be two independent,
+// near-identical copies (~250 lines each) that had already drifted — the
+// order-form PreviewModal rendered its non-doc preview branch twice (a
+// copy-paste leftover), which this version fixes once instead of in two
+// places.
 import {
   Box,
   Text,
@@ -28,30 +37,53 @@ import {
 } from 'react-icons/ri';
 import { useT } from '@/shared/hooks/useT';
 
+const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+const DOC_EXTENSIONS = ['doc', 'docx'];
+
+function extOf(filename: string) {
+  return filename.split('.').pop()?.toLowerCase() || '';
+}
+
 export function getFileIcon(filename: string) {
-  const ext = filename.split('.').pop()?.toLowerCase();
-  if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext || '')) return RiImageLine;
+  const ext = extOf(filename);
+  if (IMAGE_EXTENSIONS.includes(ext)) return RiImageLine;
   if (ext === 'pdf') return RiFilePdfLine;
-  if (['doc', 'docx'].includes(ext || '')) return RiFileWordLine;
+  if (DOC_EXTENSIONS.includes(ext)) return RiFileWordLine;
   return RiFile3Line;
 }
 
 export function getFileColor(filename: string) {
-  const ext = filename.split('.').pop()?.toLowerCase();
-  if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext || '')) return 'blue.400';
+  const ext = extOf(filename);
+  if (IMAGE_EXTENSIONS.includes(ext)) return 'blue.400';
   if (ext === 'pdf') return 'red.400';
-  if (['doc', 'docx'].includes(ext || '')) return 'blue.600';
+  if (DOC_EXTENSIONS.includes(ext)) return 'blue.600';
   return 'gray.400';
 }
 
 export function isImage(filename: string) {
-  return ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(
-    filename.split('.').pop()?.toLowerCase() || ''
-  );
+  return IMAGE_EXTENSIONS.includes(extOf(filename));
+}
+
+export function isPdf(filename: string) {
+  return extOf(filename) === 'pdf';
+}
+
+export function isDoc(filename: string) {
+  return DOC_EXTENSIONS.includes(extOf(filename));
 }
 
 export function getFilename(url: string) {
   return decodeURIComponent(url.split('/').pop() || url).split('?')[0];
+}
+
+function FileTypeIcon({ name, size = 5 }: { name: string; size?: number }) {
+  return (
+    <Icon
+      as={getFileIcon(name)}
+      boxSize={size}
+      color={getFileColor(name)}
+    />
+  );
 }
 
 // ─── Preview Modal ────────────────────────────────────────────────────────────
@@ -67,9 +99,6 @@ export function PreviewModal({
 }) {
   const { t } = useT();
   const filename = getFilename(url);
-  const image = isImage(filename);
-  const isPdf = filename.endsWith('.pdf');
-  const isDoc = filename.endsWith('.doc') || filename.endsWith('.docx');
 
   return (
     <Modal
@@ -86,7 +115,7 @@ export function PreviewModal({
           overflow='hidden'
           borderRadius='md'
         >
-          {image ? (
+          {isImage(filename) ? (
             <Image
               src={url}
               alt={filename}
@@ -95,7 +124,7 @@ export function PreviewModal({
               objectFit='contain'
               crossOrigin='anonymous'
             />
-          ) : isPdf ? (
+          ) : isPdf(filename) ? (
             <Box
               as='iframe'
               src={url}
@@ -103,7 +132,7 @@ export function PreviewModal({
               h='80vh'
               border='none'
             />
-          ) : isDoc ? (
+          ) : isDoc(filename) ? (
             <Box
               as='iframe'
               src={`https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`}
@@ -118,55 +147,9 @@ export function PreviewModal({
               py={12}
               gap={4}
             >
-              <Icon
-                as={getFileIcon(filename)}
-                boxSize={16}
-                color={getFileColor(filename)}
-              />
-              <Text fontFamily='mono'>{filename}</Text>
-              <Text
-                fontSize='13px'
-                color='gray.400'
-              >
-                Preview not available
-              </Text>
-              <Button
-                size='sm'
-                leftIcon={<Icon as={RiDownloadLine} />}
-                onClick={() => window.open(url, '_blank')}
-              >
-                {t('common.download')}
-              </Button>
-            </Flex>
-          )}
-          {image ? (
-            <Image
-              src={url}
-              alt={filename}
-              w='100%'
-              maxH='85vh'
-              objectFit='contain'
-              crossOrigin='anonymous'
-            />
-          ) : isPdf ? (
-            <Box
-              as='iframe'
-              src={url}
-              w='100%'
-              h='80vh'
-              border='none'
-            />
-          ) : (
-            <Flex
-              direction='column'
-              align='center'
-              py={12}
-              gap={4}
-            >
-              <Icon
-                as={getFileIcon(filename)}
-                boxSize={16}
-                color={getFileColor(filename)}
+              <FileTypeIcon
+                name={filename}
+                size={16}
               />
               <Text fontFamily='mono'>{filename}</Text>
               <Text
@@ -203,8 +186,6 @@ export function FileCard({
 }) {
   const { t } = useT();
   const filename = getFilename(url);
-  const FileIconComp = getFileIcon(filename);
-  const color = getFileColor(filename);
   const image = isImage(filename);
 
   const handleDownload = async () => {
@@ -255,10 +236,9 @@ export function FileCard({
             crossOrigin='anonymous'
           />
         ) : (
-          <Icon
-            as={FileIconComp}
-            boxSize={9}
-            color={color}
+          <FileTypeIcon
+            name={filename}
+            size={9}
           />
         )}
       </Box>
@@ -328,8 +308,6 @@ export function LocalFileCard({ file, onRemove }: { file: File; onRemove: () => 
   const { t } = useT();
   const [preview, setPreview] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const FileIconComp = getFileIcon(file.name);
-  const color = getFileColor(file.name);
   const image = isImage(file.name);
 
   const handlePreview = () => {
@@ -367,10 +345,9 @@ export function LocalFileCard({ file, onRemove }: { file: File; onRemove: () => 
               h='100%'
             />
           ) : (
-            <Icon
-              as={FileIconComp}
-              boxSize={9}
-              color={color}
+            <FileTypeIcon
+              name={file.name}
+              size={9}
             />
           )}
         </Box>
@@ -446,10 +423,9 @@ export function LocalFileCard({ file, onRemove }: { file: File; onRemove: () => 
                 py={8}
                 gap={3}
               >
-                <Icon
-                  as={FileIconComp}
-                  boxSize={16}
-                  color={color}
+                <FileTypeIcon
+                  name={file.name}
+                  size={16}
                 />
                 <Text
                   fontFamily='mono'

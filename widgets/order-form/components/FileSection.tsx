@@ -2,7 +2,7 @@
 import { Box, Text, Flex, Badge, SimpleGrid, Icon, useDisclosure } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import { RiUploadCloud2Line } from 'react-icons/ri';
-import { FileCard, LocalFileCard, PreviewModal } from './FileCard';
+import { FileCard, LocalFileCard, PreviewModal } from '@/features/files/ui/FileCard';
 import { useT } from '@/shared/hooks/useT';
 
 interface FileSectionProps {
