@@ -8,10 +8,8 @@ import {
   Th,
   Td,
   HStack,
-  Input,
   Button,
   Icon,
-  useToast,
   Flex,
   Text,
   useColorModeValue,
@@ -21,25 +19,31 @@ import {
   Avatar,
   Tooltip,
   Grid,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 import { translatorStatsApi } from '@/features/translator-stats/api/translatorStatsApi';
+import { TranslatorStatsEntry } from '@/entities/translator-stats/model/types';
 import { useT } from '@/shared/hooks/useT';
+import { DayEntriesModal } from './DayEntriesModal';
 
 export function TranslatorStatsTable() {
   const { t } = useT();
-
-  const toast = useToast();
 
   const [month, setMonth] = useState(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
   });
 
-  const [editingCell, setEditingCell] = useState<string | null>(null);
-  const [cellValue, setCellValue] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [activeCell, setActiveCell] = useState<{
+    translatorId: string;
+    translatorName: string;
+    day: number;
+    entries: TranslatorStatsEntry[];
+  } | null>(null);
 
   const bg = useColorModeValue('white', '#1a1a1a');
   const borderColor = useColorModeValue('gray.100', '#2e2e2e');
@@ -47,12 +51,11 @@ export function TranslatorStatsTable() {
   const thColor = useColorModeValue('gray.500', '#666666');
   const tdColor = useColorModeValue('gray.800', '#e0e0e0');
   const hoverBg = useColorModeValue('gray.50', '#222222');
-  const cellInputBg = useColorModeValue('white', '#252525');
   const summaryBg = useColorModeValue('brand.50', '#1a2540');
   const summaryTextColor = useColorModeValue('brand.700', 'brand.300');
   const weekHeaderColor = useColorModeValue('gray.500', '#999999');
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['translator-stats', month],
     queryFn: () => translatorStatsApi.getByMonth(month),
   });
@@ -169,34 +172,13 @@ export function TranslatorStatsTable() {
   };
 
   const handleCellClick = (
-    statId: string | null,
-    currentValue: number,
     translatorId: string,
-    day: number
+    translatorName: string,
+    day: number,
+    entries: TranslatorStatsEntry[]
   ) => {
-    setEditingCell(`${translatorId}-${day}`);
-    setCellValue(String(currentValue));
-  };
-
-  const handleSaveCell = async (translatorId: string, day: number, statId: string | null) => {
-    const wordCount = parseInt(cellValue) || 0;
-
-    try {
-      // ✅ Always use setDayTotal — replaces manual entry, keeps order entries
-      await translatorStatsApi.setDayTotal(translatorId, month, day, wordCount);
-
-      toast({ title: 'Updated', status: 'success', duration: 1500 });
-      refetch();
-    } catch (err: any) {
-      toast({
-        title: 'Failed to update',
-        description: err?.response?.data?.message || 'Unknown error',
-        status: 'error',
-        duration: 2000,
-      });
-    }
-
-    setEditingCell(null);
+    setActiveCell({ translatorId, translatorName, day, entries });
+    onOpen();
   };
 
   if (isLoading) {
@@ -337,8 +319,7 @@ export function TranslatorStatsTable() {
                   {Array.from({ length: actualDaysInMonth }, (_, i) => i + 1).map((day) => {
                     const cellKey = `${row.translatorId}-${day}`;
                     const wordCount = row[`day${day}`] || 0;
-                    const statId = row[`statId${day}`];
-                    const isEditing = editingCell === cellKey;
+                    const entries: TranslatorStatsEntry[] = row[`entries${day}`] || [];
 
                     return (
                       <Td
@@ -351,37 +332,16 @@ export function TranslatorStatsTable() {
                         _hover={{ bg: hoverBg }}
                         transition='background 0.1s'
                       >
-                        {isEditing ? (
-                          <Input
-                            type='number'
-                            size='sm'
-                            value={cellValue}
-                            onChange={(e) => setCellValue(e.target.value)}
-                            onBlur={() => handleSaveCell(row.translatorId, day, statId)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') handleSaveCell(row.translatorId, day, statId);
-                              if (e.key === 'Escape') setEditingCell(null);
-                            }}
-                            autoFocus
-                            bg={cellInputBg}
-                            borderColor='brand.400'
-                            _focus={{
-                              borderColor: 'brand.500',
-                              boxShadow: '0 0 0 1px var(--chakra-colors-brand-500)',
-                            }}
-                          />
-                        ) : (
-                          <Text
-                            fontSize='13px'
-                            fontWeight={wordCount > 0 ? '600' : '400'}
-                            color={wordCount > 0 ? 'grey.500' : thColor}
-                            onClick={() =>
-                              handleCellClick(statId, wordCount, row.translatorId, day)
-                            }
-                          >
-                            {wordCount}
-                          </Text>
-                        )}
+                        <Text
+                          fontSize='13px'
+                          fontWeight={wordCount > 0 ? '600' : '400'}
+                          color={wordCount > 0 ? 'grey.500' : thColor}
+                          onClick={() =>
+                            handleCellClick(row.translatorId, row.translatorName, day, entries)
+                          }
+                        >
+                          {Math.round(wordCount)}
+                        </Text>
                       </Td>
                     );
                   })}
@@ -656,6 +616,18 @@ export function TranslatorStatsTable() {
           </Table>
         </Box>
       </Box>
+
+      {activeCell && (
+        <DayEntriesModal
+          isOpen={isOpen}
+          onClose={onClose}
+          translatorId={activeCell.translatorId}
+          translatorName={activeCell.translatorName}
+          month={month}
+          day={activeCell.day}
+          entries={activeCell.entries}
+        />
+      )}
     </Grid>
   );
 }

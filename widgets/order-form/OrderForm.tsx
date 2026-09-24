@@ -9,16 +9,11 @@ import {
   Icon,
   Flex,
   Grid,
-  Input,
-  NumberInputField,
-  NumberInput,
-  FormLabel,
-  FormControl,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 import { RiSaveLine } from 'react-icons/ri';
 import { useToast } from '@chakra-ui/react';
 import { Order, UpdateOrderDto } from '@/entities/order/model/types';
@@ -30,6 +25,7 @@ import { PaymentSection } from './components/PaymentSection';
 import { AssignmentSection } from './components/AssignmentSection';
 import { FileSection } from './components/FileSection';
 import { CommentSection } from '@/widgets/order-form/components/CommentSection';
+import { WordPriceEntriesSection } from '@/widgets/order-form/components/WordPriceEntriesSection';
 import { UnreadBadge } from '@/widgets/order-table/components/UnreadBadge';
 import { Messenger } from '@/widgets/order-table/components/Messenger';
 import { useAuth } from '@/features/auth/model/useAuth';
@@ -79,15 +75,7 @@ type OrderFormValues = z.infer<typeof orderSchema>;
 interface OrderFormProps {
   order?: Order;
   translators?: User[];
-  onSubmit: (
-    data: UpdateOrderDto,
-    originalFiles: File[],
-    translatedFiles: File[],
-    statsEntry?: {
-      wordCount: number;
-      date: Date;
-    }
-  ) => Promise<void>;
+  onSubmit: (data: UpdateOrderDto, originalFiles: File[], translatedFiles: File[]) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
   mode?: 'create' | 'edit';
@@ -115,8 +103,6 @@ export function OrderForm({
   const [existingTranslated, setExistingTranslated] = useState<string[]>(
     order?.translatedFiles || []
   );
-  const [words, setWords] = useState(0);
-  const [wordsPrice, setWordsPrice] = useState(0);
 
   const {
     register,
@@ -174,15 +160,8 @@ export function OrderForm({
     setTranslatedLocal((prev) => [...prev, ...valid]);
   }, []);
 
-  const wordCount = useMemo(() => {
-    return (words / 1800) * wordsPrice;
-  }, [words, wordsPrice]);
-
   const handleFormSubmit = async (values: OrderFormValues) => {
-    await onSubmit(values as UpdateOrderDto, originalLocal, translatedLocal, {
-      wordCount,
-      date: new Date(),
-    });
+    await onSubmit(values as UpdateOrderDto, originalLocal, translatedLocal);
   };
 
   const handleDeleteExisting = async (
@@ -254,49 +233,26 @@ export function OrderForm({
 
             {isManagerOrAdmin && <CommentSection register={register} />}
 
-            {isManagerOrAdmin && (
-              <Grid
+            {isManagerOrAdmin && order && (
+              <Box
                 mt={2}
-                templateColumns='repeat(2, 1fr)'
-                gap={4}
+                borderTop='1px solid'
+                borderColor='gray.100'
+                pt={4}
               >
-                <Flex
-                  flexDirection='column'
-                  alignItems='flex-start'
-                  justifyContent='center'
+                <Text
+                  fontFamily='Syne'
+                  fontWeight='700'
+                  fontSize='13px'
+                  letterSpacing='0.06em'
+                  textTransform='uppercase'
+                  color='gray.400'
+                  mb={3}
                 >
-                  <FormControl>
-                    <FormLabel fontSize='13px'>{t('orders.wordsCount')}</FormLabel>
-
-                    <NumberInput
-                      size='sm'
-                      min={0}
-                      value={words}
-                      onChange={(_, v) => setWords(isNaN(v) ? 0 : v)}
-                    >
-                      <NumberInputField />
-                    </NumberInput>
-                  </FormControl>
-                </Flex>
-                <Flex
-                  flexDirection='column'
-                  alignItems='flex-start'
-                  justifyContent='center'
-                >
-                  <FormControl>
-                    <FormLabel fontSize='13px'>{t('orders.priceFor')}</FormLabel>
-
-                    <NumberInput
-                      size='sm'
-                      min={0}
-                      value={wordsPrice}
-                      onChange={(_, v) => setWordsPrice(isNaN(v) ? 0 : v)}
-                    >
-                      <NumberInputField />
-                    </NumberInput>
-                  </FormControl>
-                </Flex>
-              </Grid>
+                  {t('orders.wordsCount')} / {t('orders.priceFor')}
+                </Text>
+                <WordPriceEntriesSection order={order} />
+              </Box>
             )}
           </Flex>
 

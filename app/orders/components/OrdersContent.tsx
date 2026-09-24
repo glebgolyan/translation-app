@@ -12,7 +12,6 @@ import { User } from '@/entities/user/model/types';
 import { Order, UpdateOrderDto } from '@/entities/order/model/types';
 import { useT } from '@/shared/hooks/useT';
 import { FileManagementDialog } from '@/app/orders/components/FileManagementDialog';
-import { translatorStatsApi } from '@/features/translator-stats/api/translatorStatsApi';
 
 export function OrdersContent({ user }: { user: User }) {
   const { t } = useT();
@@ -51,8 +50,7 @@ export function OrdersContent({ user }: { user: User }) {
   const handleFormSubmit = async (
     data: UpdateOrderDto,
     originalFiles: File[],
-    translatedFiles: File[],
-    statsEntry?: { wordCount: number; date: Date }
+    translatedFiles: File[]
   ) => {
     setFormLoading(true);
     try {
@@ -69,23 +67,6 @@ export function OrdersContent({ user }: { user: User }) {
       if (translatedFiles.length > 0)
         await ordersApi.uploadFiles(order.id, translatedFiles, 'translated');
 
-      // ✅ Save translator stats if provided
-      if (statsEntry && statsEntry.wordCount > 0 && order.translatorId) {
-        const date = new Date(statsEntry.date);
-        const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-        const day = date.getDate();
-
-        await translatorStatsApi
-          .createOrUpdate(order.translatorId, month, day, statsEntry.wordCount)
-          .catch((err) => console.error('Stats update failed:', err));
-
-        toast({
-          title: '📊 Stats updated',
-          description: `Added ${statsEntry.wordCount} HRN to translator stats`,
-          status: 'info',
-          duration: 3000,
-        });
-      }
       queryClient.invalidateQueries({ queryKey: ['orders'] });
       onClose();
     } catch (err: any) {
