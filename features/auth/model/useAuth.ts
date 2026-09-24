@@ -60,17 +60,17 @@ export function useAuth() {
   const hasSession =
     typeof window !== 'undefined' && !!(Cookies.get('accessToken') || Cookies.get('refreshToken'));
 
+  // Don't clear cookies here on a failed request — shared/api/client.ts's
+  // response interceptor already owns that decision: on a real 401 it tries
+  // a refresh first and only clears+redirects if the refresh itself fails.
+  // This used to clear on ANY error, including a plain network failure —
+  // which on mobile is exactly what the first request after a cold Chrome
+  // relaunch tends to hit (radio/connection not back up yet), forcing a
+  // re-login even though the tokens were still perfectly valid. Desktop
+  // never sees this because its connection is already warm.
   const { data: user, isLoading } = useQuery({
     queryKey: AUTH_QUERY_KEY,
-    queryFn: async () => {
-      try {
-        return await authApi.me();
-      } catch (err) {
-        Cookies.remove('accessToken');
-        Cookies.remove('refreshToken');
-        throw err;
-      }
-    },
+    queryFn: () => authApi.me(),
     enabled: hasSession,
     retry: false,
   });
