@@ -15,8 +15,11 @@ export interface TranslatorStatsEntry {
   updatedAt: string;
 }
 
+// Rounded up to a whole number — mirrors the same rule on the backend
+// (translator-stats.service.ts): half a unit of currency always counts as
+// a full one (0.5 -> 1), never truncated down.
 export function entryValue(entry: Pick<TranslatorStatsEntry, 'wordsCount' | 'price'>) {
-  return (entry.wordsCount / 1800) * entry.price;
+  return Math.ceil((entry.wordsCount / 1800) * entry.price);
 }
 
 export interface TranslatorStatsRow {
