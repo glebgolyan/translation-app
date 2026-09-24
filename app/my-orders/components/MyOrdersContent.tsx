@@ -28,7 +28,7 @@ import { RiAddLine, RiFileList3Line } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 import { ordersApi } from '@/features/orders/api/ordersApi';
 import { FileUpload } from '@/features/files/ui/FileUpload';
-import { StatusBadge } from '@/shared/ui/StatusBadge';
+import { StatusBadge } from '@/entities/order/ui/StatusBadge';
 import { Order } from '@/entities/order/model/types';
 
 const LANGUAGES = [

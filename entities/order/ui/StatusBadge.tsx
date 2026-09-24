@@ -1,8 +1,8 @@
 'use client';
-// shared/ui/StatusBadge.tsx
+// entities/order/ui/StatusBadge.tsx
 import { Badge } from '@chakra-ui/react';
-import { OrderStatus } from '@/entities/order/model/types';
-import { useStatusConfig } from '@/widgets/order-table/hook/useStatusConfig';
+import { OrderStatus } from '../model/types';
+import { useStatusConfig } from '../lib/useStatusConfig';
 
 export function StatusBadge({ status }: { status: OrderStatus }) {
   const statusConfig = useStatusConfig();

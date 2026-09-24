@@ -1,7 +1,7 @@
 'use client';
 import { Box, Flex, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { Order } from '@/entities/order/model/types';
-import { StatusBadge } from '@/shared/ui/StatusBadge';
+import { StatusBadge } from '@/entities/order/ui/StatusBadge';
 import { useT } from '@/shared/hooks/useT';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
