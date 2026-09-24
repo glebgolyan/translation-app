@@ -130,7 +130,9 @@
     "deletedByAdmin": "Deleted by Admin",
     "file": "file",
     "wordsCount": "Words count",
-    "priceFor": "Price by 1800"
+    "priceFor": "Price by 1800",
+    "addWordPriceEntry": "+ Add entry",
+    "wordPriceNoTranslator": "Assign a translator to add words/price entries"
   },
   "dateRanges": {
     "all": "All time",

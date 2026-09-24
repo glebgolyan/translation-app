@@ -130,7 +130,9 @@
     "deletedByAdmin": "Видалено адміном",
     "file": "файл",
     "wordsCount": "Кiл-ть знаків",
-    "priceFor": "Ціна за 1800 знаків"
+    "priceFor": "Ціна за 1800 знаків",
+    "addWordPriceEntry": "+ Додати запис",
+    "wordPriceNoTranslator": "Призначте перекладача, щоб додавати записи кількості слів/ціни"
   },
   "dateRanges": {
     "all": "За весь час",
