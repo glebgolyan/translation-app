@@ -1,9 +1,18 @@
 // app/login/page.tsx
+import { redirect } from 'next/navigation';
 import { Box, Text } from '@chakra-ui/react';
 import { Suspense } from 'react';
+import { getServerUser } from '@/shared/lib/serverAuth';
 import { LoginPageContent } from '@/app/login/components/LoginPageContent';
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  // Nothing on this page checked for an already-valid session before —
+  // /login always rendered the form regardless, so opening it with valid
+  // cookies still present (e.g. a bookmark pointing straight at /login)
+  // looked identical to "got logged out", even though the session was fine.
+  const user = await getServerUser();
+  if (user) redirect('/dashboard');
+
   return (
     <Box
       minH='100vh'

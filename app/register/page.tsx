@@ -1,8 +1,13 @@
+import { redirect } from 'next/navigation';
 import { Box, Text } from '@chakra-ui/react';
 import { Suspense } from 'react';
+import { getServerUser } from '@/shared/lib/serverAuth';
 import { RegisterPageContent } from './components/RegisterPageContent';
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  const user = await getServerUser();
+  if (user) redirect('/dashboard');
+
   return (
     <Box
       minH='100vh'
