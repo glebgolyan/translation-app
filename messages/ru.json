@@ -8,6 +8,7 @@
     "settings": "Настройки",
     "translatorStats": "Статистика переводчиков",
     "apostilization": "Апостиль",
+    "apostilizationV2": "Апостиль v2",
     "messages": "Сообщения",
     "requests": "Заявки"
   },
@@ -38,7 +39,9 @@
     "cancel": "Отмена",
     "actions": "Действия",
     "searchPlaceholder": "Поиск имени клиента или телефона...",
-    "noResults": "Результатов не найдено"
+    "noResults": "Результатов не найдено",
+    "submittedOn": "Подано",
+    "more": "ещё"
   },
   "auth": {
     "login": "Войти",

@@ -9,12 +9,13 @@ export const apostilizationApi = {
   },
 
   getAll: async (
-    filters?: { month?: string; search?: string },
+    filters?: { month?: string; search?: string; dateField?: 'dateOfTaking' | 'createdAt' },
     client: AxiosInstance = apiClient
   ): Promise<Apostilization[]> => {
     const params = new URLSearchParams();
     if (filters?.month) params.append('month', filters.month);
     if (filters?.search) params.append('search', filters.search);
+    if (filters?.dateField) params.append('dateField', filters.dateField);
     const { data } = await client.get(`/apostilization?${params.toString()}`);
     return data;
   },

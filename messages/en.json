@@ -8,6 +8,7 @@
     "settings": "Settings",
     "translatorStats": "Translator Stats",
     "apostilization": "Apostilization",
+    "apostilizationV2": "Apostilization v2",
     "messages": "Messages",
     "requests": "Requests"
   },
@@ -38,7 +39,9 @@
     "cancel": "Cancel",
     "actions": "Actions",
     "searchPlaceholder": "Search client name or phone...",
-    "noResults": "No results found"
+    "noResults": "No results found",
+    "submittedOn": "Submitted",
+    "more": "more"
   },
   "auth": {
     "login": "Sign In",

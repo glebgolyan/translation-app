@@ -8,6 +8,7 @@
     "settings": "Налаштування",
     "translatorStats": "Статистика перекладачів",
     "apostilization": "Апостиль",
+    "apostilizationV2": "Апостиль v2",
     "messages": "Повідомлення",
     "requests": "Заявки"
   },
@@ -38,7 +39,9 @@
     "cancel": "Скасувати",
     "actions": "Дії",
     "searchPlaceholder": "Пошук ім'я клієнта або телефону...",
-    "noResults": "Результатів не знайдено"
+    "noResults": "Результатів не знайдено",
+    "submittedOn": "Подано",
+    "more": "ще"
   },
   "auth": {
     "login": "Увійти",
