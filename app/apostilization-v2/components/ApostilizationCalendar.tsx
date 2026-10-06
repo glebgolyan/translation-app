@@ -76,8 +76,6 @@ function buildCalendarCells(month: string): CalendarCell[] {
   });
 }
 
-const MAX_VISIBLE = 2;
-
 interface ApostilizationCalendarProps {
   month: string; // "YYYY-MM"
   search: string;
@@ -91,7 +89,7 @@ export function ApostilizationCalendar({
   onEditItem,
   onCreateForDate,
 }: ApostilizationCalendarProps) {
-  const { t, locale } = useT();
+  const { locale } = useT();
   const { colorMode } = useColorMode();
 
   const bg = useColorModeValue('white', '#1a1a1a');
@@ -100,7 +98,6 @@ export function ApostilizationCalendar({
   const dayNumberColor = useColorModeValue('gray.500', '#888888');
   const mutedDayNumberColor = useColorModeValue('gray.300', '#444444');
   const weekdayColor = useColorModeValue('gray.400', '#666666');
-  const mutedTextColor = useColorModeValue('gray.400', '#777777');
   const todayBorder = useColorModeValue('brand.400', 'brand.300');
 
   // Cards are placed by createdAt (the day they were filed) rather than
@@ -170,8 +167,6 @@ export function ApostilizationCalendar({
           const key = dateKey(cell.date);
           const dayItems = byDay.get(key) ?? [];
           const isToday = key === todayKey;
-          const visible = dayItems.slice(0, MAX_VISIBLE);
-          const overflow = dayItems.length - visible.length;
 
           return (
             <Box
@@ -207,7 +202,7 @@ export function ApostilizationCalendar({
                   spacing={1}
                   align='stretch'
                 >
-                  {visible.map((item) => {
+                  {dayItems.map((item) => {
                     const { primary, secondary } = chipTextColors(item.status, colorMode);
                     return (
                       <Box
@@ -264,15 +259,6 @@ export function ApostilizationCalendar({
                       </Box>
                     );
                   })}
-                  {overflow > 0 && (
-                    <Text
-                      fontSize='11px'
-                      color={mutedTextColor}
-                      pl={1}
-                    >
-                      +{overflow} {t('apostilization.more')}
-                    </Text>
-                  )}
                 </VStack>
               )}
             </Box>
