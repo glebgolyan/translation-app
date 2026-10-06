@@ -104,6 +104,15 @@ const NAV_ITEMS: NavItem[] = [
     icon: RiFileList3Line,
     roles: ['MANAGER', 'ADMIN'],
   },
+  {
+    // Design-test route for the calendar-grid redesign of apostilization
+    // (see app/apostilization-v2) — remove this entry once a decision is
+    // made to either replace /apostilization with it or drop it.
+    labelKey: 'nav.apostilizationV2',
+    href: '/apostilization-v2',
+    icon: RiFileList3Line,
+    roles: ['MANAGER', 'ADMIN'],
+  },
   { labelKey: 'nav.myOrders', href: '/my-orders', icon: RiFileList3Line, roles: ['CLIENT'] },
   { labelKey: 'nav.assignments', href: '/assignments', icon: RiTranslate2, roles: ['TRANSLATOR'] },
   { labelKey: 'nav.users', href: '/admin/users', icon: RiUserLine, roles: ['ADMIN'] },
