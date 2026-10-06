@@ -38,7 +38,9 @@
     "cancel": "Cancel",
     "actions": "Actions",
     "searchPlaceholder": "Search client name or phone...",
-    "noResults": "No results found"
+    "noResults": "No results found",
+    "submittedOn": "Submitted",
+    "more": "more"
   },
   "auth": {
     "login": "Sign In",
