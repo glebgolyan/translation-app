@@ -1,6 +1,16 @@
 'use client';
 // app/apostilization-v2/components/ApostilizationCalendar.tsx
-import { Box, Grid, VStack, HStack, Text, Center, Spinner, useColorModeValue } from '@chakra-ui/react';
+import {
+  Box,
+  Grid,
+  VStack,
+  HStack,
+  Text,
+  Center,
+  Spinner,
+  useColorModeValue,
+  useColorMode,
+} from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apostilizationApi } from '@/features/apostilization/api/apostilizationApi';
@@ -18,6 +28,23 @@ const STATUS_COLOR: Record<string, string> = {
 function statusColor(status: string) {
   return STATUS_COLOR[status] ?? 'gray';
 }
+
+// Chip text colors come from the same hue as the chip's background instead
+// of a flat neutral gray — a flat gray.400 "muted" tone (fine on plain white)
+// turned out too low-contrast once it sat on top of a tinted orange/green
+// chip background. Using darker/lighter shades of the chip's own color
+// keeps it readable regardless of which status color is showing.
+function chipTextColors(status: string, colorMode: 'light' | 'dark') {
+  const c = statusColor(status);
+  return {
+    primary: colorMode === 'dark' ? `${c}.100` : `${c}.800`,
+    secondary: colorMode === 'dark' ? `${c}.300` : `${c}.700`,
+  };
+}
+
+// Weekend columns are visually de-emphasized (apostille pickups cluster on
+// weekdays) — narrower than Mon-Fri, which get the reclaimed space.
+const WEEK_COLUMNS = 'repeat(5, 1.15fr) 0.75fr 0.75fr';
 
 function dateKey(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -64,6 +91,7 @@ export function ApostilizationCalendar({
   onCreateForDate,
 }: ApostilizationCalendarProps) {
   const { t, locale } = useT();
+  const { colorMode } = useColorMode();
 
   const bg = useColorModeValue('white', '#1a1a1a');
   const mutedBg = useColorModeValue('gray.50', '#161616');
@@ -71,7 +99,6 @@ export function ApostilizationCalendar({
   const dayNumberColor = useColorModeValue('gray.500', '#888888');
   const mutedDayNumberColor = useColorModeValue('gray.300', '#444444');
   const weekdayColor = useColorModeValue('gray.400', '#666666');
-  const textColor = useColorModeValue('gray.800', '#e0e0e0');
   const mutedTextColor = useColorModeValue('gray.400', '#777777');
   const todayBorder = useColorModeValue('brand.400', 'brand.300');
 
@@ -111,14 +138,14 @@ export function ApostilizationCalendar({
   return (
     <Box>
       <Grid
-        templateColumns='repeat(7, 1fr)'
+        templateColumns={WEEK_COLUMNS}
         gap={2}
         mb={2}
       >
         {weekdayLabels.map((label) => (
           <Text
             key={label}
-            fontSize='11px'
+            fontSize='12px'
             fontWeight='600'
             textTransform='uppercase'
             letterSpacing='0.04em'
@@ -131,7 +158,7 @@ export function ApostilizationCalendar({
       </Grid>
 
       <Grid
-        templateColumns='repeat(7, 1fr)'
+        templateColumns={WEEK_COLUMNS}
         gap={2}
       >
         {cells.map((cell) => {
@@ -144,7 +171,7 @@ export function ApostilizationCalendar({
           return (
             <Box
               key={key}
-              minH={{ base: '72px', md: '112px' }}
+              minH={{ base: '76px', md: '120px' }}
               p={1.5}
               borderRadius='8px'
               border='1px solid'
@@ -160,7 +187,7 @@ export function ApostilizationCalendar({
               transition='border-color 0.15s'
             >
               <Text
-                fontSize='12px'
+                fontSize='13px'
                 fontWeight={isToday ? '700' : '500'}
                 color={
                   !cell.inMonth ? mutedDayNumberColor : isToday ? todayBorder : dayNumberColor
@@ -175,59 +202,62 @@ export function ApostilizationCalendar({
                   spacing={1}
                   align='stretch'
                 >
-                  {visible.map((item) => (
-                    <Box
-                      key={item.id}
-                      onClick={() => onEditItem(item)}
-                      bg={`${statusColor(item.status)}.50`}
-                      _dark={{ bg: `${statusColor(item.status)}.900` }}
-                      borderLeft='3px solid'
-                      borderColor={`${statusColor(item.status)}.400`}
-                      borderRadius='4px'
-                      px={1.5}
-                      py={0.5}
-                      cursor='pointer'
-                      _hover={{ opacity: 0.85 }}
-                    >
-                      <HStack
-                        spacing={1}
-                        justify='space-between'
-                        align='flex-start'
+                  {visible.map((item) => {
+                    const { primary, secondary } = chipTextColors(item.status, colorMode);
+                    return (
+                      <Box
+                        key={item.id}
+                        onClick={() => onEditItem(item)}
+                        bg={`${statusColor(item.status)}.50`}
+                        _dark={{ bg: `${statusColor(item.status)}.900` }}
+                        borderLeft='3px solid'
+                        borderColor={`${statusColor(item.status)}.400`}
+                        borderRadius='4px'
+                        px={1.5}
+                        py={1}
+                        cursor='pointer'
+                        _hover={{ opacity: 0.85 }}
                       >
-                        <Text
-                          fontSize='11px'
-                          fontWeight='600'
-                          noOfLines={1}
-                          color={textColor}
+                        <HStack
+                          spacing={1}
+                          justify='space-between'
+                          align='flex-start'
                         >
-                          {item.clientName}
+                          <Text
+                            fontSize='12px'
+                            fontWeight='600'
+                            noOfLines={1}
+                            color={primary}
+                          >
+                            {item.clientName}
+                          </Text>
+                          {item.remainingAmount > 0 && (
+                            <Box
+                              w='5px'
+                              h='5px'
+                              mt='4px'
+                              borderRadius='full'
+                              bg='orange.400'
+                              flexShrink={0}
+                            />
+                          )}
+                        </HStack>
+                        <Text
+                          fontSize='10px'
+                          color={secondary}
+                        >
+                          {t('apostilization.submittedOn')}{' '}
+                          {new Date(item.createdAt).toLocaleDateString('uk-UA', {
+                            day: '2-digit',
+                            month: '2-digit',
+                          })}
                         </Text>
-                        {item.remainingAmount > 0 && (
-                          <Box
-                            w='5px'
-                            h='5px'
-                            mt='3px'
-                            borderRadius='full'
-                            bg='orange.400'
-                            flexShrink={0}
-                          />
-                        )}
-                      </HStack>
-                      <Text
-                        fontSize='9px'
-                        color={mutedTextColor}
-                      >
-                        {t('apostilization.submittedOn')}{' '}
-                        {new Date(item.createdAt).toLocaleDateString('uk-UA', {
-                          day: '2-digit',
-                          month: '2-digit',
-                        })}
-                      </Text>
-                    </Box>
-                  ))}
+                      </Box>
+                    );
+                  })}
                   {overflow > 0 && (
                     <Text
-                      fontSize='10px'
+                      fontSize='11px'
                       color={mutedTextColor}
                       pl={1}
                     >
