@@ -18,8 +18,8 @@ export default async function ApostilizationV2Page() {
   const [user] = await Promise.all([
     getServerUser(),
     queryClient.prefetchQuery({
-      queryKey: ['apostilization', month, ''],
-      queryFn: () => apostilizationApi.getAll({ month, search: '' }, client),
+      queryKey: ['apostilization', month, '', 'createdAt'],
+      queryFn: () => apostilizationApi.getAll({ month, search: '', dateField: 'createdAt' }, client),
     }),
   ]);
   if (!user) redirect('/login');

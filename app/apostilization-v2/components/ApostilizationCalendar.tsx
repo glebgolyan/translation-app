@@ -8,6 +8,7 @@ import {
   Text,
   Center,
   Spinner,
+  Tooltip,
   useColorModeValue,
   useColorMode,
 } from '@chakra-ui/react';
@@ -102,9 +103,13 @@ export function ApostilizationCalendar({
   const mutedTextColor = useColorModeValue('gray.400', '#777777');
   const todayBorder = useColorModeValue('brand.400', 'brand.300');
 
+  // Cards are placed by createdAt (the day they were filed) rather than
+  // dateOfTaking (the day the document is due back) — the month filter has
+  // to match, otherwise a card filed this month but due back next month
+  // would never be fetched for the month it's actually shown under.
   const { data: items = [], isLoading } = useQuery({
-    queryKey: ['apostilization', month, search],
-    queryFn: () => apostilizationApi.getAll({ month, search }),
+    queryKey: ['apostilization', month, search, 'createdAt'],
+    queryFn: () => apostilizationApi.getAll({ month, search, dateField: 'createdAt' }),
   });
 
   const cells = useMemo(() => buildCalendarCells(month), [month]);
@@ -112,7 +117,7 @@ export function ApostilizationCalendar({
   const byDay = useMemo(() => {
     const map = new Map<string, Apostilization[]>();
     for (const item of items) {
-      const key = dateKey(new Date(item.dateOfTaking));
+      const key = dateKey(new Date(item.createdAt));
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(item);
     }
@@ -177,13 +182,13 @@ export function ApostilizationCalendar({
               border='1px solid'
               borderColor={isToday ? todayBorder : borderColor}
               bg={cell.inMonth ? bg : mutedBg}
-              cursor={cell.inMonth && dayItems.length === 0 ? 'pointer' : 'default'}
-              onClick={
-                cell.inMonth && dayItems.length === 0 ? () => onCreateForDate(key) : undefined
-              }
-              _hover={
-                cell.inMonth && dayItems.length === 0 ? { borderColor: 'brand.300' } : undefined
-              }
+              // Cards always land on today's cell (createdAt), so clicking
+              // to create one only makes sense there — any other empty day
+              // would silently create a card that shows up under today
+              // instead of the day you clicked.
+              cursor={isToday && dayItems.length === 0 ? 'pointer' : 'default'}
+              onClick={isToday && dayItems.length === 0 ? () => onCreateForDate(key) : undefined}
+              _hover={isToday && dayItems.length === 0 ? { borderColor: 'brand.300' } : undefined}
               transition='border-color 0.15s'
             >
               <Text
@@ -242,16 +247,20 @@ export function ApostilizationCalendar({
                             />
                           )}
                         </HStack>
-                        <Text
-                          fontSize='10px'
-                          color={secondary}
+                        <Tooltip
+                          label={item.whatToDo}
+                          placement='top'
+                          hasArrow
+                          openDelay={300}
                         >
-                          {t('apostilization.submittedOn')}{' '}
-                          {new Date(item.createdAt).toLocaleDateString('uk-UA', {
-                            day: '2-digit',
-                            month: '2-digit',
-                          })}
-                        </Text>
+                          <Text
+                            fontSize='10px'
+                            color={secondary}
+                            noOfLines={1}
+                          >
+                            {item.whatToDo}
+                          </Text>
+                        </Tooltip>
                       </Box>
                     );
                   })}
