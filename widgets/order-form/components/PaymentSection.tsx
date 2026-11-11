@@ -12,15 +12,23 @@ import {
 import { UseFormRegister, Controller, UseFormSetValue, useWatch } from 'react-hook-form';
 import { useT } from '@/shared/hooks/useT';
 import { useEffect } from 'react';
+import { InvoiceControls } from './InvoiceControls';
 
 interface PaymentSectionProps {
   register: UseFormRegister<any>;
   control: any;
   paymentType: string;
   setValue: UseFormSetValue<any>;
+  orderId?: string;
 }
 
-export function PaymentSection({ register, control, paymentType, setValue }: PaymentSectionProps) {
+export function PaymentSection({
+  register,
+  control,
+  paymentType,
+  setValue,
+  orderId,
+}: PaymentSectionProps) {
   const { t } = useT();
 
   const totalPrice = useWatch({ control, name: 'totalPrice' });
@@ -140,6 +148,14 @@ export function PaymentSection({ register, control, paymentType, setValue }: Pay
               )}
             />
           </FormControl>
+        )}
+
+        {(paymentType === 'card' || paymentType === 'mixed') && (
+          <InvoiceControls
+            orderId={orderId}
+            control={control}
+            setValue={setValue}
+          />
         )}
       </Grid>
     </Box>

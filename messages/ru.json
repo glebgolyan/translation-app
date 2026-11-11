@@ -135,7 +135,24 @@
     "wordsCount": "Кол-во знаков",
     "priceFor": "Цена за 1800 знаков",
     "addWordPriceEntry": "+ Добавить запись",
-    "wordPriceNoTranslator": "Назначьте переводчика, чтобы добавлять записи количества слов/цены"
+    "wordPriceNoTranslator": "Назначьте переводчика, чтобы добавлять записи количества слов/цены",
+    "issueInvoice": "Выставить счёт",
+    "saveOrderFirst": "Сохраните заказ, чтобы выставить счёт",
+    "copyLink": "Скопировать ссылку",
+    "openLink": "Открыть ссылку",
+    "refreshStatus": "Обновить статус",
+    "invoiceCreated": "Счёт выставлен",
+    "invoicePaid": "Счёт оплачен — депозит обновлён",
+    "linkCopied": "Ссылка скопирована",
+    "invoiceStatuses": {
+      "created": "Не оплачен",
+      "processing": "В обработке",
+      "hold": "Заморожен",
+      "success": "Оплачен",
+      "failure": "Ошибка оплаты",
+      "reversed": "Возврат",
+      "expired": "Истёк"
+    }
   },
   "dateRanges": {
     "all": "За всё время",
