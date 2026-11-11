@@ -1,4 +1,5 @@
 'use client';
+import { APP_LOCALE, formatDate } from '@/shared/lib/format';
 import {
   Tr,
   Td,
@@ -108,7 +109,7 @@ export function OrderRow({ order, visibleColumns, userRole, onEdit, onDelete }: 
             fontFamily='mono'
             color='gray.200'
           >
-            {new Date(order.createdAt).toLocaleDateString('uk-UA')}
+            {formatDate(order.createdAt)}
           </Text>
         );
       case 'dueDate': {
@@ -119,7 +120,7 @@ export function OrderRow({ order, visibleColumns, userRole, onEdit, onDelete }: 
             color={isClosed ? 'green.500' : isLate ? 'red.500' : 'gray.200'}
             fontWeight={isLate ? '600' : '400'}
           >
-            {order.dueDate ? new Date(order.dueDate).toLocaleDateString('uk-UA') : '—'}
+            {order.dueDate ? formatDate(order.dueDate) : '—'}
           </Text>
         );
       }
@@ -171,13 +172,13 @@ export function OrderRow({ order, visibleColumns, userRole, onEdit, onDelete }: 
                 p={1}
               >
                 <Text>
-                  💰 {t('orders.totalPrice')}: ₴{order.totalPrice.toLocaleString()}
+                  💰 {t('orders.totalPrice')}: ₴{order.totalPrice.toLocaleString(APP_LOCALE)}
                 </Text>
                 <Text>
-                  ⬇️ {t('orders.deposit')}: ₴{order.deposit.toLocaleString()}
+                  ⬇️ {t('orders.deposit')}: ₴{order.deposit.toLocaleString(APP_LOCALE)}
                 </Text>
                 <Text color={order.remainingAmount > 0 ? 'orange.300' : 'green.300'}>
-                  🔄 {t('orders.remaining')}: ₴{order.remainingAmount.toLocaleString()}
+                  🔄 {t('orders.remaining')}: ₴{order.remainingAmount.toLocaleString(APP_LOCALE)}
                 </Text>
                 <Text
                   fontSize='11px'
@@ -204,7 +205,7 @@ export function OrderRow({ order, visibleColumns, userRole, onEdit, onDelete }: 
                 fontWeight='600'
                 color='white.100'
               >
-                ₴{order.totalPrice.toLocaleString()}
+                ₴{order.totalPrice.toLocaleString(APP_LOCALE)}
               </Text>
               {!isClosed && order.remainingAmount > 0 && (
                 <Text
@@ -212,7 +213,8 @@ export function OrderRow({ order, visibleColumns, userRole, onEdit, onDelete }: 
                   fontFamily='mono'
                   color='red.300'
                 >
-                  -{order.remainingAmount.toLocaleString()} {t('orders.remaining').toLowerCase()}
+                  -{order.remainingAmount.toLocaleString(APP_LOCALE)}{' '}
+                  {t('orders.remaining').toLowerCase()}
                 </Text>
               )}
             </Box>
@@ -225,7 +227,7 @@ export function OrderRow({ order, visibleColumns, userRole, onEdit, onDelete }: 
             fontFamily='mono'
             color='green.600'
           >
-            ₴{order.deposit.toLocaleString()}
+            ₴{order.deposit.toLocaleString(APP_LOCALE)}
           </Text>
         );
       case 'remainingAmount':
@@ -235,7 +237,7 @@ export function OrderRow({ order, visibleColumns, userRole, onEdit, onDelete }: 
             fontFamily='mono'
             color={order.remainingAmount > 0 ? 'orange.500' : 'gray.400'}
           >
-            ₴{order.remainingAmount.toLocaleString()}
+            ₴{order.remainingAmount.toLocaleString(APP_LOCALE)}
           </Text>
         );
       case 'paymentType':

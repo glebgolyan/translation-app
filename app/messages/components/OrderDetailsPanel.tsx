@@ -1,4 +1,5 @@
 'use client';
+import { formatDate } from '@/shared/lib/format';
 import {
   Box,
   VStack,
@@ -93,7 +94,7 @@ export function OrderDetailsPanel({ conversation }: OrderDetailsPanelProps) {
               fontSize='12px'
               color={mutedColor}
             >
-              Created: {new Date(conversation.createdAt).toLocaleDateString('uk-UA')}
+              Created: {formatDate(conversation.createdAt)}
             </Text>
           </VStack>
           {(user?.role === 'MANAGER' || user?.role === 'ADMIN') && (

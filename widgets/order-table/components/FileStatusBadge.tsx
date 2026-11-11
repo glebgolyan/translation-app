@@ -1,4 +1,5 @@
 'use client';
+import { formatDate } from '@/shared/lib/format';
 import { Icon, Tooltip, Text } from '@chakra-ui/react';
 import { RiAlertLine, RiFile3Line } from 'react-icons/ri';
 import { useT } from '@/shared/hooks/useT';
@@ -21,7 +22,7 @@ export function FileStatusBadge({
   if (filesDeletedAt) {
     return (
       <Tooltip
-        label={`${t('orders.filesDeleted') || 'Files deleted'}: ${new Date(filesDeletedAt).toLocaleDateString('uk-UA')}`}
+        label={`${t('orders.filesDeleted') || 'Files deleted'}: ${formatDate(filesDeletedAt)}`}
         placement='top'
         hasArrow
         fontSize='12px'

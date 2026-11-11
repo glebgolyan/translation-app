@@ -5,18 +5,16 @@ import { createServerApiClient } from '@/shared/api/serverClient';
 import { ordersApi } from '@/features/orders/api/ordersApi';
 import { apostilizationApi } from '@/features/apostilization/api/apostilizationApi';
 import { translatorStatsApi } from '@/features/translator-stats/api/translatorStatsApi';
-import { getDateRange, getPreviousMonthRange } from '@/shared/lib/dateRange';
+import { getDateRange, getPreviousMonthRange, monthKey } from '@/shared/lib/dateRange';
 import { DashboardContent } from './components/DashboardContent';
 
 export default async function DashboardPage() {
   const client = createServerApiClient();
   const queryClient = new QueryClient();
 
-  const now = new Date();
-  const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const month = monthKey();
   const { dateFrom } = getDateRange('month');
-  const prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-  const prevMonth = `${prevMonthDate.getFullYear()}-${String(prevMonthDate.getMonth() + 1).padStart(2, '0')}`;
+  const prevMonth = monthKey(-1);
   const { dateFrom: prevDateFrom, dateTo: prevDateTo } = getPreviousMonthRange();
 
   // Auth check and the orders prefetch (needed by every role — total/in

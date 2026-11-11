@@ -1,4 +1,5 @@
 'use client';
+import { formatDate } from '@/shared/lib/format';
 import {
   Flex,
   InputGroup,
@@ -52,7 +53,7 @@ export function ApostilizationFilter({
   };
 
   const monthDate = new Date(`${month}-01`);
-  const monthLabel = monthDate.toLocaleDateString('uk-UA', { month: 'long', year: 'numeric' });
+  const monthLabel = formatDate(monthDate, { month: 'long', year: 'numeric' });
 
   return (
     <Flex
