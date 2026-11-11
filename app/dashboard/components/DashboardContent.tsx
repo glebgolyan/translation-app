@@ -1,4 +1,5 @@
 'use client';
+import { APP_LOCALE } from '@/shared/lib/format';
 import { Box, Grid, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -71,7 +72,7 @@ export function DashboardContent({ user }: { user: User }) {
 
   const totalStats = stats
     .reduce((sum: number, row: any) => sum + (grandTotals[row.translatorId]?.total || 0), 0)
-    .toLocaleString();
+    .toLocaleString(APP_LOCALE);
 
   const { data: ordersData } = useQuery({
     queryKey: ['orders', 'dashboard', dateFrom],
@@ -199,7 +200,7 @@ export function DashboardContent({ user }: { user: User }) {
         {isAdmin && (
           <StatCard
             label={t('dashboard.revenue')}
-            value={`₴${revenue.toLocaleString()}`}
+            value={`₴${revenue.toLocaleString(APP_LOCALE)}`}
             secondaryLabel={t('dashboard.cardPayments')}
             secondaryValue={totalCard}
             icon={RiMoneyDollarCircleLine}
@@ -211,7 +212,7 @@ export function DashboardContent({ user }: { user: User }) {
         {isAdmin && (
           <StatCard
             label={t('dashboard.notarization')}
-            value={`₴${totalNotarizationValue.toLocaleString()}`}
+            value={`₴${totalNotarizationValue.toLocaleString(APP_LOCALE)}`}
             secondaryLabel={t('dashboard.translatorPayouts')}
             secondaryValue={totalStats}
             icon={RiMoneyDollarCircleLine}

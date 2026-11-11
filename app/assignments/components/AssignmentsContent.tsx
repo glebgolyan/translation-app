@@ -1,4 +1,5 @@
 'use client';
+import { formatDate } from '@/shared/lib/format';
 import {
   Box,
   Text,
@@ -241,7 +242,7 @@ export function AssignmentsContent({ user }: { user: User }) {
                           as={RiCalendarLine}
                           boxSize={3.5}
                         />
-                        <Text>Due {new Date(order.dueDate).toLocaleDateString('uk-UA')}</Text>
+                        <Text>Due {formatDate(order.dueDate)}</Text>
                       </Flex>
                     )}
                     <Flex
@@ -346,7 +347,7 @@ export function AssignmentsContent({ user }: { user: User }) {
                         Deadline
                       </Text>
                       <Text fontWeight='500'>
-                        {new Date(selectedOrder.dueDate).toLocaleDateString('uk-UA', {
+                        {formatDate(selectedOrder.dueDate, {
                           weekday: 'long',
                           year: 'numeric',
                           month: 'long',

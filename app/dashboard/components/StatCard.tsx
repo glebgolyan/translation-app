@@ -1,4 +1,5 @@
 'use client';
+import { APP_LOCALE } from '@/shared/lib/format';
 import {
   Box,
   Flex,
@@ -81,7 +82,7 @@ export function StatCard({
               mt={1}
             >
               {secondaryLabel}: ₴
-              {typeof secondaryValue === 'number' ? secondaryValue.toLocaleString() : secondaryValue}
+              {typeof secondaryValue === 'number' ? secondaryValue.toLocaleString(APP_LOCALE) : secondaryValue}
             </Text>
           )}
 

@@ -1,4 +1,5 @@
 'use client';
+import { APP_LOCALE } from '@/shared/lib/format';
 // app/translations/components/DayEntriesModal.tsx
 //
 // Replaces the old "click the day cell, type a number" inline edit: a day
@@ -283,7 +284,7 @@ export function DayEntriesModal({
               borderTop='1px solid'
               borderColor='gray.100'
             >
-              Total: {total.toLocaleString()}
+              Total: {total.toLocaleString(APP_LOCALE)}
             </Text>
           </VStack>
         </ModalBody>

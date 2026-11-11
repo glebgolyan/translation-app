@@ -1,4 +1,5 @@
 'use client';
+import { APP_LOCALE, formatDate } from '@/shared/lib/format';
 import {
   Box,
   Table,
@@ -108,7 +109,7 @@ export function ApostilizationTable({ month, search, onEdit }: ApostilizationTab
                 fontFamily='mono'
                 color={labelColor}
               >
-                {new Date(item.dateOfTaking).toLocaleDateString('uk-UA')}
+                {formatDate(item.dateOfTaking)}
               </Text>
             </Flex>
 
@@ -154,7 +155,7 @@ export function ApostilizationTable({ month, search, onEdit }: ApostilizationTab
                   fontWeight='600'
                   color={tdColor}
                 >
-                  ₴{item.sum.toLocaleString()}
+                  ₴{item.sum.toLocaleString(APP_LOCALE)}
                 </Text>
               </Box>
               <Box>
@@ -174,7 +175,7 @@ export function ApostilizationTable({ month, search, onEdit }: ApostilizationTab
                   fontWeight='600'
                   color={item.remainingAmount > 0 ? 'orange.500' : 'green.500'}
                 >
-                  ₴{item.remainingAmount.toLocaleString()}
+                  ₴{item.remainingAmount.toLocaleString(APP_LOCALE)}
                 </Text>
               </Box>
             </Grid>
@@ -310,7 +311,7 @@ export function ApostilizationTable({ month, search, onEdit }: ApostilizationTab
                   px={4}
                   py={3}
                 >
-                  {new Date(item.dateOfTaking).toLocaleDateString('uk-UA')}
+                  {formatDate(item.dateOfTaking)}
                 </Td>
                 <Td
                   fontSize='13px'
@@ -345,7 +346,7 @@ export function ApostilizationTable({ month, search, onEdit }: ApostilizationTab
                   fontFamily='mono'
                   fontWeight='600'
                 >
-                  ₴{item.sum.toLocaleString()}
+                  ₴{item.sum.toLocaleString(APP_LOCALE)}
                 </Td>
                 <Td
                   fontSize='13px'
@@ -356,7 +357,7 @@ export function ApostilizationTable({ month, search, onEdit }: ApostilizationTab
                   fontFamily='mono'
                   fontWeight='600'
                 >
-                  ₴{item.remainingAmount.toLocaleString()}
+                  ₴{item.remainingAmount.toLocaleString(APP_LOCALE)}
                 </Td>
                 <Td
                   fontSize='13px'

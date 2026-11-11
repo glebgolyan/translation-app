@@ -1,4 +1,5 @@
 'use client';
+import { formatDate } from '@/shared/lib/format';
 import {
   Box,
   HStack,
@@ -150,7 +151,7 @@ export function ConversationList({ onSelectConversation, selectedId }: Conversat
             fontSize='10px'
             color={mutedColor}
           >
-            <Text>{new Date(conv.lastMessage?.createdAt).toLocaleDateString('uk-UA')}</Text>
+            <Text>{formatDate(conv.lastMessage?.createdAt)}</Text>
             {conv.lastMessage?.isRead && (
               <Icon
                 as={RiCheckDoubleLine}

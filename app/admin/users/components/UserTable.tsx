@@ -1,4 +1,5 @@
 'use client';
+import { formatDate } from '@/shared/lib/format';
 import {
   Table,
   Thead,
@@ -170,7 +171,7 @@ export function UserTable({ users, isLoading }: UserTableProps) {
                   color={labelColor}
                   fontFamily='mono'
                 >
-                  {new Date(user.createdAt).toLocaleDateString('uk-UA')}
+                  {formatDate(user.createdAt)}
                 </Text>
               </Box>
             </Grid>
@@ -302,7 +303,7 @@ export function UserTable({ users, isLoading }: UserTableProps) {
                   color='gray.400'
                   fontFamily='mono'
                 >
-                  {new Date(user.createdAt).toLocaleDateString('uk-UA')}
+                  {formatDate(user.createdAt)}
                 </Text>
               </Td>
               <Td>

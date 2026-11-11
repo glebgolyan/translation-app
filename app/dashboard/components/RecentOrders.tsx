@@ -1,4 +1,5 @@
 'use client';
+import { APP_LOCALE, formatDate } from '@/shared/lib/format';
 import { Box, Flex, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { Order } from '@/entities/order/model/types';
 import { StatusBadge } from '@/entities/order/ui/StatusBadge';
@@ -113,7 +114,7 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
                 fontSize='12px'
                 color={dateColor}
               >
-                {new Date(order.createdAt).toLocaleDateString('uk-UA')}
+                {formatDate(order.createdAt)}
               </Text>
               <StatusBadge status={order.status} />
               <Text
@@ -122,7 +123,7 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
                 fontFamily='mono'
                 color={priceColor}
               >
-                ₴{order.totalPrice.toLocaleString()}
+                ₴{order.totalPrice.toLocaleString(APP_LOCALE)}
               </Text>
             </Flex>
           ))
