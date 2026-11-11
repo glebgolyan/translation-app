@@ -221,6 +221,7 @@ export function OrderForm({
                 control={control}
                 paymentType={paymentType}
                 setValue={setValue}
+                orderId={order?.id}
               />
             )}
 

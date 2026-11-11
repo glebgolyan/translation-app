@@ -135,7 +135,24 @@
     "wordsCount": "Words count",
     "priceFor": "Price by 1800",
     "addWordPriceEntry": "+ Add entry",
-    "wordPriceNoTranslator": "Assign a translator to add words/price entries"
+    "wordPriceNoTranslator": "Assign a translator to add words/price entries",
+    "issueInvoice": "Issue invoice",
+    "saveOrderFirst": "Save the order first to issue an invoice",
+    "copyLink": "Copy link",
+    "openLink": "Open link",
+    "refreshStatus": "Refresh status",
+    "invoiceCreated": "Invoice issued",
+    "invoicePaid": "Invoice paid — deposit updated",
+    "linkCopied": "Link copied",
+    "invoiceStatuses": {
+      "created": "Not paid",
+      "processing": "Processing",
+      "hold": "On hold",
+      "success": "Paid",
+      "failure": "Payment failed",
+      "reversed": "Refunded",
+      "expired": "Expired"
+    }
   },
   "dateRanges": {
     "all": "All time",
