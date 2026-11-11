@@ -1,4 +1,5 @@
 'use client';
+import { formatDate } from '@/shared/lib/format';
 import {
   Table,
   Thead,
@@ -46,6 +47,7 @@ export function UserTable({ users, isLoading }: UserTableProps) {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const bg = useColorModeValue('white', '#1a1a1a');
+  const hoverBg = useColorModeValue('gray.50', '#252525');
   const borderColor = useColorModeValue('gray.100', '#2e2e2e');
   const labelColor = useColorModeValue('gray.500', 'gray.400');
 
@@ -170,7 +172,7 @@ export function UserTable({ users, isLoading }: UserTableProps) {
                   color={labelColor}
                   fontFamily='mono'
                 >
-                  {new Date(user.createdAt).toLocaleDateString('uk-UA')}
+                  {formatDate(user.createdAt)}
                 </Text>
               </Box>
             </Grid>
@@ -238,7 +240,7 @@ export function UserTable({ users, isLoading }: UserTableProps) {
           {users.map((user: User) => (
             <Tr
               key={user.id}
-              _hover={bg}
+              _hover={{ bg: hoverBg }}
             >
               <Td>
                 <Flex
@@ -302,7 +304,7 @@ export function UserTable({ users, isLoading }: UserTableProps) {
                   color='gray.400'
                   fontFamily='mono'
                 >
-                  {new Date(user.createdAt).toLocaleDateString('uk-UA')}
+                  {formatDate(user.createdAt)}
                 </Text>
               </Td>
               <Td>

@@ -1,4 +1,6 @@
 'use client';
+import { monthKey } from '@/shared/lib/dateRange';
+import { APP_LOCALE, formatDate } from '@/shared/lib/format';
 import {
   Box,
   Table,
@@ -32,10 +34,7 @@ import { DayEntriesModal } from './DayEntriesModal';
 export function TranslatorStatsTable() {
   const { t } = useT();
 
-  const [month, setMonth] = useState(() => {
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-  });
+  const [month, setMonth] = useState(() => monthKey());
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [activeCell, setActiveCell] = useState<{
@@ -209,7 +208,7 @@ export function TranslatorStatsTable() {
           fontWeight='600'
           fontSize={{ base: '16px', md: '24px' }}
         >
-          {monthDate.toLocaleDateString('uk-UA', { month: 'long', year: 'numeric' })}
+          {formatDate(monthDate, { month: 'long', year: 'numeric' })}
         </Text>
         <HStack spacing={2}>
           <Button
@@ -448,7 +447,7 @@ export function TranslatorStatsTable() {
                           textAlign='right'
                           fontFamily='mono'
                         >
-                          {weekTotal.toLocaleString()}
+                          {weekTotal.toLocaleString(APP_LOCALE)}
                         </Td>
                       </Tr>
                     );
@@ -479,7 +478,7 @@ export function TranslatorStatsTable() {
                             sum + (week.translators[row.translatorId]?.total || 0),
                           0
                         )
-                        .toLocaleString()}
+                        .toLocaleString(APP_LOCALE)}
                     </Td>
                   </Tr>
                 </Tbody>
@@ -580,7 +579,7 @@ export function TranslatorStatsTable() {
                       textAlign='right'
                       fontFamily='mono'
                     >
-                      {total.toLocaleString()}
+                      {total.toLocaleString(APP_LOCALE)}
                     </Td>
                   </Tr>
                 );
@@ -609,7 +608,7 @@ export function TranslatorStatsTable() {
                       (sum: number, row: any) => sum + (grandTotals[row.translatorId]?.total || 0),
                       0
                     )
-                    .toLocaleString()}
+                    .toLocaleString(APP_LOCALE)}
                 </Td>
               </Tr>
             </Tbody>

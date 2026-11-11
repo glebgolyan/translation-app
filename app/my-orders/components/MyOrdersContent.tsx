@@ -1,4 +1,5 @@
 'use client';
+import { formatDate } from '@/shared/lib/format';
 import {
   Box,
   Text,
@@ -148,7 +149,7 @@ export function MyOrdersContent() {
                       color='gray.400'
                       fontFamily='mono'
                     >
-                      {new Date(order.createdAt).toLocaleDateString('uk-UA')}
+                      {formatDate(order.createdAt)}
                     </Text>
                   </Box>
                 </HStack>

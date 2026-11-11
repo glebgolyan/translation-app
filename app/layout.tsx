@@ -10,8 +10,14 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // ColorModeScript sets data-theme/style on <html> and a chakra-ui-* class
+  // on <body> before React hydrates. suppressHydrationWarning only silences
+  // attribute diffs on these two elements themselves, not their children.
   return (
-    <html lang='en'>
+    <html
+      lang='en'
+      suppressHydrationWarning
+    >
       <head>
         <title>Translation CRM</title>
         <link
@@ -28,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel='stylesheet'
         />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <ColorModeScript initialColorMode='light' />
         <QueryProvider>
           <AppChakraProvider>

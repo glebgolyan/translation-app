@@ -1,4 +1,5 @@
 'use client';
+import { monthKey } from '@/shared/lib/dateRange';
 import {
   Box,
   Text,
@@ -36,10 +37,7 @@ export function ApostilizationCalendarContent() {
   // so submit still goes through createMutation).
   const [prefillDate, setPrefillDate] = useState<string | null>(null);
 
-  const [month, setMonth] = useState(() => {
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-  });
+  const [month, setMonth] = useState(() => monthKey());
   const [search, setSearch] = useState('');
 
   const textColor = useColorModeValue('gray.900', '#f0f0f0');

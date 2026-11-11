@@ -1,4 +1,5 @@
 'use client';
+import { APP_LOCALE, formatDate } from '@/shared/lib/format';
 import {
   Box,
   Grid,
@@ -109,7 +110,7 @@ export function OrderCard({ order, userRole, onView, onEdit }: OrderRowProps) {
                 fontFamily='mono'
                 color='gray.200'
               >
-                {new Date(order.createdAt).toLocaleDateString('uk-UA')}
+                {formatDate(order.createdAt)}
               </Text>
             </Box>
 
@@ -131,7 +132,7 @@ export function OrderCard({ order, userRole, onView, onEdit }: OrderRowProps) {
                 color={isLate ? 'red.500' : 'gray.200'}
                 fontWeight={isLate ? '600' : '400'}
               >
-                {order.dueDate ? new Date(order.dueDate).toLocaleDateString('uk-UA') : '—'}
+                {order.dueDate ? formatDate(order.dueDate) : '—'}
               </Text>
             </Box>
 
@@ -147,13 +148,13 @@ export function OrderCard({ order, userRole, onView, onEdit }: OrderRowProps) {
                 {t('orders.totalPrice')}
               </Text>
               <Text>
-                💰 {t('orders.totalPrice')}: ₴{order.totalPrice.toLocaleString()}
+                💰 {t('orders.totalPrice')}: ₴{order.totalPrice.toLocaleString(APP_LOCALE)}
               </Text>
               <Text>
-                ⬇️ {t('orders.deposit')}: ₴{order.deposit.toLocaleString()}
+                ⬇️ {t('orders.deposit')}: ₴{order.deposit.toLocaleString(APP_LOCALE)}
               </Text>
               <Text color={order.remainingAmount > 0 ? 'orange.300' : 'green.300'}>
-                🔄 {t('orders.remaining')}: ₴{order.remainingAmount.toLocaleString()}
+                🔄 {t('orders.remaining')}: ₴{order.remainingAmount.toLocaleString(APP_LOCALE)}
               </Text>
               <Text
                 fontSize='11px'
