@@ -1,3 +1,4 @@
+import { monthKey } from '@/shared/lib/dateRange';
 import { redirect } from 'next/navigation';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { getServerUser } from '@/shared/lib/serverAuth';
@@ -9,8 +10,7 @@ export default async function ApostilizationPage() {
   const client = createServerApiClient();
   const queryClient = new QueryClient();
 
-  const now = new Date();
-  const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const month = monthKey();
 
   const [user] = await Promise.all([
     getServerUser(),

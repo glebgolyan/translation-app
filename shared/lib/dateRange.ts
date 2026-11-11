@@ -29,6 +29,12 @@ function todayInAppTimeZone(): Date {
 const calendarDate = (y: number, monthIndex: number, d: number) =>
   new Date(Date.UTC(y, monthIndex, d)).toISOString().slice(0, 10);
 
+// "YYYY-MM" of the current Kyiv month, shifted by `offset` months.
+export function monthKey(offset = 0): string {
+  const today = todayInAppTimeZone();
+  return calendarDate(today.getUTCFullYear(), today.getUTCMonth() + offset, 1).slice(0, 7);
+}
+
 export function getDateRange(range: DateRange): {
   dateFrom?: string;
   dateTo?: string;

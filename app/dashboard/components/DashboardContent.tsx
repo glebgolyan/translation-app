@@ -15,21 +15,19 @@ import { StatCard } from './StatCard';
 import { RecentOrders } from './RecentOrders';
 import { apostilizationApi } from '@/features/apostilization/api/apostilizationApi';
 import { useState } from 'react';
-import { getDateRange, getPreviousMonthRange, percentChange } from '@/shared/lib/dateRange';
+import {
+  getDateRange,
+  getPreviousMonthRange,
+  monthKey,
+  percentChange,
+} from '@/shared/lib/dateRange';
 import { translatorStatsApi } from '@/features/translator-stats/api/translatorStatsApi';
 
 export function DashboardContent({ user }: { user: User }) {
   const { t } = useT();
 
-  const [month] = useState(() => {
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-  });
-  const [prevMonth] = useState(() => {
-    const now = new Date();
-    const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    return `${prev.getFullYear()}-${String(prev.getMonth() + 1).padStart(2, '0')}`;
-  });
+  const [month] = useState(() => monthKey());
+  const [prevMonth] = useState(() => monthKey(-1));
 
   const { dateFrom } = getDateRange('month');
   const { dateFrom: prevDateFrom, dateTo: prevDateTo } = getPreviousMonthRange();

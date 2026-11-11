@@ -1,4 +1,5 @@
 'use client';
+import { monthKey } from '@/shared/lib/dateRange';
 import { APP_LOCALE, formatDate } from '@/shared/lib/format';
 import {
   Box,
@@ -33,10 +34,7 @@ import { DayEntriesModal } from './DayEntriesModal';
 export function TranslatorStatsTable() {
   const { t } = useT();
 
-  const [month, setMonth] = useState(() => {
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-  });
+  const [month, setMonth] = useState(() => monthKey());
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [activeCell, setActiveCell] = useState<{
