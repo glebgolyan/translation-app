@@ -72,19 +72,29 @@ export function getDateRange(range: DateRange): {
   return {};
 }
 
-// Bounded range for the full previous calendar month (unlike getDateRange's
-// 'month', which is open-ended from the 1st of *this* month to now) — used
-// for month-over-month comparisons. dateTo is the 1st of the current month,
-// not the last day of the previous one: the backend applies it as `lte`
-// against midnight, so using the next month's start correctly includes the
-// previous month's last day in full instead of cutting it off at midnight.
+// The previous month's range, but only up through the same day-of-month as
+// today — not the full previous month. getDateRange('month') (the "current"
+// side of the comparison) is 1st-of-this-month-through-now, i.e. partial
+// for all but the last day of the month; comparing that against a *whole*
+// previous month overstates the previous period and makes the % change look
+// worse than it is for most of the month. dateTo is one day past the
+// matching day-of-month: the backend applies it as `lte` against midnight,
+// so passing the next day (not the matching day itself) is what includes
+// that day in full instead of cutting it off at midnight.
 export function getPreviousMonthRange(): { dateFrom: string; dateTo: string } {
   const today = todayInAppTimeZone();
   const y = today.getUTCFullYear();
   const m = today.getUTCMonth();
+  const d = today.getUTCDate();
+
+  // Clamp to the previous month's last day for dates that don't exist there
+  // (comparing e.g. Mar 31 against Feb).
+  const daysInPrevMonth = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  const sameDayLastMonth = Math.min(d, daysInPrevMonth);
+
   return {
     dateFrom: calendarDate(y, m - 1, 1),
-    dateTo: calendarDate(y, m, 1),
+    dateTo: calendarDate(y, m - 1, sameDayLastMonth + 1),
   };
 }
 
