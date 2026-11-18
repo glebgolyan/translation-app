@@ -73,7 +73,14 @@
     "noOrders": "Замовлень ще немає",
     "notarization": "Нотаріальне посвідчення",
     "cardPayments": "Оплачено карткою",
-    "translatorPayouts": "Виплати перекладачам"
+    "translatorPayouts": "Виплати перекладачам",
+    "monthlyHistory": "Історія за місяцями",
+    "month": "Місяць",
+    "profit": "Прибуток",
+    "last3Months": "3 місяці",
+    "last6Months": "6 місяців",
+    "last12Months": "12 місяців",
+    "last24Months": "24 місяці"
   },
   "orders": {
     "title": "Замовлення",

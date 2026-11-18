@@ -1,11 +1,11 @@
 'use client';
 import { APP_LOCALE, formatDate } from '@/shared/lib/format';
-import { Box, Flex, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, Link, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { Order } from '@/entities/order/model/types';
 import { StatusBadge } from '@/entities/order/ui/StatusBadge';
 import { useT } from '@/shared/hooks/useT';
-import { redirect } from 'next/navigation';
-import Link from 'next/link';
+import NextLink from 'next/link';
+import { useDashboardCardStyle, DASHBOARD_FONT_STACK } from './dashboardStyles';
 
 interface RecentOrdersProps {
   orders: Order[];
@@ -13,45 +13,44 @@ interface RecentOrdersProps {
 
 export function RecentOrders({ orders }: RecentOrdersProps) {
   const { t } = useT();
+  const card = useDashboardCardStyle();
 
-  const bg = useColorModeValue('white', '#1a1a1a');
-  const borderColor = useColorModeValue('gray.100', '#2e2e2e');
-  const dividerColor = useColorModeValue('gray.50', '#252525');
-  const headerText = useColorModeValue('gray.900', '#f0f0f0');
-  const clientNameColor = useColorModeValue('gray.800', '#e0e0e0');
-  const langColor = useColorModeValue('gray.400', '#666666');
-  const dateColor = useColorModeValue('gray.400', '#666666');
-  const priceColor = useColorModeValue('gray.700', '#d0d0d0');
+  const dividerColor = useColorModeValue('rgba(0,0,0,0.05)', 'rgba(255,255,255,0.06)');
+  const headerText = useColorModeValue('#1d1d1f', '#f5f5f7');
+  const clientNameColor = useColorModeValue('#1d1d1f', '#f5f5f7');
+  const langColor = useColorModeValue('gray.400', '#6e6e73');
+  const dateColor = useColorModeValue('gray.400', '#6e6e73');
+  const priceColor = useColorModeValue('#1d1d1f', '#f5f5f7');
   const emptyColor = useColorModeValue('gray.400', '#555555');
-  const hoverBg = useColorModeValue('gray.50', '#222222');
+  const hoverBg = useColorModeValue('rgba(0,0,0,0.025)', 'rgba(255,255,255,0.04)');
 
   return (
-    <Box
-      bg={bg}
-      borderRadius='8px'
-      border='1px solid'
-      borderColor={borderColor}
-    >
+    <Box {...card}>
       <Flex
-        px={6}
-        py={4}
+        px={{ base: 4, md: 6 }}
+        py={5}
         align='center'
         justify='space-between'
         borderBottom='1px solid'
         borderColor={dividerColor}
       >
         <Text
-          fontFamily='Syne'
-          fontWeight='700'
-          fontSize='15px'
+          fontFamily={DASHBOARD_FONT_STACK}
+          fontWeight='600'
+          fontSize='16px'
+          letterSpacing='-0.01em'
           color={headerText}
         >
           {t('dashboard.recentOrders')}
         </Text>
 
         <Link
+          as={NextLink}
           href='orders'
-          className='text-brand-500 hover:underline'
+          color={useColorModeValue('brand.500', 'brand.300')}
+          fontSize='14px'
+          fontWeight='500'
+          _hover={{ textDecoration: 'underline' }}
         >
           {t('dashboard.viewAll')}
         </Link>
@@ -83,7 +82,7 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
           orders.map((order) => (
             <Flex
               key={order.id}
-              px={6}
+              px={{ base: 4, md: 6 }}
               py={4}
               align='center'
               gap={4}
@@ -99,6 +98,7 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
                   fontWeight='500'
                   mb={0.5}
                   color={clientNameColor}
+                  fontFamily={DASHBOARD_FONT_STACK}
                 >
                   {order.clientName}
                 </Text>
@@ -120,8 +120,9 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
               <Text
                 fontSize='14px'
                 fontWeight='600'
-                fontFamily='mono'
+                fontFamily={DASHBOARD_FONT_STACK}
                 color={priceColor}
+                sx={{ fontFeatureSettings: '"tnum"' }}
               >
                 ₴{order.totalPrice.toLocaleString(APP_LOCALE)}
               </Text>

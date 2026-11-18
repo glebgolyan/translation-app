@@ -5,6 +5,7 @@ import { createServerApiClient } from '@/shared/api/serverClient';
 import { ordersApi } from '@/features/orders/api/ordersApi';
 import { apostilizationApi } from '@/features/apostilization/api/apostilizationApi';
 import { translatorStatsApi } from '@/features/translator-stats/api/translatorStatsApi';
+import { dashboardApi } from '@/features/dashboard/api/dashboardApi';
 import { getDateRange, getPreviousMonthRange, monthKey } from '@/shared/lib/dateRange';
 import { DashboardContent } from './components/DashboardContent';
 
@@ -50,6 +51,12 @@ export default async function DashboardPage() {
       queryClient.prefetchQuery({
         queryKey: ['apostilization', 'prev', prevMonth],
         queryFn: () => apostilizationApi.getAll({ month: prevMonth }, client),
+      }),
+      // Matches MonthlyFinancialsTable's default `months` state (12) so the
+      // history table hydrates pre-filled instead of showing its spinner.
+      queryClient.prefetchQuery({
+        queryKey: ['dashboard', 'monthly-financials', 12],
+        queryFn: () => dashboardApi.getMonthlyFinancials(12, client),
       }),
     ]);
   }

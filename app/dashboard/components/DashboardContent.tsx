@@ -13,6 +13,7 @@ import { User } from '@/entities/user/model/types';
 import { useT } from '@/shared/hooks/useT';
 import { StatCard } from './StatCard';
 import { RecentOrders } from './RecentOrders';
+import { MonthlyFinancialsTable } from './MonthlyFinancialsTable';
 import { apostilizationApi } from '@/features/apostilization/api/apostilizationApi';
 import { useState } from 'react';
 import {
@@ -150,29 +151,29 @@ export function DashboardContent({ user }: { user: User }) {
   const revenueChange = percentChange(revenue, prevRevenue);
   const notarizationChange = percentChange(totalNotarizationValue, prevNotarizationValue);
   return (
-    <Box p={8}>
-      <Box mb={8}>
+    <Box p={{ base: 5, md: 10 }}>
+      <Box mb={10}>
         <Text
           fontFamily='Syne'
-          fontWeight='800'
-          fontSize='26px'
+          fontWeight='700'
+          fontSize={{ base: '26px', md: '32px' }}
           letterSpacing='-0.02em'
-          mb={1}
+          mb={1.5}
         >
           {t('dashboard.greeting')}, {user?.name?.split(' ')[0]} 👋
         </Text>
         <Text
-          color='gray.500'
-          fontSize='14px'
+          color='text.secondary'
+          fontSize='15px'
         >
           {t('dashboard.subtitle')}
         </Text>
       </Box>
 
       <Grid
-        templateColumns={{ base: '1fr', lg: `repeat(${isAdmin ? 4 : 3}, 1fr)` }}
-        gap={4}
-        mb={8}
+        templateColumns={{ base: '1fr', md: 'repeat(auto-fit, minmax(220px, 1fr))' }}
+        gap={5}
+        mb={10}
       >
         <StatCard
           label={t('dashboard.totalOrders')}
@@ -219,6 +220,8 @@ export function DashboardContent({ user }: { user: User }) {
           />
         )}
       </Grid>
+
+      {isAdmin && <MonthlyFinancialsTable />}
 
       <RecentOrders orders={orders} />
     </Box>
