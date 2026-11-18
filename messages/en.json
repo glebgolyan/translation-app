@@ -73,7 +73,14 @@
     "noOrders": "No orders yet",
     "notarization": "Notarization",
     "cardPayments": "Paid by card",
-    "translatorPayouts": "Translator payouts"
+    "translatorPayouts": "Translator payouts",
+    "monthlyHistory": "Monthly history",
+    "month": "Month",
+    "profit": "Profit",
+    "last3Months": "3 months",
+    "last6Months": "6 months",
+    "last12Months": "12 months",
+    "last24Months": "24 months"
   },
   "orders": {
     "title": "Orders",

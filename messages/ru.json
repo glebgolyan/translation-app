@@ -73,7 +73,14 @@
     "noOrders": "Заказов ещё нет",
     "notarization": "Нотариальное заверение",
     "cardPayments": "Оплачено картой",
-    "translatorPayouts": "Выплаты переводчикам"
+    "translatorPayouts": "Выплаты переводчикам",
+    "monthlyHistory": "История по месяцам",
+    "month": "Месяц",
+    "profit": "Прибыль",
+    "last3Months": "3 месяца",
+    "last6Months": "6 месяцев",
+    "last12Months": "12 месяцев",
+    "last24Months": "24 месяца"
   },
   "orders": {
     "title": "Заказы",

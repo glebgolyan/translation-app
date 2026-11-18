@@ -13,6 +13,7 @@ import { User } from '@/entities/user/model/types';
 import { useT } from '@/shared/hooks/useT';
 import { StatCard } from './StatCard';
 import { RecentOrders } from './RecentOrders';
+import { MonthlyFinancialsTable } from './MonthlyFinancialsTable';
 import { apostilizationApi } from '@/features/apostilization/api/apostilizationApi';
 import { useState } from 'react';
 import {
@@ -219,6 +220,8 @@ export function DashboardContent({ user }: { user: User }) {
           />
         )}
       </Grid>
+
+      {isAdmin && <MonthlyFinancialsTable />}
 
       <RecentOrders orders={orders} />
     </Box>
